@@ -1,0 +1,22 @@
+{
+  "httpMethod": "GET",
+  "isBase64Encoded": false,
+  "path": "/proxy",
+  "queryString": {
+    "c": "j"
+  },
+  "headers": {
+    "User-Agent": "Mozilla/5.0 (Linux; Android 11; SAMSUNG SM-G973U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/14.2 Chrome/87.0.4280.141 Mobile Safari/537.36",
+    "x-api-requestid": "1234",
+    "x-b3-traceid": "1234",
+    "x-api-scheme": "https",
+    "x-proxy-target": "https://movie.douban.com/j/subject_suggest?q=%E7%88%B1",
+    "x-proxy-headers": "{\"user-agent\":\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/109.0\"}"
+  },
+  "requestContext": {
+    "path": "/proxy",
+    "serviceId": "service-886k0uiy",
+    "sourceIp": "50.7.158.186",
+    "stage": "release"
+  }
+}

@@ -1,0 +1,27 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+html,
+body,
+:root {
+  margin: 0;
+  font-family: system-ui;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgb(0 0 0 / 0%);
+}
+
+a:focus,
+input:focus,
+p:focus,
+div:focus {
+  -webkit-tap-highlight-color: rgb(0 0 0 / 0%);
+}

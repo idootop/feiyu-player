@@ -1,0 +1,30 @@
+#player {
+  width: 100% !important;
+  height: auto !important;
+}
+
+.xgplayer-skin-default .center-spinner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  z-index: 120;
+}
+.xgplayer-enter,
+.xgplayer-loading {
+  display: none !important;
+}
+
+.xgplayer-skin-default.xgplayer-is-enter .center-spinner {
+  display: flex;
+}
+
+.xgplayer-skin-default.xgplayer-isloading .center-spinner {
+  display: flex;
+  background: rgba(0, 0, 0, 0.1);
+}

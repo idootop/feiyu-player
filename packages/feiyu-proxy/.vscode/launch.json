@@ -1,0 +1,59 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Index.ts",
+      "type": "node",
+      "request": "launch",
+      "args": ["${workspaceFolder}/src/index.ts"],
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register",
+        "-r",
+        "tsconfig-paths/register"
+      ],
+      "cwd": "${workspaceRoot}",
+      "protocol": "inspector",
+      "internalConsoleOptions": "openOnSessionStart",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    {
+      "name": "Test.ts",
+      "type": "node",
+      "request": "launch",
+      "args": ["${workspaceFolder}/test/index.ts"],
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register",
+        "-r",
+        "tsconfig-paths/register"
+      ],
+      "cwd": "${workspaceRoot}",
+      "protocol": "inspector",
+      "internalConsoleOptions": "openOnSessionStart",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    {
+      "name": "CurrentFile",
+      "type": "node",
+      "request": "launch",
+      "args": ["${workspaceFolder}/${relativeFile}"],
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register",
+        "-r",
+        "tsconfig-paths/register"
+      ],
+      "cwd": "${workspaceRoot}",
+      "protocol": "inspector",
+      "internalConsoleOptions": "openOnSessionStart",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    }
+  ]
+}

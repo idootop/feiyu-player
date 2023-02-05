@@ -1,0 +1,9 @@
+.fill-img {
+  width: 100%;
+}
+
+.fill-img .arco-image-img {
+  width: 100%;
+  aspect-ratio: 80 / 112;
+  object-fit: cover;
+}

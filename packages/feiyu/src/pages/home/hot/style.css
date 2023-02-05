@@ -1,0 +1,49 @@
+.movie-grid {
+  display: grid;
+  list-style: none;
+}
+
+@media only screen and (max-width: 992px) {
+  .movie-grid {
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .movie-grid {
+    gap: 20px 40px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+.movie-grid .arco-image {
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.5s;
+}
+
+.movie-grid .arco-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px -5px rgb(0 0 0 / 30%);
+}
+
+.no-scale .arco-image:hover {
+  transform: none !important;
+  box-shadow: 0 5px 15px -5px rgb(0 0 0 / 30%);
+}
+
+body[arco-theme='dark'] .movie-grid .arco-image:hover {
+  box-shadow: 0 10px 30px -5px rgb(255 255 255 / 30%);
+}
+
+body[arco-theme='dark'] .no-scale .arco-image:hover {
+  box-shadow: 0 5px 15px -5px rgb(255 255 255 / 30%);
+}
+
+.star {
+  color: rgb(var(--gold-6));
+}
+
+body[arco-theme='dark'] .star {
+  color: rgb(var(--gold-5));
+}

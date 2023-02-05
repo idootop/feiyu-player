@@ -1,0 +1,117 @@
+.glass-header {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+div[data-type='offscreen-wrapper'] {
+  width: 100% !important;
+}
+
+.arco-layout-sider {
+  z-index: 3 !important;
+}
+
+.arco-menu-selected {
+  background: rgb(var(--primary-6)) !important;
+  color: var(--color-bg-white) !important;
+}
+
+.arco-menu-selected .arco-icon {
+  color: var(--color-bg-white) !important;
+}
+
+/* 通知横幅 */
+.arco-notification {
+  margin-bottom: 0 !important;
+}
+
+/* 移动端样式 */
+@media only screen and (max-width: 768px) {
+  .arco-modal {
+    width: 100% !important;
+    top: 0 !important;
+  }
+
+  .zoomModal-appear,
+  .zoomModal-enter-active,
+  .zoomModal-exit-active,
+  .fadeModal-appear,
+  .fadeModal-enter-active,
+  .fadeModal-exit-active {
+    transition: none !important;
+  }
+
+  /* 通知横幅 */
+  .arco-notification {
+    width: 100% !important;
+  }
+  .arco-notification-wrapper-bottomRight {
+    width: 100%;
+    bottom: 0 !important;
+    right: 0 !important;
+    padding: 20px;
+  }
+}
+
+.ac-navbar-search-input {
+  width: 140px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-fill-2);
+  border-radius: 2px;
+  padding: 0 8px;
+  margin: 0 24px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.ac-navbar-search-input-placeholder {
+  color: var(--color-text-3);
+  margin: 0 6px;
+  vertical-align: 1px;
+  user-select: none;
+}
+
+.ac-navbar-search-input:hover {
+  background-color: var(--color-fill-3);
+}
+
+.arco-modal {
+  border-radius: 10px !important;
+}
+
+.arco-modal-content {
+  padding: 0 !important;
+}
+
+.arco-drawer-content {
+  padding: 0 !important;
+}
+
+div.arco-typography,
+p.arco-typography {
+  margin-bottom: 0 !important;
+}
+
+.arco-rate-character:not(:last-child) {
+  margin-right: 2px !important;
+}
+
+.arco-rate-character .arco-icon {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.arco-rate-inner {
+  min-height: auto !important;
+}
+
+.arco-list-item:hover {
+  background: var(--color-secondary-hover);
+}
+
+.arco-list-item:hover .arco-rate-character {
+  color: var(--color-secondary-active);
+}

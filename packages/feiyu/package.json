@@ -1,0 +1,49 @@
+{
+  "name": "feiyu",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "pwa": "ts-node scripts/pwa",
+    "dev": "vite",
+    "build": "vite build && yarn pwa",
+    "preview": "vite build && yarn pwa && vite preview"
+  },
+  "dependencies": {
+    "@arco-design/web-react": "^2.43.2",
+    "fast-xml-parser": "^4.0.12",
+    "isomorphic-unfetch": "^3.1.0",
+    "localforage": "^1.10.0",
+    "nft.storage": "^7.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-lazy-load": "^4.0.1",
+    "wouter": "^2.10.0-alpha.1",
+    "xgplayer": "^2.32.2",
+    "xgplayer-hls.js": "^2.6.4"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.16",
+    "@types/react": "^18.0.26",
+    "@types/react-dom": "^18.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.46.1",
+    "@typescript-eslint/parser": "^5.46.1",
+    "@vitejs/plugin-react-swc": "^3.0.1",
+    "eslint": "^8.30.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-simple-import-sort": "^8.0.0",
+    "less": "^4.1.3",
+    "prettier": "^2.8.1",
+    "stylelint": "^14.16.0",
+    "stylelint-config-standard": "^29.0.0",
+    "stylelint-order": "^5.0.0",
+    "stylelint-scss": "^4.3.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.1",
+    "typescript": "^4.9.4",
+    "vite": "^4.0.1",
+    "vite-plugin-html": "^3.2.0",
+    "vite-plugin-imp": "^2.3.1",
+    "vite-plugin-pwa": "^0.14.1"
+  }
+}

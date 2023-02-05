@@ -1,0 +1,42 @@
+component: scf
+app: feiyu-proxy
+name: feiyu-proxy
+stage: release
+
+inputs:
+  name: feiyu-proxy
+  region: ap-hongkong # 函数所在区域
+  description: feiyu-proxy
+  src: ./build
+  handler: index.main #入口（函数类型为事件类型时生效）
+  runtime: Nodejs16.13 #环境
+  memorySize: 64 # 内存大小，单位MB
+  timeout: 180 # 函数执行超时时间，单位秒
+  ignoreTriggers: false # 是否忽略触发器部署
+  installDependency: false # 是否在线安装依赖
+  publicAccess: true # 是否开启公网访问
+  eip: false # 是否开启固定IP
+  asyncRunEnable: false # 是否启用异步执行（长时间运行）
+  traceEnable: false # 是否状态追踪
+  retryNum: 0 # 重试次数
+  environment: # 环境变量（只读）
+    variables:
+      test: 404
+  events:
+    - apigw:
+        parameters:
+          serviceName: feiyu-proxy
+          # serviceId: service-xxxxxx # 部署成功后，下次部署可填写已生成的 serviceId
+          protocols:
+            - https
+          description: feiyu-proxy
+          environment: release
+          endpoints:
+            - path: /
+              method: ANY
+              apiName: feiyu-proxy
+              # apiId: api-xxxxxxx # 部署成功后，下次部署可填写已生成的 apiId
+              description: feiyu-proxy
+              serviceTimeout: 180
+              function:
+                isIntegratedResponse: true # 集成响应

@@ -1,0 +1,34 @@
+{
+  "name": "feiyu-proxy",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "main": "ts-node -r tsconfig-paths/register src/index",
+    "dev": "NODE_ENV=development yarn main",
+    "prod": "NODE_ENV=production yarn main",
+    "build": "NODE_ENV=production esbuild src/index.ts --bundle --minify --platform=node --target=node16 --outfile=build/index.js",
+    "build:dev": "NODE_ENV=development esbuild src/index.ts --bundle --platform=node --target=node16 --outfile=build/index.js",
+    "deploy": "yarn build && scf deploy",
+    "logs":"clear && scf logs --startTime 3m",
+    "invoke": "scf invoke --path test/test.json"
+  },
+  "dependencies": {
+    "axios": "^0.27.2"
+  },
+  "devDependencies": {
+    "@types/dotenv-flow": "^3.2.0",
+    "@types/node": "18.11.10",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "esbuild": "^0.16.4",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "prettier": "^2.5.1",
+    "ts-node": "^10.7.0",
+    "tsc-alias": "^1.6.7",
+    "tsconfig-paths": "^4.1.1",
+    "typescript": "^4.6.2"
+  }
+}
