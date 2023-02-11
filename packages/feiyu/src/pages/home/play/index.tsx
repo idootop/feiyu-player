@@ -1,4 +1,4 @@
-import { Button, Empty, Message } from '@arco-design/web-react';
+import { Button, Empty, Message, Modal } from '@arco-design/web-react';
 import {
   IconLeft,
   IconShareExternal,
@@ -106,6 +106,23 @@ const Play = () => {
   const title = movie?.name ?? (loading ? '加载中' : '加载失败');
 
   const [sharing, setSharing] = useState(false);
+  const [shareURL, setShareURL] = useState<string>('');
+
+  const $ShareModal = (
+    <Modal
+      title="请手动复制 🔗"
+      visible={isNotEmpty(shareURL)}
+      onCancel={() => setShareURL('')}
+      footer={null}
+      style={{
+        width: 'auto',
+        maxWidth: '400px',
+        margin: '20px',
+      }}
+    >
+      <Text style={{ padding: '20px', color: '#3d7ff6' }}>{shareURL}</Text>
+    </Modal>
+  );
 
   // 分享影片
   const share = async () => {
@@ -118,10 +135,13 @@ const Play = () => {
     if (_cid) {
       const shareUrl = new URL(window.location.href.replace('#/', ''));
       shareUrl.searchParams.set('cid', _cid);
-      const success = await clipboard.write(
-        shareUrl.href.replace('/home', '/#/home'),
-      );
-      Message.info(!success ? '复制邀请链接失败，请重试' : '分享链接已复制');
+      const url = shareUrl.href.replace('/home', '/#/home');
+      const success = await clipboard.write(url);
+      if (success) {
+        Message.info('分享链接已复制');
+      } else {
+        setShareURL(url);
+      }
     } else {
       Message.info('分享失败');
     }
@@ -292,6 +312,7 @@ const Play = () => {
     </Column>
   );
 
+  // TODO 白屏
   const $Body =
     loading && noData ? (
       <Column width="100%" height="calc(80vh - 60px)" justifyContent="center">
@@ -324,6 +345,7 @@ const Play = () => {
     <PageBuilder
       background={isMobile ? colors.bg : isDarkMode ? colors.bg3 : colors.gray}
     >
+      {$ShareModal}
       {isMobile ? (
         <Box />
       ) : (

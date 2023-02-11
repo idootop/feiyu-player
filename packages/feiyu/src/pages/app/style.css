@@ -32,7 +32,7 @@ div[data-type='offscreen-wrapper'] {
 
 /* 移动端样式 */
 @media only screen and (max-width: 768px) {
-  .arco-modal {
+  .arco-modal-search {
     width: 100% !important;
     top: 0 !important;
   }

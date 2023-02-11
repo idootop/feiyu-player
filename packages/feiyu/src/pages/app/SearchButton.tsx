@@ -278,6 +278,7 @@ const SearchModal = () => {
 
   return (
     <Modal
+      className="arco-modal-search"
       autoFocus
       visible={showSearchModal}
       onCancel={closeModal}
