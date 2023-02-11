@@ -312,7 +312,6 @@ const Play = () => {
     </Column>
   );
 
-  // TODO 白屏
   const $Body =
     loading && noData ? (
       <Column width="100%" height="calc(80vh - 60px)" justifyContent="center">

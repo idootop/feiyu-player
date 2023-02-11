@@ -50,12 +50,11 @@ export const PageBuilder = (props: BoxProps) => {
       className="hide-scollbar"
       width="100%"
       height="100vh"
-      padding="20px"
+      padding={`calc(${kHeaderHeight} + 20px) 20px 20px 20px`}
       overflowY="scroll"
       background={colors.bg}
       {...props}
     >
-      <Box height={kHeaderHeight} />
       {props.children}
     </Box>
   );

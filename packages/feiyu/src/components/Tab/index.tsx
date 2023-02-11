@@ -21,7 +21,9 @@ export const TabPages = (props: {
   const pages = controller.pages;
   return (
     <Stack size="100%">
-      <Box size="100%" />
+      <Center size="100%" background={colors.bg}>
+        <Loading />
+      </Center>
       {pages.map((e) => {
         const isActive = _currentPage === e.key;
         return (

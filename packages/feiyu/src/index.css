@@ -19,6 +19,14 @@ body,
   -webkit-tap-highlight-color: rgb(0 0 0 / 0%);
 }
 
+body {
+  --color-bg-card: rgb(var(--gray-1));
+}
+
+body[arco-theme='dark'] {
+  --color-bg-card: var(--color-bg-3);
+}
+
 a:focus,
 input:focus,
 p:focus,

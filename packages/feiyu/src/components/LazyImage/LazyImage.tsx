@@ -4,6 +4,8 @@ import { Image } from '@arco-design/web-react';
 import { useState } from 'react';
 import LazyLoad from 'react-lazy-load';
 
+import { colors } from '@/styles/colors';
+
 import { AspectRatio } from '../AspectRatio';
 
 interface LazyImageProps {
@@ -41,6 +43,7 @@ export const LazyImage = (props: LazyImageProps) => {
             style={{
               ...size,
               objectFit: 'cover',
+              background: colors.card,
             }}
             referrerPolicy="no-referrer"
           />

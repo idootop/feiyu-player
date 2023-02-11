@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useUnmount } from '@/hooks/useUnmount';
 
 export const Loading = (props?: { size?: number; delay?: number }) => {
-  const { size = 40, delay = 500 } = props ?? {};
+  const { size = 40, delay = 200 } = props ?? {};
   const [inited, setInited] = useState(false);
   const isUnmountRef = useUnmount();
   useEffect(() => {
@@ -14,5 +14,5 @@ export const Loading = (props?: { size?: number; delay?: number }) => {
       }
     }, delay);
   }, []);
-  return inited ? <Spin size={size} /> : <div></div>;
+  return inited || delay < 1 ? <Spin size={size} /> : <div></div>;
 };

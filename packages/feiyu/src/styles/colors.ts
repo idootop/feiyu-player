@@ -10,4 +10,5 @@ export const colors = {
   text2: 'var(--color-text-2)',
   text3: 'var(--color-text-3)',
   gray: 'rgb(var(--gray-1))',
+  card: 'var(--color-bg-card)',
 };
