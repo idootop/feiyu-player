@@ -36,6 +36,8 @@ type HttpConfig = {
    */
   cacheEmpty?: boolean;
   cacheDuration?: number;
+  cacheKey?: string;
+  blob?: boolean;
 } & AbortConfig;
 
 const get = async (
@@ -50,13 +52,16 @@ const get = async (
     cache: _cache = true,
     cacheEmpty,
     cacheDuration,
+    cacheKey: _cacheKey,
   } = config ?? {};
   const newUrl = _buildURL(url, query);
   const cacheKey =
+    _cacheKey ??
     jsonEncode({
       url: newUrl,
       headers,
-    }) ?? '404';
+    }) ??
+    '404';
   if (_cache) {
     const cacheData = await cache.get(cacheKey);
     if (cacheEmpty ? cacheData : cacheData?.data) {
@@ -97,14 +102,18 @@ const post = async (url: string, data?: any, config?: HttpConfig) => {
     cache: _cache = true,
     cacheEmpty,
     cacheDuration,
+    blob,
+    cacheKey: _cacheKey,
   } = config ?? {};
-  const body = isObject(data) ? jsonEncode(data) : data;
+  const body = !blob && isObject(data) ? jsonEncode(data) : data;
   const cacheKey =
+    _cacheKey ??
     jsonEncode({
       url,
       headers,
       body,
-    }) ?? '404';
+    }) ??
+    '404';
   if (_cache) {
     const cacheData = await cache.get(cacheKey);
     if (cacheEmpty ? cacheData : cacheData?.data) {
@@ -151,28 +160,24 @@ export const http = {
      */
     get(url: string, query?: Record<string, any>, config?: HttpConfig): any {
       const { headers = {}, cache = true, signal } = config ?? {};
-      return configs.httpProxy
-        ? get(configs.httpProxy, query, {
-            ...config,
-            headers: { ...kBaseHeaders, ...headers, [kProxyKey]: url },
-            signal,
-            cache,
-          })
-        : get(url, query, config);
+      return get(configs.httpProxy, query, {
+        ...config,
+        headers: { ...kBaseHeaders, ...headers, [kProxyKey]: url },
+        signal,
+        cache,
+      });
     },
     /**
      * Proxy 请求默认开启 cache
      */
     post(url: string, data?: any, config?: HttpConfig): any {
       const { headers = {}, cache = true, signal } = config ?? {};
-      return configs.httpProxy
-        ? post(configs.httpProxy, data, {
-            ...config,
-            headers: { ...kBaseHeaders, ...headers, [kProxyKey]: url },
-            signal,
-            cache,
-          })
-        : post(url, data, config);
+      return post(configs.httpProxy, data, {
+        ...config,
+        headers: { ...kBaseHeaders, ...headers, [kProxyKey]: url },
+        signal,
+        cache,
+      });
     },
   },
 };
