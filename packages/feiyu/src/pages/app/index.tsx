@@ -47,10 +47,11 @@ export const App = () => {
 export const PageBuilder = (props: BoxProps) => {
   return (
     <Box
+      className="hide-scollbar"
       width="100%"
       height="100vh"
       padding="20px"
-      overflow="scroll"
+      overflowY="scroll"
       background={colors.bg}
       {...props}
     >
