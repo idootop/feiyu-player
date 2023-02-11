@@ -3,6 +3,40 @@
   height: auto !important;
 }
 
+.no-next {
+  display: none !important;
+}
+
+.play-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.play-button svg {
+  background: rgba(0, 0, 0, 0.58);
+  border-radius: 100%;
+}
+
+.play-button svg:hover {
+  background: rgba(0, 0, 0, 0.38);
+}
+
+.xgplayer-skin-default .xgplayer-replay svg {
+  padding: 6px;
+}
+
+.xgplayer-skin-default .xgplayer-replay svg path {
+  transform: none !important;
+  fill: none !important;
+  stroke: #ddd;
+}
+
+.xgplayer-skin-default .xgplayer-replay svg:hover path {
+  stroke: #fff;
+}
+
 .xgplayer-skin-default .center-spinner {
   position: absolute;
   left: 0;

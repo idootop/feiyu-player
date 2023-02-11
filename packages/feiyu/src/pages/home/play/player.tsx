@@ -6,7 +6,7 @@ import HlsJsPlayer from 'xgplayer-hls.js';
 import { Box } from '@/components/Box';
 import { store } from '@/services/store/useStore';
 import { lastOf } from '@/utils/base';
-import { createDom, hasClass } from '@/utils/dom';
+import { addClass, createDom, hasClass, removeClass } from '@/utils/dom';
 
 import { isPlayPage } from '.';
 
@@ -96,12 +96,20 @@ export const Player = forwardRef(
         // 是否有下一集
         const hasNext = lastOf(playList) !== current;
         // 控制下一集按钮是否显示
-        const playNextDom = document.getElementsByClassName(
-          'xgplayer-playnext',
-        )[0] as HTMLElement;
-        if (playNextDom) {
-          playNextDom.style.display = hasNext ? 'block' : 'none';
-        }
+        const playNextDoms = [
+          document.getElementsByClassName(
+            'xgplayer-playnext',
+          )[0] as HTMLElement,
+          document.getElementsByClassName('playnext')[0] as HTMLElement,
+          document.getElementsByClassName('playnext')[1] as HTMLElement,
+        ];
+        playNextDoms.forEach((playNextDom) => {
+          if (hasNext) {
+            removeClass(playNextDom, 'no-next');
+          } else {
+            addClass(playNextDom, 'no-next');
+          }
+        });
       }, 100);
     }, [props.current]);
 
@@ -109,20 +117,20 @@ export const Player = forwardRef(
   },
 );
 
+const _playNextIcon = `
+<svg class="xgplayer-playnext-svg" width="48px" height="48px" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z" fill="none" stroke-width="4" stroke-linejoin="round"></path>
+  <path d="M21 33L30 24L21 15" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+`;
+const _replayIcon = `
+<svg class="xgplayer-replay-svg" width="48px" height="48px" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M21 24V18L26 21L31 24L26 27L21 30V24Z" fill="none" stroke-width="4" stroke-linejoin="round"></path>
+  <path d="M11.2721 36.7279C14.5294 39.9853 19.0294 42 24 42C33.9411 42 42 33.9411 42 24C42 14.0589 33.9411 6 24 6C19.0294 6 14.5294 8.01472 11.2721 11.2721C9.6141 12.9301 6 17 6 17" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M6 9V17H14" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+`;
 const _playerPlugins = {
-  // 播放下一集
-  playNext: (player: any) => {
-    function onPlayNextBtnClick() {
-      player.emit('playNext');
-    }
-
-    function onDestroy() {
-      player.off('playNextBtnClick', onPlayNextBtnClick);
-      player.off('destroy', onDestroy);
-    }
-    player.on('playNextBtnClick', onPlayNextBtnClick);
-    player.once('destroy', onDestroy);
-  },
   // 播放暂停
   mobile(player: any) {
     const root = player.root;
@@ -216,7 +224,7 @@ const _playerPlugins = {
     }
     player.once('destroy', onDestroy);
   },
-  // 播放器皮肤插件
+  // 加载中
   s_enter: (player: any) => {
     const root = player.root;
     const enter = createDom({
@@ -224,5 +232,83 @@ const _playerPlugins = {
       innerHTML: `<div class="arco-spin"><span class="arco-spin-icon"><svg fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 48 48" aria-hidden="true" focusable="false" style="font-size: 40px;" class="arco-icon arco-icon-loading"><path d="M42 24c0 9.941-8.059 18-18 18S6 33.941 6 24 14.059 6 24 6"></path></svg></span></div>`,
     });
     root.appendChild(enter);
+  },
+  // 播放下一集
+  playNext: (player: any) => {
+    function onPlayNextBtnClick() {
+      player.emit('playNext');
+    }
+
+    function onDestroy() {
+      player.off('playNextBtnClick', onPlayNextBtnClick);
+      player.off('destroy', onDestroy);
+    }
+    player.on('playNextBtnClick', onPlayNextBtnClick);
+    player.once('destroy', onDestroy);
+  },
+  s_reply(player: any) {
+    const root = player.root;
+    const btn = createDom({
+      tagName: 'xg-replay',
+      innerHTML: `
+      <div style="display:flex;flex-direction:row;align-items:center;">
+        <div class="play-button">${_replayIcon}<xg-replay-txt class="xgplayer-replay-txt">重播</xg-replay-txt></div>
+        <div class="playnext" style="width:20px"></div>
+        <div class="playnext play-button">${_playNextIcon}<xg-replay-txt class="xgplayer-replay-txt">下一集</xg-replay-txt></div>
+      </div>`,
+      className: 'xgplayer-replay',
+    });
+    player.once('ready', () => {
+      const oldEl = document.getElementsByClassName(
+        'xgplayer-replay',
+      )[0] as HTMLElement;
+      if (oldEl) {
+        oldEl.remove();
+      }
+      root.appendChild(btn);
+    });
+
+    function onEnded() {
+      const path = btn.querySelector('path');
+      if (path) {
+        const transform = window
+          .getComputedStyle(path)
+          .getPropertyValue('transform');
+        if (typeof transform === 'string' && transform.indexOf('none') > -1) {
+          return;
+        } else {
+          path.setAttribute('transform', transform);
+        }
+      }
+    }
+    player.on('ended', onEnded);
+
+    function onBtnClick(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    btn.addEventListener('click', onBtnClick);
+
+    const replay = btn.querySelector('.xgplayer-replay-svg');
+    const playNext = btn.querySelector('.xgplayer-playnext-svg');
+
+    ['click', 'touchend'].forEach((item) => {
+      replay?.addEventListener(item, function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        player.userGestureTrigEvent('replayBtnClick');
+      });
+      playNext?.addEventListener(item, function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        player.userGestureTrigEvent('playNextBtnClick');
+      });
+    });
+
+    function destroyFunc() {
+      player.off('ended', onEnded);
+      player.off('destroy', destroyFunc);
+    }
+    player.once('destroy', destroyFunc);
   },
 };
