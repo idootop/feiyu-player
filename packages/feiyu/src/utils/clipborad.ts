@@ -1,9 +1,9 @@
 export const clipboard = {
   async write(text: string) {
-    if (navigator.clipboard && window.isSecureContext) {
+    try {
       // 只在 https 环境可用
-      return navigator.clipboard.writeText(text);
-    } else {
+      return await navigator.clipboard.writeText(text);
+    } catch (_) {
       // polyfill
       const textArea = document.createElement('textarea');
       textArea.value = text;
