@@ -3,7 +3,6 @@ import { Popover } from '@arco-design/web-react';
 import { Expand, Row } from '@/components/Flex';
 import { SwitchDark } from '@/components/SwitchDark';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
-import { useDarkMode } from '@/hooks/useDarkMode';
 import { colors } from '@/styles/colors';
 
 import { useHomePages } from '../home';
@@ -13,14 +12,13 @@ import { useSideMenu } from './SideMenu';
 export const kHeaderHeight = '60px';
 
 export const MyHeader = () => {
-  const { isDarkMode } = useDarkMode();
   const { jumpToIndex } = useHomePages();
   const { isMobile } = useBreakpoint();
   const { openSideMenu } = useSideMenu();
 
   return (
     <Row
-      className="glass-header"
+      className="glass-effect"
       style={{
         position: 'fixed',
         top: '0px',
@@ -28,7 +26,6 @@ export const MyHeader = () => {
         width: '100vw',
         height: kHeaderHeight,
         padding: '0px 20px',
-        background: isDarkMode ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)',
         boxShadow: '0 2px 6px rgba(0,0,0,.05)',
       }}
     >

@@ -177,13 +177,13 @@ export const MovieItem = (props: {
         <LazyImage src={movie.image} />
         <Position width="100%" align="bottomLeft">
           <Center
-            className="glass-header"
             padding="4px 10px"
             margin="10px"
             borderRadius="4px"
-            width="fit-content"
+            width="max-content"
             maxWidth="calc(100% - 2 * 10px)"
             overflow="hidden"
+            background="rgba(0, 0, 0, 0.8)"
           >
             <Text
               cssEllipsis

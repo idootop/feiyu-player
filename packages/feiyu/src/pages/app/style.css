@@ -1,6 +1,11 @@
-.glass-header {
+.glass-effect {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+body[arco-theme='dark'] .glass-effect {
+  background: rgba(0, 0, 0, 0.8);
 }
 
 div[data-type='offscreen-wrapper'] {
