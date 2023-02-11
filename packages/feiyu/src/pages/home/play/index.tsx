@@ -26,9 +26,10 @@ import {
   useRebuildRef,
 } from '@/services/store/useStore';
 import { colors } from '@/styles/colors';
+import { clipboard } from '@/utils/clipborad';
 import { isEqual } from '@/utils/diff';
 import { FeiyuMovie } from '@/utils/feiyu';
-import { isNotEmpty } from '@/utils/is';
+import { isEmpty, isNotEmpty } from '@/utils/is';
 
 import { useHomePages } from '..';
 import { kCurrentSearchMovies, kPlayPageId, MovieItem } from '../search';
@@ -113,14 +114,14 @@ const Play = () => {
       return;
     }
     setSharing(true);
-    const _cid = cid ?? (await ipfs.writeJson(movie));
+    const _cid = isEmpty(cid) ? await ipfs.writeJson(movie) : cid;
     if (_cid) {
       const shareUrl = new URL(window.location.href.replace('#/', ''));
       shareUrl.searchParams.set('cid', _cid);
-      const failed = await navigator.clipboard
-        .writeText(shareUrl.href.replace('/home', '/#/home'))
-        .catch(() => true);
-      Message.info(failed ? '复制邀请链接失败，请重试' : '分享链接已复制');
+      const success = clipboard.write(
+        shareUrl.href.replace('/home', '/#/home'),
+      );
+      Message.info(!success ? '复制邀请链接失败，请重试' : '分享链接已复制');
     } else {
       Message.info('分享失败');
     }
@@ -268,7 +269,6 @@ const Play = () => {
             display="flex"
             flexDirection="row"
             flexWrap="wrap"
-            gap="10px"
             justifyContent="center"
           >
             {videos.map((e, idx) => {
@@ -278,6 +278,9 @@ const Play = () => {
                   key={e.name + e.url + idx}
                   type={currentIdx === idx ? 'primary' : undefined}
                   onClick={() => startPlay(idx)}
+                  style={{
+                    margin: '5px',
+                  }}
                 >
                   {e.name}
                 </Button>
