@@ -1,5 +1,3 @@
-import { NFTStorage } from 'nft.storage';
-
 import { jsonEncode } from '@/utils/base';
 import { envs } from '@/utils/env';
 
@@ -7,17 +5,23 @@ import { cache } from '../cache';
 import { http } from '../http';
 
 const gateway = 'https://snapshot.mypinata.cloud/ipfs/';
-const client = new NFTStorage({ token: envs.kNftStorageToken });
+const ipfsUpload = async (text: string) => {
+  const data = new Blob([text], { type: 'text/json' });
+  const res = await http.post('https://api.nft.storage/upload/', data, {
+    blob: true,
+    cacheKey: text,
+    headers: {
+      Authorization: `Bearer ${envs.kNftStorageToken}`,
+      'X-Client': 'nft.storage/js',
+    },
+  });
+  return res?.value?.cid;
+};
 
 export const ipfs = {
   async writeJson(data: any) {
     return cache.readOrWrite(jsonEncode(data) ?? '404', async () => {
-      const blob = new Blob([jsonEncode({ data })!]);
-      const cid = await client.storeBlob(blob).catch((_e) => {
-        // console.log('IPFS ERROR', _e);
-        return undefined;
-      });
-      return cid;
+      return await ipfsUpload(jsonEncode({ data }) ?? '');
     });
   },
   async readJson(cid: string) {

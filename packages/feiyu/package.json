@@ -13,7 +13,6 @@
     "fast-xml-parser": "^4.0.12",
     "isomorphic-unfetch": "^3.1.0",
     "localforage": "^1.10.0",
-    "nft.storage": "^7.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-lazy-load": "^4.0.1",
