@@ -209,7 +209,7 @@ const Play = () => {
       height={isMobile ? undefined : playerSize?.height}
       maxHeight={isMobile ? undefined : playerSize?.height}
       alignItems="start"
-      padding={isMobile ? '10px 0 0 0' : '0 20px'}
+      padding={isMobile ? '10px 0 0 0' : '0 0 0 20px'}
     >
       <Row width="100%">
         <Expand>
