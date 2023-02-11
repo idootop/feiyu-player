@@ -1,3 +1,4 @@
+import legacy from '@vitejs/plugin-legacy';
 import react from '@vitejs/plugin-react-swc';
 import * as path from 'path';
 import { defineConfig, splitVendorChunkPlugin } from 'vite';
@@ -74,6 +75,8 @@ export default defineConfig({
         ],
       },
     }),
+    // 兼容旧版浏览器
+    legacy(),
   ],
   envPrefix: 'k',
   resolve: {
@@ -94,12 +97,7 @@ export default defineConfig({
           if (id.includes('node_modules')) {
             const lib = id.split('node_modules/')[1].split('/')[0];
             if (
-              [
-                '@arco-design',
-                'localforage',
-                'lodash',
-                'dayjs',
-              ].includes(lib)
+              ['@arco-design', 'localforage', 'lodash', 'dayjs'].includes(lib)
             ) {
               return lib;
             }
