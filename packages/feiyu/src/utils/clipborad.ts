@@ -1,32 +1,62 @@
+// 主要代码由 ChatGPT 生成
 export const clipboard = {
   async read() {
-    return navigator.clipboard
-      ? await navigator.clipboard.readText().catch(() => undefined)
-      : undefined;
+    let result: string | undefined = undefined;
+
+    // Check if there is a modern clipboard API available
+    if (navigator.clipboard) {
+      try {
+        result = await navigator.clipboard.readText();
+      } catch (error) {
+        console.error('Failed to read from clipboard using modern API', error);
+      }
+    } else {
+      // Use document.execCommand as a fallback
+      const textarea = document.createElement('textarea');
+      textarea.style.position = 'fixed';
+      document.body.appendChild(textarea);
+      textarea.focus();
+
+      try {
+        document.execCommand('paste');
+        result = textarea.value;
+      } catch (error) {
+        console.error('Failed to read from clipboard using execCommand', error);
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
+
+    return result;
   },
   async write(text: string) {
-    try {
-      // 只在 https 环境可用
-      const failed = navigator.clipboard
-        ? await navigator.clipboard.writeText(text).catch(() => true)
-        : true;
-      return !failed;
-      // todo 可以再次读取对比是否已复制（但是有可能需要授权弹窗）
-    } catch (_) {
-      // polyfill
-      const textArea = document.createElement('textarea');
-      textArea.value = text;
-      textArea.style.position = 'fixed';
-      textArea.style.left = '-999999px';
-      textArea.style.top = '-999999px';
-      textArea.style.opacity = '0';
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      return new Promise((resolve) => {
-        resolve(document.execCommand?.('copy') ?? false);
-        textArea.remove();
-      });
+    let result = false;
+
+    // Check if there is a modern clipboard API available
+    if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(text);
+        result = true;
+      } catch (error) {
+        console.error('Failed to write to clipboard using modern API', error);
+      }
+    } else {
+      // Use document.execCommand as a fallback
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      try {
+        result = document.execCommand('copy');
+      } catch (error) {
+        console.error('Failed to write to clipboard using execCommand', error);
+      } finally {
+        document.body.removeChild(textarea);
+      }
     }
+
+    return result;
   },
 };

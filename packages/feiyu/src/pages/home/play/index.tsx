@@ -118,7 +118,7 @@ const Play = () => {
     if (_cid) {
       const shareUrl = new URL(window.location.href.replace('#/', ''));
       shareUrl.searchParams.set('cid', _cid);
-      const success = clipboard.write(
+      const success = await clipboard.write(
         shareUrl.href.replace('/home', '/#/home'),
       );
       Message.info(!success ? '复制邀请链接失败，请重试' : '分享链接已复制');
