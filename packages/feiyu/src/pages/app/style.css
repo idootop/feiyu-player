@@ -4,6 +4,10 @@
   background: rgba(255, 255, 255, 0.8);
 }
 
+.arco-btn-loading::before {
+  background: transparent !important;
+}
+
 body[arco-theme='dark'] .glass-effect {
   background: rgba(0, 0, 0, 0.8);
 }

@@ -260,7 +260,7 @@ const Play = () => {
         <Box />
       )}
       {videos.length > 1 ? (
-        <Row width="100%" justifyContent="space-between" padding="5px 0">
+        <Row width="100%" justifyContent="space-between" padding="10px 0 5px 0">
           <Text
             width="100%"
             fontSize="14px"
@@ -282,7 +282,7 @@ const Play = () => {
       ) : (
         <Box />
       )}
-      <Expand className="hide-scollbar" overflowY="scroll" margin="15px 0 0 0">
+      <Expand className="hide-scollbar" overflowY="scroll" margin="10px 0 0 0">
         <Box width="100%" height="100%">
           <Box
             width="100%"
