@@ -52,7 +52,7 @@ export const SideDrawer = () => {
 
 const MyMenu = (props?: { showLogo?: boolean }) => {
   const { showLogo } = props ?? {};
-  const { currentPage, jumpToPage } = usePages();
+  const { currentPage, jumpToPage, isIndexPage } = usePages();
   const { jumpToIndex } = usePages({ parent: '/home', index: 'hot' });
   const { closeSideMenu } = useSideMenu();
   return (
@@ -73,9 +73,13 @@ const MyMenu = (props?: { showLogo?: boolean }) => {
           <Row
             cursor="pointer"
             onClick={() => {
-              // 菜单点击后，收起侧边栏
+              // 收起侧边栏
               closeSideMenu();
-              Message.info("喵呜 ฅ'ω'ฅ");
+              if (!isIndexPage) {
+                jumpToIndex(); // 回到首页
+              } else {
+                Message.info("喵呜 ฅ'ω'ฅ");
+              }
             }}
           >
             <img width="24px" height="24px" src="/logo.svg" />

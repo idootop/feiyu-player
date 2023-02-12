@@ -1,5 +1,5 @@
+import { configs } from '@/data/config/manager';
 import { useSearchDatas } from '@/hooks/useSearchDatas';
-import { configs } from '@/pages/app/configs';
 import { http } from '@/services/http';
 import { store } from '@/services/store/useStore';
 
@@ -15,9 +15,12 @@ export const useSearchHotMovies = () => {
     async onSearch() {
       const currenHotMovies = store.get(kHotMoviesKey);
       if (currenHotMovies) return currenHotMovies;
-      const movies = await http.get(configs.hotMovies);
+      const hotMovies = configs.current.hotMovies;
+      const movies = isString(hotMovies)
+        ? await http.get(hotMovies as string)
+        : hotMovies;
       if (isString(movies)) {
-        return [];
+        return []; // 非预期数据
       }
       store.set(kHotMoviesKey, movies);
       return movies;

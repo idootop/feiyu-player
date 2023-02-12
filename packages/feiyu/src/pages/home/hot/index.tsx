@@ -1,11 +1,12 @@
 import './style.css';
 
-import { Empty, Rate } from '@arco-design/web-react';
+import { Rate } from '@arco-design/web-react';
 
 import { Box } from '@/components/Box';
 import { Column, Row } from '@/components/Flex';
 import { LazyImage } from '@/components/LazyImage/LazyImage';
 import { Loading } from '@/components/Loading';
+import { SearchEmpty } from '@/components/SearchEmpty';
 import { Text } from '@/components/Text';
 import { PageBuilder } from '@/pages/app';
 import { useInit } from '@/services/store/useStore';
@@ -44,7 +45,7 @@ const Hot = () => {
         }
       }}
     >
-      <Empty description="空空如也，喵呜 ฅ'ω'ฅ" />
+      <SearchEmpty />
     </Column>
   ) : (
     <>

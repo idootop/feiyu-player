@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-unfetch';
 
-import { configs } from '@/pages/app/configs';
+import { configs } from '@/data/config/manager';
 import { AbortConfig } from '@/utils/abort';
 import { jsonDecode, jsonEncode } from '@/utils/base';
 import { isNotEmpty, isObject } from '@/utils/is';
@@ -147,6 +147,12 @@ const post = async (url: string, data?: any, config?: HttpConfig) => {
   return result;
 };
 
+export const isValidProxy = async () => {
+  return configs.current.httpProxy
+    ? isNotEmpty(await http.get(configs.current.httpProxy))
+    : false;
+};
+
 export const http = {
   /**
    * 默认超时：30s
@@ -160,7 +166,10 @@ export const http = {
      */
     get(url: string, query?: Record<string, any>, config?: HttpConfig): any {
       const { headers = {}, cache = true, signal } = config ?? {};
-      return get(configs.httpProxy, query, {
+      if (!configs.current.httpProxy) {
+        return get(url, query, config);
+      }
+      return get(configs.current.httpProxy, query, {
         ...config,
         headers: { ...kBaseHeaders, ...headers, [kProxyKey]: url },
         signal,
@@ -172,7 +181,10 @@ export const http = {
      */
     post(url: string, data?: any, config?: HttpConfig): any {
       const { headers = {}, cache = true, signal } = config ?? {};
-      return post(configs.httpProxy, data, {
+      if (!configs.current.httpProxy) {
+        return post(url, data, config);
+      }
+      return post(configs.current.httpProxy, data, {
         ...config,
         headers: { ...kBaseHeaders, ...headers, [kProxyKey]: url },
         signal,

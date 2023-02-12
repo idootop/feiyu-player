@@ -1,4 +1,4 @@
-import { configs } from '@/pages/app/configs';
+import { configs } from '@/data/config/manager';
 import { http } from '@/services/http';
 
 import { withAbort } from '../abort';
@@ -56,8 +56,9 @@ class Feiyu {
   ) {
     const { callback, signal, linearRun = false } = config ?? {};
     const results: FeiyuMovie[] = [];
+    const sites: any = configs.current.movieSites ?? [];
     if (linearRun) {
-      for (const site of configs.movieSites) {
+      for (const site of sites) {
         // 搜索电影列表
         const movies = await this._search(site, name, signal);
         for (const movie of movies) {
@@ -73,7 +74,7 @@ class Feiyu {
       }
     } else {
       await Promise.all(
-        configs.movieSites.map((site) =>
+        sites.map((site) =>
           (async () => {
             // 搜索电影列表
             const movies = await this._search(site, name, signal);
@@ -115,7 +116,7 @@ class Feiyu {
     videoName: string,
     signal?: AbortSignal,
   ): Promise<MovieBasic[]> {
-    const url = `${site?.api}?wd=${encodeURI(videoName)}`;
+    const url = `${site.api}?wd=${encodeURI(videoName)}`;
     const result = await http.proxy.get(url, undefined, { signal });
     const json = await parseXML(result);
     let videoList = json?.rss?.list?.video ?? [];
@@ -157,7 +158,7 @@ class Feiyu {
     videoId: string,
     signal?: AbortSignal,
   ): Promise<Movie> {
-    const url = `${site?.api}?ac=videolist&ids=${videoId}`;
+    const url = `${site.api}?ac=videolist&ids=${videoId}`;
     const result = await http.proxy.get(url, undefined, { signal });
     const json = await parseXML(result);
     const video = json?.rss?.list?.video;

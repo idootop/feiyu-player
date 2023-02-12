@@ -8,6 +8,12 @@ import { CSSProperties, FC, ReactNode } from 'react';
 export type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType[number];
 
+export type DeepPartial<T> = T extends object
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>;
+    }
+  : T;
+
 // 此处放一些全局类型
 
 export type LComponent<T = any> = FC<T>;

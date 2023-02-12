@@ -1,8 +1,7 @@
-import { configs } from '@/pages/app/configs';
 import { printf, printJson } from '@/utils/base';
 import { feiyu } from '@/utils/feiyu';
 
-export const test = () => {
+const test = () => {
   const desps = [
     '<p><span style="color: rgb(17, 17, 17); font-family: Helvetica, Arial, sans-serif; font-size: 13px; background-color: rgb(255, 255, 255);">在这个揭示钢铁超人起源的传奇冒险故事里，过去和现在发生了碰撞。在一个被埋葬多年的中国古老王国的废墟上，百万富翁兼发明家托尼。斯塔克进行着挖掘工作，但挖掘进度远远超出了协议规定的部分。他解开了一个古老的预言，预示中国最黑暗和最暴乱朝代的君主Mandarin将会复苏。为了对 付这股极具破坏性的力量，托尼打造了一套盔甲，并装备上先进武器。为了阻止这个他亲手带到地球的邪恶力量，托尼必须要成为自己有生以来最伟大的发明 -- 钢铁超人！这个新生的战士必须到地球的四个角落同Mandarin的追随者元素战士 -- 4个操纵着土、水、风和火元素力量的战士 战斗！但像预言所说的那样,钢铁超人是否有足够的能力挑战命运，阻止这股邪恶力量意图对地球的破坏呢？</span></p>',
     '<p>　　和德普前妻艾梅柏约会，被侃爷列为竞选总统顾问，被称为现实版钢铁侠； 涉足互联网、太空探索、人工智能、可持续发展能源多个领域，梦想在火星上建立一个自给自足的城市； 快来看特斯拉、SpaceX老板伊隆·马斯克(ElonMusk)的传奇人生， 志不嫌远，梦不嫌大，只要你想去做，没有什么不可能~</p>',
@@ -23,11 +22,7 @@ const main = async () => {
     },
   });
   printJson(results);
-  for (const site of configs.movieSites) {
-    if (!results.find((e) => e.site === site.key)) {
-      printf(`❌ ${site.key}`);
-    }
-  }
+  test();
   printf(`✅✅✅`);
 };
 

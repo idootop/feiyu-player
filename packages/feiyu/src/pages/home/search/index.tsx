@@ -1,4 +1,4 @@
-import { Button, Empty } from '@arco-design/web-react';
+import { Button } from '@arco-design/web-react';
 import { IconLeft, IconSort } from '@arco-design/web-react/icon';
 import { useEffect } from 'react';
 
@@ -6,6 +6,7 @@ import { Box } from '@/components/Box';
 import { Center, Column, Expand, Row } from '@/components/Flex';
 import { LazyImage } from '@/components/LazyImage/LazyImage';
 import { Loading } from '@/components/Loading';
+import { SearchEmpty } from '@/components/SearchEmpty';
 import { Stack } from '@/components/Stack';
 import { Position } from '@/components/Stack/position';
 import { Text } from '@/components/Text';
@@ -71,7 +72,7 @@ const Search = () => {
         }
       }}
     >
-      <Empty description="空空如也，喵呜 ฅ'ω'ฅ" />
+      <SearchEmpty />
     </Column>
   ) : (
     <>

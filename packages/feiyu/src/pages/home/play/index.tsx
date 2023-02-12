@@ -1,4 +1,4 @@
-import { Button, Empty, Message, Modal } from '@arco-design/web-react';
+import { Button, Message, Modal } from '@arco-design/web-react';
 import {
   IconLeft,
   IconShareExternal,
@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Box } from '@/components/Box';
 import { Column, Expand, Row } from '@/components/Flex';
 import { Loading } from '@/components/Loading';
+import { SearchEmpty } from '@/components/SearchEmpty';
 import { Text } from '@/components/Text';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useDarkMode } from '@/hooks/useDarkMode';
@@ -319,7 +320,7 @@ const Play = () => {
       </Column>
     ) : noData || !currentVideo ? (
       <Column width="100%" height="calc(80vh - 60px)" justifyContent="center">
-        <Empty description="空空如也，喵呜 ฅ'ω'ฅ" />
+        <SearchEmpty />
       </Column>
     ) : (
       <Column width="100%" justifyContent="center">

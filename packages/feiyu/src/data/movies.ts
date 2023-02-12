@@ -1,14 +1,9 @@
-import { getHotMovies } from '@/utils/douban/useSearchHotMovies';
-
 import { pickOne } from '../utils/base';
+import { configs } from './config/manager';
 
 export const randomMovie = () => {
-  // 推荐前 50 个热门电影
-  const hotMovies = getHotMovies()
-    ?.slice(0, 50)
-    ?.map((e) => e.title);
   return pickOne(
-    hotMovies ?? [
+    configs.current.recommendMovies ?? [
       '请回答1988',
       '白色巨塔',
       '非自然死亡',
