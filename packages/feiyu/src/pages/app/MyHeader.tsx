@@ -1,4 +1,4 @@
-import { Popover } from '@arco-design/web-react';
+import { Message } from '@arco-design/web-react';
 
 import { Expand, Row } from '@/components/Flex';
 import { SwitchDark } from '@/components/SwitchDark';
@@ -12,7 +12,7 @@ import { useSideMenu } from './SideMenu';
 export const kHeaderHeight = '60px';
 
 export const MyHeader = () => {
-  const { jumpToIndex } = useHomePages();
+  const { jumpToIndex, isIndexPage } = useHomePages();
   const { isMobile } = useBreakpoint();
   const { openSideMenu } = useSideMenu();
 
@@ -36,24 +36,25 @@ export const MyHeader = () => {
             // 移动端点击打开菜单栏
             openSideMenu();
           } else {
-            // 跳转首页
-            jumpToIndex({ keepHistory: false });
+            if (!isIndexPage) {
+              jumpToIndex(); // 回到首页
+            } else {
+              Message.info("喵呜 ฅ'ω'ฅ");
+            }
           }
         }}
       >
         <img width="24px" height="24px" src="/logo.svg" />
-        <Popover position="right" content="喵呜 ฅ'ω'ฅ">
-          <span
-            style={{
-              fontSize: '20px',
-              fontWeight: 'bold',
-              padding: '0px 10px',
-              color: colors.text,
-            }}
-          >
-            飞鱼
-          </span>
-        </Popover>
+        <span
+          style={{
+            fontSize: '20px',
+            fontWeight: 'bold',
+            padding: '0px 10px',
+            color: colors.text,
+          }}
+        >
+          飞鱼
+        </span>
       </Row>
 
       <Expand />

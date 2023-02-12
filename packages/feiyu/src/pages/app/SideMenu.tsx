@@ -52,7 +52,7 @@ export const SideDrawer = () => {
 
 const MyMenu = (props?: { showLogo?: boolean }) => {
   const { showLogo } = props ?? {};
-  const { currentPage } = usePages();
+  const { currentPage, jumpToPage } = usePages();
   const { jumpToIndex } = usePages({ parent: '/home', index: 'hot' });
   const { closeSideMenu } = useSideMenu();
   return (
@@ -99,14 +99,19 @@ const MyMenu = (props?: { showLogo?: boolean }) => {
           <MenuItem
             key={page.key}
             onClick={() => {
-              if (page.key === kRoutePages[0].key) {
-                jumpToIndex();
+              // 收起侧边栏
+              closeSideMenu();
+              // 跳转页面
+              const available = ['home', 'settings'].includes(page.key);
+              if (available) {
+                if (page.key === 'home') {
+                  jumpToIndex();
+                } else {
+                  jumpToPage(page.key);
+                }
               } else {
                 Message.info('Coming soon');
-                // jumpToPage(page.key);
               }
-              // 菜单点击后，收起侧边栏
-              closeSideMenu();
             }}
           >
             {page.icon}
