@@ -1,6 +1,5 @@
 import { configs } from '@/data/config/manager';
 import { jsonEncode } from '@/utils/base';
-import { envs } from '@/utils/env';
 
 import { cache } from '../cache';
 import { http } from '../http';
@@ -11,7 +10,7 @@ const ipfsUpload = async (text: string): Promise<string | undefined> => {
     blob: true,
     cacheKey: text,
     headers: {
-      Authorization: `Bearer ${envs.kNftStorageToken}`,
+      Authorization: `Bearer ${configs.current.ipfs?.token}`,
       'X-Client': 'nft.storage/js',
     },
   });
