@@ -7,7 +7,7 @@ import { subscribeStorage } from './storage';
 import { FeiyuConfig, Subscribe } from './types';
 
 class ConfigManager {
-  static defaultKey = '本地';
+  static defaultKey = '默认订阅';
   static defaultConfig: Subscribe = {
     key: ConfigManager.defaultKey,
     link: undefined,

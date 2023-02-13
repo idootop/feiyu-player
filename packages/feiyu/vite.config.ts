@@ -7,7 +7,7 @@ import vitePluginImp from 'vite-plugin-imp';
 import { VitePWA } from 'vite-plugin-pwa';
 
 const title = '飞鱼';
-const description = '一个漂亮得不像实力派的视频播放器✨';
+const description = '一个漂亮得不像实力派的在线视频播放器✨';
 
 export default defineConfig({
   plugins: [
