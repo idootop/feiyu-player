@@ -1,0 +1,7 @@
+.subscribe-title .arco-dropdown-popup-visible .arco-icon-down {
+  transform: rotate(180deg);
+}
+
+.table-row:hover {
+  background: var(--color-bg-card);
+}

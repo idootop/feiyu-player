@@ -1,10 +1,18 @@
 import { http } from '@/services/http';
 import { ipfs, ipfsGateway } from '@/services/ipfs';
+import { store } from '@/services/store/useStore';
 import { timestamp } from '@/utils/base';
 
 import { kDefaultConfig } from '../default';
 import { subscribeStorage } from './storage';
 import { FeiyuConfig, Subscribe } from './types';
+
+interface SubscribesStore {
+  currentSubscribe: string;
+  subscribes: Record<string, Subscribe>;
+}
+
+export const kSubscribesKey = 'kSubscribesKey';
 
 class ConfigManager {
   static defaultKey = '默认订阅';
@@ -15,11 +23,16 @@ class ConfigManager {
     config: kDefaultConfig,
   };
 
-  /**
-   * 当前订阅
-   */
-  private _subscribes: Record<string, Subscribe> = {};
-  private _currentSubscribe = ConfigManager.defaultKey;
+  private get _subscribes() {
+    return store.get<SubscribesStore>(kSubscribesKey)?.subscribes ?? {};
+  }
+
+  private get _currentSubscribe() {
+    return (
+      store.get<SubscribesStore>(kSubscribesKey)?.currentSubscribe ??
+      ConfigManager.defaultKey
+    );
+  }
 
   get current(): FeiyuConfig {
     this.init(); // 被动初始化
@@ -30,21 +43,29 @@ class ConfigManager {
    * 初始化订阅列表
    */
   async init() {
-    if (Object.keys(this._subscribes).length > 0) {
+    const _subscribes =
+      store.get<SubscribesStore>(kSubscribesKey)?.subscribes ?? {};
+    if (Object.keys(_subscribes).length > 0) {
       return; // 只从本地初始化一次
     }
     // 添加默认配置
-    this._subscribes[ConfigManager.defaultKey] = ConfigManager.defaultConfig;
+    _subscribes[ConfigManager.defaultKey] = ConfigManager.defaultConfig;
     // 加载本地订阅配置
     const subscribes = await subscribeStorage.getAll();
     subscribes.forEach((e) => {
-      this._subscribes[e.key] = e;
+      _subscribes[e.key] = e;
     });
     // 从本地读取当前使用的配置记录
+    let _currentSubscribe = ConfigManager.defaultKey;
     const current = subscribeStorage.current();
     if (current) {
-      this._currentSubscribe = current;
+      _currentSubscribe = current;
     }
+    // 初始化依赖
+    store.set(kSubscribesKey, {
+      subscribes: _subscribes,
+      currentSubscribe: _currentSubscribe,
+    });
     // 刷新订阅
     this.refreshAll();
   }
@@ -80,30 +101,38 @@ class ConfigManager {
     const datas: Subscribe[] =
       (await http.proxy.get(url, { caches: false })) ?? [];
     let successItems = 0;
+    const _subscribes = this._subscribes;
     for (const subscribe of datas) {
       const key = subscribe.key;
       const link = subscribe.link;
       // 不能重名
-      if (this._subscribes[key]) {
+      if (_subscribes[key]) {
         let newName = subscribe.key;
-        while (this._subscribes[newName]) {
+        while (_subscribes[newName]) {
           newName = newName + '(重名)';
         }
         // 解决重名
         subscribe.key = newName;
       }
       // 不能重复添加相同的订阅源
-      const _subscribes = Object.values(this._subscribes);
-      const sameLink = _subscribes.find((e) => e.link === link);
+      const subscribeKeys = Object.values(_subscribes);
+      const sameLink = subscribeKeys.find((e) => e.link === link);
       if (sameLink) {
         break; // 跳过已添加的订阅源
       }
       // 导入订阅
       const success = await subscribeStorage.set(key, subscribe);
       if (success) {
-        this._subscribes[key] = subscribe;
+        _subscribes[key] = subscribe;
         successItems += 1;
       }
+    }
+    if (successItems > 0) {
+      // 更新状态
+      store.set(kSubscribesKey, {
+        subscribes: _subscribes,
+        currentSubscribe: this._currentSubscribe,
+      });
     }
     return successItems;
   }
@@ -118,8 +147,8 @@ class ConfigManager {
       return '此名称已使用，请重新命名';
     }
     // 不能重复添加相同的订阅源
-    const _subscribes = Object.values(this._subscribes);
-    const sameLink = _subscribes.find((e) => e.link === link);
+    const subscribeKeys = Object.values(this._subscribes);
+    const sameLink = subscribeKeys.find((e) => e.link === link);
     if (sameLink) {
       return `订阅已存在，请先删除：${sameLink.key}`;
     }
@@ -135,7 +164,13 @@ class ConfigManager {
       };
       const success = await subscribeStorage.set(key, newData);
       if (success) {
-        this._subscribes[key] = newData;
+        const _subscribes = this._subscribes;
+        _subscribes[key] = newData;
+        // 更新状态
+        store.set(kSubscribesKey, {
+          subscribes: _subscribes,
+          currentSubscribe: this._currentSubscribe,
+        });
         return '添加成功';
       }
     }
@@ -165,7 +200,13 @@ class ConfigManager {
         };
         const success = await subscribeStorage.set(key, newData);
         if (success) {
-          this._subscribes[key] = newData;
+          const _subscribes = this._subscribes;
+          _subscribes[key] = newData;
+          // 更新状态
+          store.set(kSubscribesKey, {
+            subscribes: _subscribes,
+            currentSubscribe: this._currentSubscribe,
+          });
           return true;
         }
       }
@@ -187,7 +228,13 @@ class ConfigManager {
       };
       const success = await subscribeStorage.set(key, newData);
       if (success) {
-        this._subscribes[key] = newData;
+        const _subscribes = this._subscribes;
+        _subscribes[key] = newData;
+        // 更新状态
+        store.set(kSubscribesKey, {
+          subscribes: _subscribes,
+          currentSubscribe: this._currentSubscribe,
+        });
         return true;
       }
     }
@@ -211,13 +258,21 @@ class ConfigManager {
     await this.init();
     const success = await subscribeStorage.remove(key);
     if (success) {
-      delete this._subscribes[key];
-      if (!this._subscribes[ConfigManager.defaultKey]) {
-        this._subscribes[ConfigManager.defaultKey] =
-          ConfigManager.defaultConfig;
+      const _subscribes = this._subscribes;
+      delete _subscribes[key];
+      if (!_subscribes[ConfigManager.defaultKey]) {
+        _subscribes[ConfigManager.defaultKey] = ConfigManager.defaultConfig;
       }
       // 重置为默认值
-      return await this.setCurrent(ConfigManager.defaultKey);
+      const flag = await this.setCurrent(ConfigManager.defaultKey);
+      if (flag) {
+        // 更新状态
+        store.set(kSubscribesKey, {
+          subscribes: _subscribes,
+          currentSubscribe: ConfigManager.defaultKey,
+        });
+        return true;
+      }
     }
     return false;
   }
@@ -229,11 +284,18 @@ class ConfigManager {
     await this.init();
     const success = await subscribeStorage.clear();
     if (success) {
-      this._subscribes = {
-        [ConfigManager.defaultKey]: ConfigManager.defaultConfig,
-      };
       // 重置为默认值
-      return await this.setCurrent(ConfigManager.defaultKey);
+      const flag = await this.setCurrent(ConfigManager.defaultKey);
+      if (flag) {
+        // 更新状态
+        store.set(kSubscribesKey, {
+          subscribes: {
+            [ConfigManager.defaultKey]: ConfigManager.defaultConfig,
+          },
+          currentSubscribe: ConfigManager.defaultKey,
+        });
+        return true;
+      }
     }
     return false;
   }
@@ -247,7 +309,11 @@ class ConfigManager {
     if (this._subscribes[key]) {
       const success = await subscribeStorage.setCurrent(key);
       if (success) {
-        this._currentSubscribe = key;
+        // 更新状态
+        store.set(kSubscribesKey, {
+          subscribes: this._subscribes,
+          currentSubscribe: key,
+        });
         return true;
       }
     }

@@ -40,7 +40,7 @@ const kScreenReSizeListenerKey = 'kScreenReSizeListenerKey';
 let _initScreenReSizeListener = false;
 const initScreenReSizeListener = () => {
   if (!_initScreenReSizeListener) {
-    // 全剧只初始化一次
+    // 全局只初始化一次
     setInterval(() => {
       store.set(kScreenReSizeListenerKey, _getBreakpint());
     }, 100);

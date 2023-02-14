@@ -11,4 +11,5 @@ export const colors = {
   text3: 'var(--color-text-3)',
   gray: 'rgb(var(--gray-1))',
   card: 'var(--color-bg-card)',
+  border: 'var(--color-border)',
 };

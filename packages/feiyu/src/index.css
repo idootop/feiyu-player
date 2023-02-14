@@ -21,10 +21,12 @@ body,
 
 body {
   --color-bg-card: rgb(var(--gray-1));
+  --color-border: #ebecf0;
 }
 
 body[arco-theme='dark'] {
   --color-bg-card: var(--color-bg-3);
+  --color-border: #2e2e31;
 }
 
 a:focus,
