@@ -131,7 +131,7 @@ class Feiyu {
         type: e.type ?? '', //分类
       }))
       .filter((e) => e.id && e.name);
-      
+
     if (!configs.allowMovieCommentary) {
       // 去掉电影解说
       videoList = videoList.filter(
@@ -149,7 +149,7 @@ class Feiyu {
       );
     }
 
-    if (configs.allowSexy) {
+    if (!configs.allowSexy) {
       // 去掉伦理片
       videoList = videoList.filter((e) => !e.type.includes('伦理'));
     }
