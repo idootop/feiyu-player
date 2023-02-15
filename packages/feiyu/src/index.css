@@ -46,3 +46,7 @@ div:focus {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.arco-dropdown {
+  z-index: 2;
+}

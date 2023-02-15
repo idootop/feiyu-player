@@ -12,4 +12,5 @@ export const colors = {
   gray: 'rgb(var(--gray-1))',
   card: 'var(--color-bg-card)',
   border: 'var(--color-border)',
+  red: 'rgb(var(--danger-6))',
 };

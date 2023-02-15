@@ -7,7 +7,7 @@ import { kDefaultConfig } from '../default';
 import { subscribeStorage } from './storage';
 import { FeiyuConfig, Subscribe } from './types';
 
-interface SubscribesStore {
+export interface SubscribesStore {
   currentSubscribe: string;
   subscribes: Record<string, Subscribe>;
 }
