@@ -14,7 +14,7 @@ export interface SubscribesStore {
 
 export const kSubscribesKey = 'kSubscribesKey';
 
-class ConfigManager {
+export class ConfigManager {
   static defaultKey = '默认订阅';
   static defaultConfig: Subscribe = {
     key: ConfigManager.defaultKey,

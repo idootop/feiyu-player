@@ -15,6 +15,7 @@ import { Box } from '@/components/Box';
 import { Center, Column, Expand, Row } from '@/components/Flex';
 import { Text } from '@/components/Text';
 import {
+  ConfigManager,
   configs,
   kSubscribesKey,
   SubscribesStore,
@@ -24,6 +25,7 @@ import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useDarkMode } from '@/hooks/useDarkMode';
 import { useConsumer } from '@/services/store/useStore';
 import { colors } from '@/styles/colors';
+import { isEmpty, isNotEmpty } from '@/utils/is';
 
 import { PageBuilder } from '../app';
 
@@ -165,36 +167,51 @@ const TableRow = (props: {
   setCurrent: (key: string) => void;
 }) => {
   const { isMobile, selected, setCurrent, subscribe } = props;
+  const hasRefresh = isNotEmpty(subscribe.link);
+  const hasEdit = isEmpty(subscribe.link);
+  const hasDelete = subscribe.key !== ConfigManager.defaultKey;
   const dropList = (
     <Menu style={{ width: '90px' }}>
-      <Menu.Item
-        key="编辑"
-        onClick={() => {
-          alert('编辑');
-        }}
-      >
-        <IconCode style={{ marginRight: '10px' }} />
-        编辑
-      </Menu.Item>
-      <Menu.Item
-        key="更新"
-        onClick={() => {
-          alert('更新');
-        }}
-      >
-        <IconLoop style={{ marginRight: '10px' }} />
-        更新
-      </Menu.Item>
-      <Menu.Item
-        key="删除"
-        style={{ color: colors.red }}
-        onClick={() => {
-          alert('删除');
-        }}
-      >
-        <IconDelete style={{ marginRight: '10px' }} />
-        删除
-      </Menu.Item>
+      {hasEdit ? (
+        <Menu.Item
+          key="编辑"
+          onClick={() => {
+            alert('编辑');
+          }}
+        >
+          <IconCode style={{ marginRight: '10px' }} />
+          编辑
+        </Menu.Item>
+      ) : (
+        <Box />
+      )}
+      {hasRefresh ? (
+        <Menu.Item
+          key="更新"
+          onClick={() => {
+            alert('更新');
+          }}
+        >
+          <IconLoop style={{ marginRight: '10px' }} />
+          更新
+        </Menu.Item>
+      ) : (
+        <Box />
+      )}
+      {hasDelete ? (
+        <Menu.Item
+          key="删除"
+          style={{ color: colors.red }}
+          onClick={() => {
+            alert('删除');
+          }}
+        >
+          <IconDelete style={{ marginRight: '10px' }} />
+          删除
+        </Menu.Item>
+      ) : (
+        <Box />
+      )}
     </Menu>
   );
   return (
@@ -249,7 +266,7 @@ const TableRow = (props: {
         {new Date(subscribe.lastUpdate).toISOString().substring(0, 10)}
       </Text>
       <Center width="64px">
-        <Dropdown droplist={dropList} position="br" trigger="click">
+        <Dropdown droplist={dropList} position="br">
           <Button type="text">
             <IconMore />
           </Button>

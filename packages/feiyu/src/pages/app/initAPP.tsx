@@ -2,6 +2,7 @@ import { Button, Notification } from '@arco-design/web-react';
 import { useEffect } from 'react';
 import { registerSW } from 'virtual:pwa-register';
 
+import { configs } from '@/data/config/manager';
 import { usePWA } from '@/hooks/usePWA';
 import { cache } from '@/services/cache';
 import { useFallbackToIndex } from '@/services/routes/page';
@@ -10,10 +11,12 @@ import { useInit } from '@/services/store/useStore';
 import { kRoutePages } from '..';
 
 const _initAPP = async () => {
+  // 初始化APP配置信息
+  configs.init();
   // 注册 service worker（自动更新）
   registerSW({ immediate: true });
   // 清除已过期的本地缓存
-  await cache.clearExpired();
+  cache.clearExpired();
 };
 
 export const useInitAPP = () => {
