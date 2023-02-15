@@ -1,6 +1,6 @@
 import './style.css';
 
-import { Button, Dropdown, Menu, Radio } from '@arco-design/web-react';
+import { Button, Dropdown, Menu, Radio, Switch } from '@arco-design/web-react';
 import {
   IconCode,
   IconDelete,
@@ -29,8 +29,8 @@ import { isEmpty, isNotEmpty } from '@/utils/is';
 
 import { PageBuilder } from '../app';
 
-const SubscribeHeader = () => {
-  const { isMobile } = useBreakpoint();
+const SubscribeHeader = (props: { isMobile: boolean }) => {
+  const { isMobile } = props;
   const dropList = (
     <Menu
       style={{
@@ -276,12 +276,66 @@ const TableRow = (props: {
   );
 };
 
+const CurrentHeader = (props: { isMobile: boolean }) => {
+  const { isMobile: _ } = props;
+  const [data] = useConsumer<SubscribesStore>(kSubscribesKey);
+  const { allowSexy, allowMovieCommentary } = data ?? {};
+  return (
+    <Column width="100%" className="subscribe-title" alignItems="start">
+      <Text fontSize="16px" fontWeight="500">
+        搜索过滤开关
+      </Text>
+      <Row>
+        <Row
+          margin="20px 0"
+          padding="16px"
+          border={`1px solid ${colors.border}`}
+          borderRadius="4px"
+          marginRight="20px"
+        >
+          <Text fontSize="14px" fontWeight="500" marginRight="20px">
+            电影解说
+          </Text>
+          <Switch
+            checked={!allowMovieCommentary}
+            onChange={(value) => {
+              console.log('电影解说', !allowMovieCommentary, value);
+              if (!allowMovieCommentary === !value) {
+                configs.toggleAllowMovieCommentary();
+              }
+            }}
+          />
+        </Row>
+        <Row
+          margin="20px 0"
+          padding="16px"
+          border={`1px solid ${colors.border}`}
+          borderRadius="4px"
+        >
+          <Text fontSize="14px" fontWeight="500" marginRight="20px">
+            伦理片
+          </Text>
+          <Switch
+            checked={!allowSexy}
+            onChange={(value) => {
+              if (!allowSexy === !value) {
+                configs.toggleAllowSexy();
+              }
+            }}
+          />
+        </Row>
+      </Row>
+    </Column>
+  );
+};
+
 const SettingsBody = (props: { isMobile: boolean }) => {
   const { isMobile } = props;
   return (
     <Column width="100%">
-      <SubscribeHeader />
+      <SubscribeHeader isMobile={isMobile} />
       <SubscribeTable isMobile={isMobile} />
+      <CurrentHeader isMobile={isMobile} />
     </Column>
   );
 };

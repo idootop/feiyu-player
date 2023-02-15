@@ -1,5 +1,6 @@
 import { http } from '@/services/http';
 import { ipfs, ipfsGateway } from '@/services/ipfs';
+import { storage } from '@/services/storage/storage';
 import { store } from '@/services/store/useStore';
 import { timestamp } from '@/utils/base';
 
@@ -10,6 +11,8 @@ import { FeiyuConfig, Subscribe } from './types';
 export interface SubscribesStore {
   currentSubscribe: string;
   subscribes: Record<string, Subscribe>;
+  allowSexy: boolean; // 不过滤伦理片
+  allowMovieCommentary: boolean; // 不过滤电影解说
 }
 
 export const kSubscribesKey = 'kSubscribesKey';
@@ -34,9 +37,40 @@ export class ConfigManager {
     );
   }
 
+  private _updateStore(data: Partial<SubscribesStore>) {
+    const old = store.get<SubscribesStore>(kSubscribesKey) ?? {};
+    store.set(kSubscribesKey, {
+      ...old,
+      ...data,
+    });
+  }
+
   get current(): FeiyuConfig {
     this.init(); // 被动初始化
     return this._subscribes[this._currentSubscribe]?.config ?? kDefaultConfig;
+  }
+
+  get allowSexy() {
+    return storage.get('allowSexy');
+  }
+  get allowMovieCommentary() {
+    return storage.get('allowMovieCommentary');
+  }
+
+  toggleAllowSexy() {
+    const flag = !this.allowSexy;
+    storage.set('allowSexy', flag);
+    this._updateStore({
+      allowSexy: flag,
+    });
+  }
+
+  toggleAllowMovieCommentary() {
+    const flag = !this.allowMovieCommentary;
+    storage.set('allowMovieCommentary', flag);
+    this._updateStore({
+      allowMovieCommentary: flag,
+    });
   }
 
   /**
@@ -62,9 +96,11 @@ export class ConfigManager {
       _currentSubscribe = current;
     }
     // 初始化依赖
-    store.set(kSubscribesKey, {
+    this._updateStore({
       subscribes: _subscribes,
       currentSubscribe: _currentSubscribe,
+      allowSexy: this.allowSexy,
+      allowMovieCommentary: this.allowMovieCommentary,
     });
     // 刷新订阅
     this.refreshAll();
@@ -129,9 +165,8 @@ export class ConfigManager {
     }
     if (successItems > 0) {
       // 更新状态
-      store.set(kSubscribesKey, {
+      this._updateStore({
         subscribes: _subscribes,
-        currentSubscribe: this._currentSubscribe,
       });
     }
     return successItems;
@@ -167,9 +202,8 @@ export class ConfigManager {
         const _subscribes = this._subscribes;
         _subscribes[key] = newData;
         // 更新状态
-        store.set(kSubscribesKey, {
+        this._updateStore({
           subscribes: _subscribes,
-          currentSubscribe: this._currentSubscribe,
         });
         return '添加成功';
       }
@@ -203,9 +237,8 @@ export class ConfigManager {
           const _subscribes = this._subscribes;
           _subscribes[key] = newData;
           // 更新状态
-          store.set(kSubscribesKey, {
+          this._updateStore({
             subscribes: _subscribes,
-            currentSubscribe: this._currentSubscribe,
           });
           return true;
         }
@@ -231,9 +264,8 @@ export class ConfigManager {
         const _subscribes = this._subscribes;
         _subscribes[key] = newData;
         // 更新状态
-        store.set(kSubscribesKey, {
+        this._updateStore({
           subscribes: _subscribes,
-          currentSubscribe: this._currentSubscribe,
         });
         return true;
       }
@@ -267,7 +299,7 @@ export class ConfigManager {
       const flag = await this.setCurrent(ConfigManager.defaultKey);
       if (flag) {
         // 更新状态
-        store.set(kSubscribesKey, {
+        this._updateStore({
           subscribes: _subscribes,
           currentSubscribe: ConfigManager.defaultKey,
         });
@@ -288,7 +320,7 @@ export class ConfigManager {
       const flag = await this.setCurrent(ConfigManager.defaultKey);
       if (flag) {
         // 更新状态
-        store.set(kSubscribesKey, {
+        this._updateStore({
           subscribes: {
             [ConfigManager.defaultKey]: ConfigManager.defaultConfig,
           },
@@ -310,8 +342,7 @@ export class ConfigManager {
       const success = await subscribeStorage.setCurrent(key);
       if (success) {
         // 更新状态
-        store.set(kSubscribesKey, {
-          subscribes: this._subscribes,
+        this._updateStore({
           currentSubscribe: key,
         });
         return true;
