@@ -113,7 +113,7 @@ export class ConfigManager {
     await this.init();
     // 逆向导出订阅列表（导入时恢复原顺序）
     const datas = Object.values(this._subscribes).reverse();
-    const cid = await ipfs.writeJson(datas);
+    const cid = await ipfs.writeJson({ feiyuVersion: 1, datas });
     return cid ? ipfsGateway() + cid : undefined;
   }
 
@@ -125,7 +125,7 @@ export class ConfigManager {
     // 逆向导出订阅列表（导入时恢复原顺序）
     if (!this._subscribes[key]) return false;
     const datas = [this._subscribes[key]];
-    const cid = await ipfs.writeJson(datas);
+    const cid = await ipfs.writeJson({ feiyuVersion: 1, datas });
     return cid ? ipfsGateway() + cid : undefined;
   }
 
@@ -134,9 +134,12 @@ export class ConfigManager {
    */
   async importSubscribes(url: string) {
     await this.init();
-    const datas: Subscribe[] =
-      (await http.proxy.get(url, { caches: false })) ?? [];
+    const _datas = await http.proxy.get(url, { caches: false });
     let successItems = 0;
+    if (!_datas?.feiyuVersion) {
+      return 0;
+    }
+    const datas: Subscribe[] = _datas.datas ?? [];
     const _subscribes = this._subscribes;
     for (const subscribe of datas) {
       const key = subscribe.key;

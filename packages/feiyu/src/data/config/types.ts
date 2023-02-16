@@ -61,7 +61,12 @@ export interface Subscribe {
   config: FeiyuConfig;
 }
 
-export type FeiyuConfig = { feiyuVersion: number } & DeepPartial<{
+export type FeiyuConfig = {
+  /**
+   * 飞鱼版本号
+   */
+  feiyuVersion: number;
+} & DeepPartial<{
   /**
    * 网络请求代理地址
    */

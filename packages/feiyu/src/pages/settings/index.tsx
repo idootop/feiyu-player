@@ -1,6 +1,13 @@
 import './style.css';
 
-import { Button, Dropdown, Menu, Radio, Switch } from '@arco-design/web-react';
+import {
+  Button,
+  Dropdown,
+  Menu,
+  Message,
+  Radio,
+  Switch,
+} from '@arco-design/web-react';
 import {
   IconCode,
   IconDelete,
@@ -28,6 +35,20 @@ import { colors } from '@/styles/colors';
 import { isEmpty, isNotEmpty } from '@/utils/is';
 
 import { PageBuilder } from '../app';
+import {
+  AddSubscribeModal,
+  CopyModal,
+  DeleteSubscribeModal,
+  ExportSubscribeModal,
+  ImportSubscribeModal,
+  showAddSubscribeModal,
+  showDeleteSubscribeModal,
+  showExportSubscribeModal,
+  showImportSubscribeModal,
+  showSubscribeDetailModal,
+  SubscribeDetailModal,
+  useInitSettingModals,
+} from './modals';
 
 const SubscribeHeader = (props: { isMobile: boolean }) => {
   const { isMobile } = props;
@@ -39,8 +60,9 @@ const SubscribeHeader = (props: { isMobile: boolean }) => {
     >
       <Menu.Item
         key="更新订阅"
-        onClick={() => {
-          alert('更新订阅');
+        onClick={async () => {
+          await configs.refreshAll();
+          Message.success('已刷新');
         }}
       >
         <IconLoop style={{ marginRight: '4px' }} />
@@ -49,7 +71,7 @@ const SubscribeHeader = (props: { isMobile: boolean }) => {
       <Menu.Item
         key="导入订阅"
         onClick={() => {
-          alert('导入订阅');
+          showImportSubscribeModal();
         }}
       >
         <IconImport
@@ -60,7 +82,7 @@ const SubscribeHeader = (props: { isMobile: boolean }) => {
       <Menu.Item
         key="批量导出"
         onClick={() => {
-          alert('批量导出');
+          showExportSubscribeModal();
         }}
       >
         <IconExport
@@ -82,6 +104,9 @@ const SubscribeHeader = (props: { isMobile: boolean }) => {
         position="br"
         droplist={dropList}
         icon={<IconDown />}
+        onClick={() => {
+          showAddSubscribeModal();
+        }}
       >
         新建
       </Dropdown.Button>
@@ -176,7 +201,7 @@ const TableRow = (props: {
         <Menu.Item
           key="编辑"
           onClick={() => {
-            alert('编辑');
+            showSubscribeDetailModal(subscribe);
           }}
         >
           <IconCode style={{ marginRight: '10px' }} />
@@ -188,8 +213,13 @@ const TableRow = (props: {
       {hasRefresh ? (
         <Menu.Item
           key="更新"
-          onClick={() => {
-            alert('更新');
+          onClick={async () => {
+            const success = await configs.refreshSubscribe(subscribe.key);
+            if (success) {
+              Message.success('已刷新');
+            } else {
+              Message.error('刷新失败');
+            }
           }}
         >
           <IconLoop style={{ marginRight: '10px' }} />
@@ -203,7 +233,7 @@ const TableRow = (props: {
           key="删除"
           style={{ color: colors.red }}
           onClick={() => {
-            alert('删除');
+            showDeleteSubscribeModal(subscribe);
           }}
         >
           <IconDelete style={{ marginRight: '10px' }} />
@@ -331,11 +361,18 @@ const CurrentHeader = (props: { isMobile: boolean }) => {
 
 const SettingsBody = (props: { isMobile: boolean }) => {
   const { isMobile } = props;
+  useInitSettingModals();
   return (
     <Column width="100%">
       <SubscribeHeader isMobile={isMobile} />
       <SubscribeTable isMobile={isMobile} />
       <CurrentHeader isMobile={isMobile} />
+      <AddSubscribeModal />
+      <ImportSubscribeModal />
+      <ExportSubscribeModal />
+      <SubscribeDetailModal />
+      <DeleteSubscribeModal />
+      <CopyModal />
     </Column>
   );
 };
