@@ -19,9 +19,9 @@ const ipfsUpload = async (text: string): Promise<string | undefined> => {
 export const ipfsGateway = () =>
   configs.current.ipfs?.gateway ?? 'https://gateway.pinata.cloud/ipfs/';
 export const ipfs = {
-  async writeJson(data: any) {
+  async writeJson(data: any, raw = false) {
     return cache.readOrWrite(jsonEncode(data) ?? '404', async () => {
-      return await ipfsUpload(jsonEncode({ data }) ?? '');
+      return await ipfsUpload(jsonEncode(raw ? data : { data }) ?? '');
     });
   },
   async readJson(cid: string) {

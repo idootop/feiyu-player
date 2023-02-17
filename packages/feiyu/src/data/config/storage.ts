@@ -39,7 +39,7 @@ export const subscribeStorage = {
       keys.map((key) => subscribeStorage.get(key)),
     );
     // 筛选非空的订阅
-    return results.filter((e) => !e);
+    return results.filter((e) => e);
   },
   async remove(key: string): Promise<boolean> {
     await subscribeStorage.init();

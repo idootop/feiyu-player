@@ -30,7 +30,7 @@ import {
 import { Subscribe } from '@/data/config/types';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useDarkMode } from '@/hooks/useDarkMode';
-import { useConsumer } from '@/services/store/useStore';
+import { useConsumer, useProvider } from '@/services/store/useStore';
 import { colors } from '@/styles/colors';
 import { isEmpty, isNotEmpty } from '@/utils/is';
 
@@ -122,23 +122,36 @@ const SubscribeTable = (props: { isMobile: boolean }) => {
   const setCurrent = (key: string) => {
     configs.setCurrent(key);
   };
-
+  const datas = Object.values(subscribes);
   return (
     <Box padding="20px 0" width="100%">
       <Column border={`1px solid ${colors.border}`} borderBottom="none">
         <TableHeader isMobile={isMobile} />
-        {Object.values(subscribes).map((subscribe) => {
-          const selected = currentSubscribe === subscribe.key;
-          return (
-            <TableRow
-              key={subscribe.key}
-              isMobile={isMobile}
-              selected={selected}
-              subscribe={subscribe}
-              setCurrent={setCurrent}
-            />
-          );
-        })}
+        {datas.length < 1 ? (
+          <Center
+            className={'table-row'}
+            width="100%"
+            height="48px"
+            fontSize="14px"
+            fontWeight="400"
+            borderBottom={`1px solid ${colors.border}`}
+          >
+            <Text>暂无数据</Text>
+          </Center>
+        ) : (
+          datas.map((subscribe) => {
+            const selected = currentSubscribe === subscribe.key;
+            return (
+              <TableRow
+                key={subscribe.key}
+                isMobile={isMobile}
+                selected={selected}
+                subscribe={subscribe}
+                setCurrent={setCurrent}
+              />
+            );
+          })
+        )}
       </Column>
     </Box>
   );
@@ -329,7 +342,6 @@ const CurrentHeader = (props: { isMobile: boolean }) => {
           <Switch
             checked={!allowMovieCommentary}
             onChange={(value) => {
-              console.log('电影解说', !allowMovieCommentary, value);
               if (!allowMovieCommentary === !value) {
                 configs.toggleAllowMovieCommentary();
               }
@@ -362,6 +374,7 @@ const CurrentHeader = (props: { isMobile: boolean }) => {
 const SettingsBody = (props: { isMobile: boolean }) => {
   const { isMobile } = props;
   useInitSettingModals();
+  useProvider(kSubscribesKey, {});
   return (
     <Column width="100%">
       <SubscribeHeader isMobile={isMobile} />

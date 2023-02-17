@@ -3,6 +3,7 @@ import { ipfs, ipfsGateway } from '@/services/ipfs';
 import { storage } from '@/services/storage/storage';
 import { store } from '@/services/store/useStore';
 import { timestamp } from '@/utils/base';
+import { isNotEmpty } from '@/utils/is';
 
 import { kDefaultConfig } from '../default';
 import { subscribeStorage } from './storage';
@@ -39,6 +40,7 @@ export class ConfigManager {
 
   private _updateStore(data: Partial<SubscribesStore>) {
     const old = store.get<SubscribesStore>(kSubscribesKey) ?? {};
+    console.log('set store', data);
     store.set(kSubscribesKey, {
       ...old,
       ...data,
@@ -113,7 +115,7 @@ export class ConfigManager {
     await this.init();
     // 逆向导出订阅列表（导入时恢复原顺序）
     const datas = Object.values(this._subscribes).reverse();
-    const cid = await ipfs.writeJson({ feiyuVersion: 1, datas });
+    const cid = await ipfs.writeJson({ feiyuVersion: 1, datas }, true);
     return cid ? ipfsGateway() + cid : undefined;
   }
 
@@ -125,7 +127,7 @@ export class ConfigManager {
     // 逆向导出订阅列表（导入时恢复原顺序）
     if (!this._subscribes[key]) return false;
     const datas = [this._subscribes[key]];
-    const cid = await ipfs.writeJson({ feiyuVersion: 1, datas });
+    const cid = await ipfs.writeJson({ feiyuVersion: 1, datas }, true);
     return cid ? ipfsGateway() + cid : undefined;
   }
 
@@ -134,7 +136,7 @@ export class ConfigManager {
    */
   async importSubscribes(url: string) {
     await this.init();
-    const _datas = await http.proxy.get(url, { caches: false });
+    const _datas = await http.proxy.get(url, undefined, { cache: false });
     let successItems = 0;
     if (!_datas?.feiyuVersion) {
       return 0;
@@ -142,10 +144,9 @@ export class ConfigManager {
     const datas: Subscribe[] = _datas.datas ?? [];
     const _subscribes = this._subscribes;
     for (const subscribe of datas) {
-      const key = subscribe.key;
       const link = subscribe.link;
       // 不能重名
-      if (_subscribes[key]) {
+      if (_subscribes[subscribe.key]) {
         let newName = subscribe.key;
         while (_subscribes[newName]) {
           newName = newName + '(重名)';
@@ -155,14 +156,15 @@ export class ConfigManager {
       }
       // 不能重复添加相同的订阅源
       const subscribeKeys = Object.values(_subscribes);
-      const sameLink = subscribeKeys.find((e) => e.link === link);
+      const sameLink =
+        isNotEmpty(link) && subscribeKeys.find((e) => e.link === link);
       if (sameLink) {
         break; // 跳过已添加的订阅源
       }
       // 导入订阅
-      const success = await subscribeStorage.set(key, subscribe);
+      const success = await subscribeStorage.set(subscribe.key, subscribe);
       if (success) {
-        _subscribes[key] = subscribe;
+        _subscribes[subscribe.key] = subscribe;
         successItems += 1;
       }
     }
@@ -185,13 +187,14 @@ export class ConfigManager {
       return '此名称已使用，请重新命名';
     }
     // 不能重复添加相同的订阅源
-    const subscribeKeys = Object.values(this._subscribes);
-    const sameLink = subscribeKeys.find((e) => e.link === link);
+    const subscribes = Object.values(this._subscribes);
+    const sameLink =
+      isNotEmpty(link) && subscribes.find((e) => e.link === link);
     if (sameLink) {
       return `订阅已存在，请先删除：${sameLink.key}`;
     }
     // 查询订阅地址
-    const config = await http.proxy.get(link, { caches: false });
+    const config = await http.proxy.get(link, undefined, { cache: false });
     if (config?.feiyuVersion) {
       // 更新订阅
       const newData = {
@@ -226,7 +229,7 @@ export class ConfigManager {
         // 本地配置，无需刷新
         return true;
       }
-      const config = await http.proxy.get(link, { caches: false });
+      const config = await http.proxy.get(link, undefined, { cache: false });
       if (config?.feiyuVersion) {
         // 更新订阅
         const newData = {
