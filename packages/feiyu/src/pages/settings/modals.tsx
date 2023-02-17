@@ -55,14 +55,12 @@ export const AddSubscribeModal = () => {
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
   const [waiting, setWaiting] = useState(false);
-  useEffect(() => {
-    if (showAdd) {
-      // 清空上一次的输入
-      setName('');
-      setLink('');
-      setWaiting(false);
-    }
-  }, [showAdd]);
+  const closeModal = () => {
+    setName('');
+    setLink('');
+    setWaiting(false);
+    showAddSubscribeModal(false);
+  };
   return (
     <Dialog
       visible={showAdd}
@@ -75,17 +73,17 @@ export const AddSubscribeModal = () => {
           const result = await configs.addSubscribe(name, link);
           if (result.includes('成功')) {
             Message.success('添加成功');
-            showAddSubscribeModal(false);
+            closeModal();
           } else {
             Message.info(result);
           }
           setWaiting(false);
         } else {
-          showAddSubscribeModal(false);
+          closeModal();
         }
       }}
       onCancel={() => {
-        showAddSubscribeModal(false);
+        closeModal();
       }}
     >
       <Row width="100%" paddingBottom="16px">
@@ -102,6 +100,7 @@ export const AddSubscribeModal = () => {
         <Expand>
           <Input
             placeholder="请输入..."
+            value={name}
             onChange={(s) => {
               setName(s);
             }}
@@ -122,6 +121,7 @@ export const AddSubscribeModal = () => {
         <Expand>
           <Input
             placeholder="请输入..."
+            value={link}
             onChange={(s) => {
               setLink(s);
             }}
@@ -143,12 +143,10 @@ export const ImportSubscribeModal = () => {
   const { showImport } = data ?? {};
   const [link, setLink] = useState('');
   const [waiting, setWaiting] = useState(false);
-  useEffect(() => {
-    if (showImport) {
-      // 清空上一次的输入
-      setLink('');
-    }
-  }, [showImport]);
+  const closeModal = () => {
+    setLink('');
+    showImportSubscribeModal(false);
+  };
   return (
     <Dialog
       visible={showImport}
@@ -161,17 +159,17 @@ export const ImportSubscribeModal = () => {
           const result = await configs.importSubscribes(link);
           if (result > 0) {
             Message.success(`新增${result}个订阅`);
-            showImportSubscribeModal(false);
+            closeModal();
           } else {
             Message.info('导入失败');
           }
           setWaiting(false);
         } else {
-          showImportSubscribeModal(false);
+          closeModal();
         }
       }}
       onCancel={() => {
-        showImportSubscribeModal(false);
+        closeModal();
       }}
     >
       <Row width="100%" paddingBottom="16px">
@@ -188,6 +186,7 @@ export const ImportSubscribeModal = () => {
         <Expand>
           <Input
             placeholder="请输入..."
+            value={link}
             onChange={(s) => {
               setLink(s);
             }}
@@ -267,33 +266,44 @@ export const SubscribeDetailModal = () => {
   );
 };
 
-export const showDeleteSubscribeModal = (subscribe: Subscribe, flag = true) => {
+export const showDeleteSubscribeModal = (
+  subscribe?: Subscribe,
+  flag = true,
+) => {
   setSettingModals({ showDelete: flag, subscribe });
 };
 export const DeleteSubscribeModal = () => {
   const [data] = useConsumer<SettingModals>(kSettingModals);
-  const { showDelete } = data ?? {};
-  useEffect(() => {
-    if (showDelete) {
-      // todo 清空上一次的输入
-    }
-  }, [showDelete]);
+  const { showDelete, subscribe } = data ?? {};
   return (
-    <Modal
-      title="请手动复制"
+    <Dialog
+      title="删除订阅"
       visible={showDelete}
+      ok="删除"
       onCancel={() => {
-        // todo close
+        showDeleteSubscribeModal(undefined, false);
       }}
-      footer={null}
-      style={{
-        width: 'auto',
-        maxWidth: '400px',
-        margin: '20px',
+      onOk={async () => {
+        const success = await configs.remove(subscribe!.key);
+        if (success) {
+          Message.success('删除成功');
+          showDeleteSubscribeModal(undefined, false);
+        } else {
+          Message.error('删除失败');
+        }
       }}
     >
-      <Text style={{ padding: '20px', color: '#3d7ff6' }}>测试</Text>
-    </Modal>
+      <Text
+        style={{
+          fontSize: '14px',
+          fontWeight: '400',
+          color: colors.text2,
+          paddingBottom: '16px',
+        }}
+      >
+        确认删除「{subscribe?.key}」？
+      </Text>
+    </Dialog>
   );
 };
 
