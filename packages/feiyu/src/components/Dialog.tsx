@@ -1,19 +1,26 @@
 import { Button, Modal } from '@arco-design/web-react';
 import { ReactNode } from 'react';
 
+import { isNotEmpty } from '@/utils/is';
+
+import { Box } from './Box';
 import { Column, Expand, Row } from './Flex';
 import { Text } from './Text';
 
 interface DialogProps {
   ok?: string;
   cancel?: string;
-  onOk: () => void;
-  onCancel: () => void;
+  lead?: string;
+  onOk?: () => void;
+  onCancel?: () => void;
+  onClose?: () => void;
+  onLead?: () => void;
   title: string;
   children: ReactNode;
   visible?: boolean;
   okWaiting?: boolean;
   cancelWaiting?: boolean;
+  leadWaiting?: boolean;
 }
 
 export const Dialog = (props: DialogProps) => {
@@ -27,13 +34,17 @@ export const Dialog = (props: DialogProps) => {
     visible,
     okWaiting,
     cancelWaiting,
+    lead,
+    onLead,
+    onClose = onCancel,
+    leadWaiting,
   } = props;
   return (
     <Modal
       title={null}
       footer={null}
       visible={visible}
-      onCancel={onCancel}
+      onCancel={onClose}
       style={{
         width: 'calc( 100% - 20px * 2)',
         maxWidth: '360px',
@@ -49,15 +60,26 @@ export const Dialog = (props: DialogProps) => {
         </Text>
         {children}
         <Row width="100%">
+          {lead ? (
+            <Button loading={leadWaiting} type="secondary" onClick={onLead}>
+              {lead}
+            </Button>
+          ) : (
+            <Box />
+          )}
           <Expand />
-          <Button
-            loading={cancelWaiting}
-            type="secondary"
-            onClick={onCancel}
-            style={{ marginRight: '8px' }}
-          >
-            {cancel}
-          </Button>
+          {isNotEmpty(cancel) ? (
+            <Button
+              loading={cancelWaiting}
+              type="secondary"
+              onClick={onCancel}
+              style={{ marginRight: '8px' }}
+            >
+              {cancel}
+            </Button>
+          ) : (
+            <Box />
+          )}
           <Button loading={okWaiting} type="primary" onClick={onOk}>
             {ok}
           </Button>

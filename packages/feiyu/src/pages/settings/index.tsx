@@ -190,7 +190,7 @@ const TableHeader = (props: { isMobile: boolean }) => {
           <Text maxLines={1}>订阅链接</Text>
         )}
       </Expand>
-      <Text width={isMobile ? '80px' : '200px'}>最后更新</Text>
+      <Text width={isMobile ? '85px' : '200px'}>最后更新</Text>
       <Text width="64px" textAlign="center">
         更多
       </Text>
@@ -286,6 +286,9 @@ const TableRow = (props: {
           padding="10px 16px"
           color={colors.primary}
           cursor="pointer"
+          onClick={() => {
+            showSubscribeDetailModal(subscribe);
+          }}
         >
           {subscribe.key}
         </Text>
@@ -298,6 +301,9 @@ const TableRow = (props: {
             padding="10px 16px"
             color={colors.primary}
             cursor="pointer"
+            onClick={() => {
+              showSubscribeDetailModal(subscribe);
+            }}
           >
             {subscribe.key}
           </Text>
@@ -305,11 +311,15 @@ const TableRow = (props: {
           <Text maxLines={1}>{subscribe.link ?? '-'}</Text>
         )}
       </Expand>
-      <Text width={isMobile ? '80px' : '200px'}>
+      <Text width={isMobile ? '85px' : '200px'}>
         {new Date(subscribe.lastUpdate).toISOString().substring(0, 10)}
       </Text>
       <Center width="64px">
-        <Dropdown droplist={dropList} position="br">
+        <Dropdown
+          droplist={dropList}
+          position="br"
+          trigger={isMobile ? 'click' : 'hover'}
+        >
           <Button type="text">
             <IconMore />
           </Button>
