@@ -69,7 +69,7 @@ const SubscribeHeader = (props: { isMobile: boolean }) => {
         更新订阅
       </Menu.Item>
       <Menu.Item
-        key="导入订阅"
+        key="批量导入"
         onClick={() => {
           showImportSubscribeModal();
         }}
@@ -77,7 +77,7 @@ const SubscribeHeader = (props: { isMobile: boolean }) => {
         <IconImport
           style={{ marginRight: '4px', transform: 'rotate(-90deg)' }}
         />
-        导入订阅
+        批量导入
       </Menu.Item>
       <Menu.Item
         key="批量导出"

@@ -124,10 +124,9 @@ export class ConfigManager {
    */
   async exportSubscribe(key: string) {
     await this.init();
-    // 逆向导出订阅列表（导入时恢复原顺序）
     if (!this._subscribes[key]) return false;
-    const datas = [this._subscribes[key]];
-    const cid = await ipfs.writeJson({ feiyuVersion: 1, datas }, true);
+    const datas = this._subscribes[key].config; // 只导出配置信息
+    const cid = await ipfs.writeJson(datas, true);
     return cid ? ipfsGateway() + cid : undefined;
   }
 
