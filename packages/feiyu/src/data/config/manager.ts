@@ -3,6 +3,7 @@ import { ipfs, ipfsGateway } from '@/services/ipfs';
 import { storage } from '@/services/storage/storage';
 import { store } from '@/services/store/useStore';
 import { timestamp } from '@/utils/base';
+import { deepClone } from '@/utils/clone';
 import { isNotEmpty } from '@/utils/is';
 
 import { kDefaultConfig } from '../default';
@@ -28,7 +29,8 @@ export class ConfigManager {
   };
 
   private get _subscribes() {
-    return store.get<SubscribesStore>(kSubscribesKey)?.subscribes ?? {};
+    const origin = store.get<SubscribesStore>(kSubscribesKey)?.subscribes ?? {};
+    return deepClone<Record<string, Subscribe>>(origin);
   }
 
   private get _currentSubscribe() {
@@ -40,7 +42,6 @@ export class ConfigManager {
 
   private _updateStore(data: Partial<SubscribesStore>) {
     const old = store.get<SubscribesStore>(kSubscribesKey) ?? {};
-    console.log('set store', data);
     store.set(kSubscribesKey, {
       ...old,
       ...data,
@@ -74,16 +75,17 @@ export class ConfigManager {
       allowMovieCommentary: flag,
     });
   }
-
+  
+  inited = false;
   /**
    * 初始化订阅列表
    */
   async init() {
-    const _subscribes =
-      store.get<SubscribesStore>(kSubscribesKey)?.subscribes ?? {};
-    if (Object.keys(_subscribes).length > 0) {
+    const _subscribes = this._subscribes;
+    if (this.inited) {
       return; // 只从本地初始化一次
     }
+    this.inited = true;
     // 添加默认配置
     _subscribes[ConfigManager.defaultKey] = ConfigManager.defaultConfig;
     // 加载本地订阅配置

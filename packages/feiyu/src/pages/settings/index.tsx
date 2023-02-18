@@ -30,7 +30,7 @@ import {
 import { Subscribe } from '@/data/config/types';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useDarkMode } from '@/hooks/useDarkMode';
-import { useConsumer, useProvider } from '@/services/store/useStore';
+import { useConsumer } from '@/services/store/useStore';
 import { colors } from '@/styles/colors';
 import { isEmpty, isNotEmpty } from '@/utils/is';
 
@@ -374,7 +374,6 @@ const CurrentHeader = (props: { isMobile: boolean }) => {
 const SettingsBody = (props: { isMobile: boolean }) => {
   const { isMobile } = props;
   useInitSettingModals();
-  useProvider(kSubscribesKey, {});
   return (
     <Column width="100%">
       <SubscribeHeader isMobile={isMobile} />

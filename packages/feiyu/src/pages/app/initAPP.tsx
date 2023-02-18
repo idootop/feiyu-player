@@ -12,7 +12,7 @@ import { kRoutePages } from '..';
 
 const _initAPP = async () => {
   // 初始化APP配置信息
-  configs.init();
+  await configs.init();
   // 注册 service worker（自动更新）
   registerSW({ immediate: true });
   // 清除已过期的本地缓存
@@ -25,7 +25,7 @@ export const useInitAPP = () => {
 
   // APP 初始化
   useInit(() => {
-    _initAPP().catch(() => undefined);
+    _initAPP();
   }, []);
 
   // APP 升级弹窗
