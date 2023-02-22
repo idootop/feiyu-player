@@ -1,5 +1,3 @@
-import { DeepPartial } from '@/utils/types';
-
 /**
  * IPFS 配置（用于生成分享链接，导入导出配置文件）
  */
@@ -7,11 +5,11 @@ interface IPFSConfig {
   /**
    * https://nft.storage/ API key
    */
-  token: string;
+  token?: string;
   /**
    * IPFS gateway
    */
-  gateway: string;
+  gateway?: string;
 }
 
 /**
@@ -43,6 +41,7 @@ export interface HotMovie {
  * 订阅配置
  */
 export interface Subscribe {
+  feiyu: 'subscribe';
   /**
    * 订阅名称（不可编辑）
    */
@@ -62,33 +61,29 @@ export interface Subscribe {
 }
 
 export type FeiyuConfig = {
-  /**
-   * 飞鱼版本号
-   */
-  feiyuVersion: number;
-} & DeepPartial<{
+  feiyu: 'config';
   /**
    * 网络请求代理地址
    */
-  httpProxy: string;
+  httpProxy?: string;
   /**
    * 资源站列表
    */
-  movieSites: MovieSite[];
+  movieSites?: MovieSite[];
   /**
    * 首页热门电影
    */
-  hotMovies: HotMovie[] | string;
+  hotMovies?: HotMovie[] | string;
   /**
    * IPFS 配置（用于生成分享链接，导入导出配置文件）
    */
-  ipfs: IPFSConfig;
+  ipfs?: IPFSConfig;
   /**
    * 随机表情列表
    */
-  randomEmojis: string[];
+  randomEmojis?: string[];
   /**
    * 推荐电影列表
    */
-  recommendMovies: string[];
-}>;
+  recommendMovies?: string[];
+};

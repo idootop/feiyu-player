@@ -22,6 +22,7 @@ export const kSubscribesKey = 'kSubscribesKey';
 export class ConfigManager {
   static defaultKey = '默认订阅';
   static defaultConfig: Subscribe = {
+    feiyu: 'subscribe',
     key: ConfigManager.defaultKey,
     link: undefined,
     lastUpdate: 1676205769619,
@@ -75,7 +76,7 @@ export class ConfigManager {
       allowMovieCommentary: flag,
     });
   }
-  
+
   inited = false;
   /**
    * 初始化订阅列表
@@ -117,7 +118,7 @@ export class ConfigManager {
     await this.init();
     // 逆向导出订阅列表（导入时恢复原顺序）
     const datas = Object.values(this._subscribes).reverse();
-    const cid = await ipfs.writeJson({ feiyuVersion: 1, datas }, true);
+    const cid = await ipfs.writeJson({ feiyu: 'subscribes', datas }, true);
     return cid ? ipfsGateway() + cid : undefined;
   }
 
@@ -127,8 +128,8 @@ export class ConfigManager {
   async exportSubscribe(key: string) {
     await this.init();
     if (!this._subscribes[key]) return false;
-    const datas = this._subscribes[key].config; // 只导出配置信息
-    const cid = await ipfs.writeJson(datas, true);
+    const data = this._subscribes[key].config; // 只导出订阅 config
+    const cid = await ipfs.writeJson(data, true);
     return cid ? ipfsGateway() + cid : undefined;
   }
 
@@ -139,33 +140,39 @@ export class ConfigManager {
     await this.init();
     const _datas = await http.proxy.get(url, undefined, { cache: false });
     let successItems = 0;
-    if (!_datas?.feiyuVersion) {
+    if (_datas?.feiyu !== 'subscribes') {
       return 0;
     }
     const datas: Subscribe[] = _datas.datas ?? [];
     const _subscribes = this._subscribes;
     for (const subscribe of datas) {
+      if (
+        subscribe.feiyu !== 'subscribe' ||
+        subscribe.config?.feiyu !== 'config'
+      ) {
+        // 未知参数
+        continue;
+      }
       const link = subscribe.link;
       // 不能重名
-      if (_subscribes[subscribe.key]) {
-        let newName = subscribe.key;
-        while (_subscribes[newName]) {
-          newName = newName + '(重名)';
+      let newKey = subscribe.key ?? '未知订阅';
+      if (_subscribes[newKey]) {
+        while (_subscribes[newKey]) {
+          newKey = newKey + '(重名)';
         }
-        // 解决重名
-        subscribe.key = newName;
       }
+      subscribe.key = newKey;
       // 不能重复添加相同的订阅源
       const subscribeKeys = Object.values(_subscribes);
       const sameLink =
         isNotEmpty(link) && subscribeKeys.find((e) => e.link === link);
       if (sameLink) {
-        break; // 跳过已添加的订阅源
+        continue; // 跳过已添加的订阅源
       }
       // 导入订阅
-      const success = await subscribeStorage.set(subscribe.key, subscribe);
+      const success = await subscribeStorage.set(newKey, subscribe);
       if (success) {
-        _subscribes[subscribe.key] = subscribe;
+        _subscribes[newKey] = subscribe;
         successItems += 1;
       }
     }
@@ -185,7 +192,7 @@ export class ConfigManager {
     await this.init();
     // 不能重名
     if (this._subscribes[key]) {
-      return '此名称已使用，请重新命名';
+      return '订阅已存在，请重命名';
     }
     // 不能重复添加相同的订阅源
     const subscribes = Object.values(this._subscribes);
@@ -196,9 +203,10 @@ export class ConfigManager {
     }
     // 查询订阅地址
     const config = await http.proxy.get(link, undefined, { cache: false });
-    if (config?.feiyuVersion) {
+    if (config?.feiyu === 'config') {
       // 更新订阅
       const newData = {
+        feiyu: 'subscribe' as any,
         key,
         link,
         lastUpdate: timestamp(),
@@ -231,9 +239,10 @@ export class ConfigManager {
         return true;
       }
       const config = await http.proxy.get(link, undefined, { cache: false });
-      if (config?.feiyuVersion) {
+      if (config?.feiyu === 'config') {
         // 更新订阅
         const newData = {
+          feiyu: 'subscribe' as any,
           key,
           link,
           lastUpdate: timestamp(),

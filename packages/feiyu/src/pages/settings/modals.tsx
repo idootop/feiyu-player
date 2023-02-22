@@ -209,11 +209,11 @@ export const ExportSubscribeModal = () => {
   const { showExport } = data ?? {};
   const [waiting, setWaiting] = useState(false);
   useEffect(() => {
-    if (showExport) {
-      if (waiting) {
-        Message.info('正在导出');
-      }
-      setTimeout(async () => {
+    setTimeout(async () => {
+      if (showExport) {
+        if (waiting) {
+          Message.info('正在导出');
+        }
         setWaiting(true);
         Message.info('导出中');
         const result = await configs.exportSubscribes();
@@ -222,17 +222,18 @@ export const ExportSubscribeModal = () => {
           const success = await clipboard.write(result);
           if (success) {
             Message.success('分享链接已复制');
+            showExportSubscribeModal(false);
           } else {
             Message.success('导出成功');
             showCopyModal(result);
           }
         } else {
           Message.error('导出失败，请先配置 NFT.Storage');
+          showExportSubscribeModal(false);
         }
         setWaiting(false);
-        showExportSubscribeModal(false);
-      });
-    }
+      }
+    });
   }, [showExport]);
   return <Box />;
 };
@@ -280,7 +281,7 @@ export const SubscribeDetailModal = () => {
       onLead={async () => {
         setLeadWaiting(true);
         Message.info('导出中');
-        const result = await configs.exportSubscribes();
+        const result = await configs.exportSubscribe(subscribe.key);
         Message.clear();
         if (result) {
           const success = await clipboard.write(result);
@@ -321,7 +322,6 @@ export const SubscribeDetailModal = () => {
           const success = await configs.refreshSubscribe(subscribe!.key);
           if (success) {
             Message.success('更新成功');
-            closeModal();
           } else {
             Message.error('更新失败');
           }
@@ -393,7 +393,9 @@ export const SubscribeDetailModal = () => {
         style={{ width: '100%', marginBottom: '16px' }}
         value={input}
         onChange={(s) => {
-          setInput(s);
+          if (isEdit) {
+            setInput(s);
+          }
         }}
       />
     </Dialog>

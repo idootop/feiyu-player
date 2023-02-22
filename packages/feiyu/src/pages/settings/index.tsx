@@ -187,7 +187,9 @@ const TableHeader = (props: { isMobile: boolean }) => {
             订阅名称
           </Text>
         ) : (
-          <Text maxLines={1}>订阅链接</Text>
+          <Text maxLines={1} padding="0 16px">
+            订阅链接
+          </Text>
         )}
       </Expand>
       <Text width={isMobile ? '85px' : '200px'}>最后更新</Text>
@@ -308,7 +310,9 @@ const TableRow = (props: {
             {subscribe.key}
           </Text>
         ) : (
-          <Text maxLines={1}>{subscribe.link ?? '-'}</Text>
+          <Text maxLines={1} padding="0 16px">
+            {subscribe.link ?? '-'}
+          </Text>
         )}
       </Expand>
       <Text width={isMobile ? '85px' : '200px'}>

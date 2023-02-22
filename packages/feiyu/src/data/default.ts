@@ -1,6 +1,7 @@
 import { FeiyuConfig } from './config/types';
 
 export const kDefaultConfig: FeiyuConfig = {
+  feiyu: 'config',
   /**
    * 代理请求接口（必填）
    */
@@ -18,10 +19,6 @@ export const kDefaultConfig: FeiyuConfig = {
       api: 'https://api2.xxx.com/api.php/provide/vod/at/xml',
     },
   ],
-  /**
-   * 版本号（必填，保持默认即可）
-   */
-  feiyuVersion: 1,
   /**
    * IPFS 配置（用于生成分享链接，导入导出配置文件）
    */
