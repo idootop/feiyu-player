@@ -197,6 +197,9 @@ export const useConsumer = <T = any>(
 
 export const useProvider = <T>(key: string, data: T | undefined) => {
   useInit(() => {
-    store.set(key, data);
+    if (!_stores[key]) {
+      // 只初始化一次
+      store.set(key, data);
+    }
   }, []);
 };
