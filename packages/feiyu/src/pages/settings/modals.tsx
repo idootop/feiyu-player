@@ -301,7 +301,7 @@ export const SubscribeDetailModal = () => {
         if (isEdit) {
           // 保存
           const config = jsonDecode(input);
-          if (!config.feiyuVersion) {
+          if (config.feiyu !== 'config') {
             Message.error('无效的配置');
             setWaiting(false);
             return;
