@@ -13,6 +13,7 @@ import {
   IconDelete,
   IconDown,
   IconExport,
+  IconEye,
   IconImport,
   IconLoop,
   IconMore,
@@ -223,7 +224,15 @@ const TableRow = (props: {
           编辑
         </Menu.Item>
       ) : (
-        <Box />
+        <Menu.Item
+          key="查看"
+          onClick={() => {
+            showSubscribeDetailModal(subscribe);
+          }}
+        >
+          <IconEye style={{ marginRight: '10px' }} />
+          查看
+        </Menu.Item>
       )}
       {hasRefresh ? (
         <Menu.Item
@@ -243,6 +252,17 @@ const TableRow = (props: {
       ) : (
         <Box />
       )}
+      <Menu.Item
+        key="导出"
+        onClick={() => {
+          showExportSubscribeModal();
+        }}
+      >
+        <IconExport
+          style={{ marginRight: '10px', transform: 'rotate(-90deg)' }}
+        />
+        导出
+      </Menu.Item>
       {hasDelete ? (
         <Menu.Item
           key="删除"
