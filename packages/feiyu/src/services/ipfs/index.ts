@@ -16,8 +16,12 @@ const ipfsUpload = async (text: string): Promise<string | undefined> => {
   });
   return res?.value?.cid;
 };
-export const ipfsGateway = () =>
-  configs.current.ipfs?.gateway ?? 'https://gateway.pinata.cloud/ipfs/';
+export const ipfsURL = (cid: string) => {
+  const gateway =
+    configs.current.ipfs?.gateway ??
+    'https://gateway.pinata.cloud/ipfs/{{cid}}';
+  return gateway.replace('{{cid}}', cid);
+};
 export const ipfs = {
   async writeJson(data: any, raw = false) {
     return cache.readOrWrite(jsonEncode(data) ?? '404', async () => {
@@ -26,7 +30,7 @@ export const ipfs = {
   },
   async readJson(cid: string) {
     return cache.readOrWrite(cid, async () => {
-      const result = await http.get(ipfsGateway() + cid);
+      const result = await http.get(ipfsURL(cid));
       return result?.data;
     });
   },

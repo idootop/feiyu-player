@@ -1,5 +1,5 @@
 import { http } from '@/services/http';
-import { ipfs, ipfsGateway } from '@/services/ipfs';
+import { ipfs, ipfsURL } from '@/services/ipfs';
 import { storage } from '@/services/storage/storage';
 import { store } from '@/services/store/useStore';
 import { timestamp } from '@/utils/base';
@@ -119,7 +119,7 @@ export class ConfigManager {
     // 逆向导出订阅列表（导入时恢复原顺序）
     const datas = Object.values(this._subscribes).reverse();
     const cid = await ipfs.writeJson({ feiyu: 'subscribes', datas }, true);
-    return cid ? ipfsGateway() + cid : undefined;
+    return cid ? ipfsURL(cid) : undefined;
   }
 
   /**
@@ -130,7 +130,7 @@ export class ConfigManager {
     if (!this._subscribes[key]) return false;
     const data = this._subscribes[key].config; // 只导出订阅 config
     const cid = await ipfs.writeJson(data, true);
-    return cid ? ipfsGateway() + cid : undefined;
+    return cid ? ipfsURL(cid) : undefined;
   }
 
   /**
