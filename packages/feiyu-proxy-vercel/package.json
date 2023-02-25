@@ -1,0 +1,28 @@
+{
+  "name": "feiyu-proxy-vercel",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "start": "vercel dev",
+    "deploy": "vercel deploy",
+    "test": "ts-node -r tsconfig-paths/register test/index"
+  },
+  "dependencies": {
+    "axios": "^0.27.2"
+  },
+  "devDependencies": {
+    "@types/dotenv-flow": "^3.2.0",
+    "@types/node": "16",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "@vercel/node": "^2.9.8",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "prettier": "^2.5.1",
+    "ts-node": "^10.7.0",
+    "tsconfig-paths": "^4.1.1",
+    "typescript": "^4.6.2"
+  }
+}
