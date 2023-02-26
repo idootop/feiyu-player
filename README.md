@@ -1,14 +1,8 @@
+![](screenshots/home-preview.jpg)
+
 # 🐟 飞鱼
 
 一个漂亮得不像实力派的在线视频播放器 ✨
-
-![](screenshots/home-preview.jpg)
-
-# 👀 预览
-
-![](screenshots/mobile-preview.jpg)
-
-![](screenshots/play-preview.jpg)
 
 # ✨ 特性
 
@@ -21,6 +15,12 @@
 - 🕷️ ｜支持代理请求，无惧跨域
 - 📶 ｜支持 PWA ，可离线访问
 - 💎 ｜使用去中心化存储（IPFS）
+
+# 👀 预览
+
+![](screenshots/mobile-preview.jpg)
+
+![](screenshots/play-preview.jpg)
 
 # ⚡️ 配置（TODO）
 
