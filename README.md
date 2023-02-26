@@ -2,27 +2,41 @@
 
 一个漂亮得不像实力派的在线视频播放器 ✨
 
-![](screenshots/home.jpg)
+![](screenshots/home-preview.jpg)
 
-# 预览
+# 👀 预览
 
-## PC 版
+![](screenshots/mobile-preview.jpg)
 
-|           亮色模式           |             暗色模式              |
-| :--------------------------: | :-------------------------------: |
-|  ![](screenshots/home.jpg)   |  ![](screenshots/home-dark.jpg)   |
-| ![](screenshots/search.jpg)  | ![](screenshots/search-dark.jpg)  |
-| ![](screenshots/results.jpg) | ![](screenshots/results-dark.jpg) |
-|  ![](screenshots/play.jpg)   |  ![](screenshots/play-dark.jpg)   |
+![](screenshots/play-preview.jpg)
 
-## Mobile 版
+# ✨ 特性
 
-|              亮色模式              |                暗色模式                 |
-| :--------------------------------: | :-------------------------------------: |
-|  ![](screenshots/mobile-home.png)  |  ![](screenshots/mobile-home-dark.png)  |
-| ![](screenshots/mobile-search.png) | ![](screenshots/mobile-search-dark.png) |
-|  ![](screenshots/mobile-play.png)  |  ![](screenshots/mobile-play-dark.png)  |
+- 🌛 ｜亮暗色模式
+- 💅 ｜极简，高颜值
+- ✅ ｜开源免费无广告
+- 📱 ｜适配 PC、移动端
+- 🔍 ｜支持多源聚合搜索
+- 📃 ｜支持导入导出订阅配置
+- 🕷️ ｜支持代理请求，无惧跨域
+- 📶 ｜支持 PWA ，可离线访问
+- 💎 ｜使用去中心化存储（IPFS）
 
-# 免责声明
+# ⚡️ 配置（TODO）
 
-本项目（飞鱼）仅用于学习交流目的，用户不得将本项目用于任何非法活动。用户使用本项目的服务和内容是在自己的意愿和责任下进行的，本项目对用户的行为不承担任何法律责任。 
+## Step 1: 请求代理
+
+> 部署请求代理云函数
+
+## Step 2: 搜索源
+
+支持苹果 v10，飞飞 CMS 接口
+
+## Step 3: IPFS
+
+- Gateway
+- NFT.strorage
+
+# 🚨 免责声明
+
+本项目（飞鱼）仅用于学习交流目的，用户不得将本项目用于任何非法活动。用户使用本项目的服务和内容是在自己的意愿和责任下进行的，本项目对用户的行为不承担任何法律责任。
