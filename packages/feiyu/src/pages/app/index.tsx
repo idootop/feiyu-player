@@ -6,7 +6,7 @@ import { Box, BoxProps } from '@/components/Box';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { colors } from '@/styles/colors';
 
-import { useInitAPP } from './initAPP';
+import { useDisclaimer, useInitAPP } from './initAPP';
 import { kHeaderHeight, MyHeader } from './MyHeader';
 import { RootPages } from './RootPages';
 import { kSideWidth, SideDrawer, SideMenu } from './SideMenu';
@@ -17,12 +17,17 @@ const Content = Layout.Content;
 export const App = () => {
   const { isMobile } = useBreakpoint();
 
+  // 初始化APP
   useInitAPP();
+
+  // 免责声明弹窗
+  const $Disclaimer = useDisclaimer();
 
   return (
     <>
       <MyHeader />
       <SideDrawer />
+      {$Disclaimer}
       <Layout style={{ height: '100vh' }}>
         <Sider
           width={kSideWidth}
