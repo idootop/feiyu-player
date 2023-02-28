@@ -14,7 +14,7 @@
 - 📃 ｜支持导入导出订阅配置
 - 📶 ｜支持 PWA ，可离线访问
 - 🕷️ ｜内置请求代理，无惧跨域
-- 💎 ｜使用去中心化存储（IPFS）分享资源
+- 💎 ｜使用去中心化存储（IPFS）
 
 # 🔥 预览
 
@@ -28,46 +28,40 @@
 
 ```json
 {
-    "feiyu": "config",
-    "httpProxy": "https://xxx.xxx.com/release/proxy",
-    "movieSites": [
-        {
-            "key": "资源站1",
-            "api": "https://api1.xxx.com/api.php/provide/vod/at/xml"
-        },
-        {
-            "key": "资源站2",
-            "api": "https://api2.xxx.com/api.php/provide/vod/at/xml"
-        }
-    ],
-    "ipfs": {
-        "gateway": "https://gateway.pinata.cloud/ipfs/{{cid}}",
-        "token": "xxxxxxxx"
+  "feiyu": "config",
+  "httpProxy": "https://xxx.xxx.com/release/proxy",
+  "movieSites": [
+    {
+      "key": "资源站1",
+      "api": "https://api1.xxx.com/api.php/provide/vod/at/xml"
     },
-    "randomEmojis": [
-        "🐮",
-        "🐰"
-    ],
-    "recommendMovies": [
-        "请回答1988",
-        "东京爱情故事"
-    ],
-    "hotMovies": [
-        {
-            "id": "26302614",
-            "isNew": false,
-            "title": "请回答1988",
-            "cover": "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2272563445.jpg",
-            "rate": "9.7"
-        },
-        {
-            "id": "36036719",
-            "isNew": false,
-            "title": "快乐再出发 第二季",
-            "cover": "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2885581294.jpg",
-            "rate": "9.5"
-        }
-    ]
+    {
+      "key": "资源站2",
+      "api": "https://api2.xxx.com/api.php/provide/vod/at/xml"
+    }
+  ],
+  "ipfs": {
+    "gateway": "https://gateway.pinata.cloud/ipfs/{{cid}}",
+    "token": "xxxxxxxx"
+  },
+  "randomEmojis": ["🐮", "🐰"],
+  "recommendMovies": ["请回答1988", "东京爱情故事"],
+  "hotMovies": [
+    {
+      "id": "26302614",
+      "isNew": false,
+      "title": "请回答1988",
+      "cover": "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2272563445.jpg",
+      "rate": "9.7"
+    },
+    {
+      "id": "36036719",
+      "isNew": false,
+      "title": "快乐再出发 第二季",
+      "cover": "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2885581294.jpg",
+      "rate": "9.5"
+    }
+  ]
 }
 ```
 
@@ -75,7 +69,7 @@
 
 ### 请求代理 (httpProxy)
 
-为了使飞鱼网页正常运转，你需要自行部署或使用第三方请求代理，详见[飞鱼 Proxy](#-飞鱼-Proxy)。
+为了使飞鱼网页正常运转，你可能需要自行部署或使用第三方请求代理，详见[飞鱼 Proxy](#%EF%B8%8F-%E9%A3%9E%E9%B1%BC-proxy)。
 
 ### 搜索源 (movieSites)
 
@@ -94,7 +88,7 @@
 #### NFT.strorage
 
 [NFT.strorage](https://nft.storage/) 提供免费的去中心化存储服务，同时支持 [IPFS](https://ipfs.tech/) 和 [Filecoin](https://filecoin.io/)。飞鱼内部默认使用 [NFT.strorage](https://nft.storage/) 向 IPFS 中写入数据。
-当你需要导出并分享数据时，你需要先在 [NFT.strorage] (https://nft.storage/)注册账号，申请API Key，然后到飞鱼设置页面填写并保存 API Key。
+当在导出或分享数据时，你需要先在 [NFT.strorage](https://nft.storage/)注册账号并申请 API Key，然后到飞鱼设置页面填写 API Key。
 
 # ⚡️ 部署
 
@@ -134,58 +128,55 @@ yarn && yarn deploy
 
 ## 🔧 自定义配置
 
-你可以在 [packages/feiyu/src/data/default.ts](packages/feiyu/src/data/default.ts) ，修改飞鱼内置的默认配置，如代理地址，搜索源等。 配置参数示例如下：
+你可以在 [packages/feiyu/src/data/default.ts](packages/feiyu/src/data/default.ts) ，修改飞鱼内置的默认配置，如代理地址，搜索源等。
+
+配置参数示例如下：
 
 ```typescript
 export const kDefaultConfig = {
-  feiyu: 'config',
+  feiyu: "config",
   /**
    * 代理请求接口（必填）
    */
-  httpProxy: 'https://xxx.xxx.com/release/proxy',
+  httpProxy: "https://xxx.xxx.com/release/proxy",
   /**
    * 资源站（必填）
    */
   movieSites: [
     {
-      key: '资源站1',
-      api: 'https://api1.xxx.com/api.php/provide/vod/at/xml',
+      key: "资源站1",
+      api: "https://api1.xxx.com/api.php/provide/vod/at/xml",
     },
     {
-      key: '资源站2',
-      api: 'https://api2.xxx.com/api.php/provide/vod/at/xml',
+      key: "资源站2",
+      api: "https://api2.xxx.com/api.php/provide/vod/at/xml",
     },
   ],
   /**
    * IPFS 配置（用于生成分享链接，导入导出配置文件）
    */
   ipfs: {
-    gateway: 'https://gateway.pinata.cloud/ipfs/{{cid}}',
-    token: 'xxxxxxxx', // 🔥 请到 https://nft.storage/ 自己申请 API key（免费）
+    gateway: "https://gateway.pinata.cloud/ipfs/{{cid}}",
+    token: "xxxxxxxx", // 🔥 请到 https://nft.storage/ 自己申请 API key（免费）
   },
   /**
    * 随机表情列表
    */
-  randomEmojis: [
-    '🐰',
-  ],
+  randomEmojis: ["🐰"],
   /**
    * 推荐电影列表
    */
-  recommendMovies: [
-    '请回答1988',
-  ],
+  recommendMovies: ["请回答1988"],
   /**
    * 热门电影榜单
    */
   hotMovies: [
     {
-      id: '26302614',
+      id: "26302614",
       isNew: false,
-      title: '请回答1988',
-      cover:
-        'https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2272563445.jpg',
-      rate: '9.7',
+      title: "请回答1988",
+      cover: "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2272563445.jpg",
+      rate: "9.7",
     },
   ],
   // 也可以是返回JSON格式数据的接口，方便获取最新的热门榜单
