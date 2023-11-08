@@ -48,16 +48,13 @@ class Feiyu {
     config?: {
       callback?: SearchCallback;
       signal?: AbortSignal;
-      /**
-       * 线性运行，不并发
-       */
-      linearRun?: boolean;
+      concurrent?: boolean;
     },
   ) {
-    const { callback, signal, linearRun = false } = config ?? {};
+    const { callback, signal, concurrent = false } = config ?? {};
     const results: FeiyuMovie[] = [];
     const sites: any = configs.current.movieSites ?? [];
-    if (linearRun) {
+    if (!concurrent) {
       for (const site of sites) {
         // 搜索电影列表
         const movies = await this._search(site, name, signal);
