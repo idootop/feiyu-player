@@ -63,6 +63,8 @@ class GlobalStore {
 
 export const store = new GlobalStore();
 
+export const newId = store.newId;
+
 export const useInit = <T>(fn: () => T, deps?: any[]): T => {
   const ref = useRef<any>({
     result: 404,
