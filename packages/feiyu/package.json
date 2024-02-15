@@ -1,6 +1,6 @@
 {
   "name": "feiyu",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "commonjs",
   "scripts": {
     "pwa": "ts-node scripts/pwa",
@@ -9,16 +9,16 @@
     "preview": "vite build && yarn pwa && vite preview"
   },
   "dependencies": {
-    "@arco-design/web-react": "^2.44.3",
-    "fast-xml-parser": "^4.0.12",
+    "@arco-design/web-react": "^2.59.1",
+    "fast-xml-parser": "^4.3.4",
     "isomorphic-unfetch": "^3.1.0",
     "localforage": "^1.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-lazy-load": "^4.0.1",
-    "wouter": "^2.10.0-alpha.1",
-    "xgplayer": "^2.32.2",
-    "xgplayer-hls.js": "^2.6.4"
+    "wouter": "^2.12.1",
+    "xgplayer": "^3.0.12",
+    "xgplayer-hls": "^3.0.12"
   },
   "devDependencies": {
     "@types/node": "^18.11.16",

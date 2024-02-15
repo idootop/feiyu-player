@@ -15,7 +15,7 @@ const Sider = Layout.Sider;
 const Content = Layout.Content;
 
 export const App = () => {
-  const { isMobile } = useBreakpoint();
+  const { width } = useBreakpoint();
 
   // 初始化APP
   useInitAPP();
@@ -31,7 +31,7 @@ export const App = () => {
       <Layout style={{ height: '100vh' }}>
         <Sider
           width={kSideWidth}
-          style={{ display: isMobile ? 'none' : 'block' }}
+          style={{ display: width < 1250 ? 'none' : 'block' }}
         >
           <SideMenu />
         </Sider>
@@ -52,7 +52,7 @@ export const App = () => {
 export const PageBuilder = (props: BoxProps) => {
   return (
     <Box
-      className="hide-scollbar"
+      className="hide-scrollbar"
       width="100%"
       height="100vh"
       padding={`calc(${kHeaderHeight} + 20px) 20px 20px 20px`}

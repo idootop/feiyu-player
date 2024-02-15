@@ -155,9 +155,9 @@ export const isValidProxy = async () => {
 
 export const http = {
   /**
-   * 默认超时：5s
+   * 默认超时：10s
    */
-  timeout: 5 * 1000,
+  timeout: 10 * 1000,
   get,
   post,
   proxy: {

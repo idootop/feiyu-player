@@ -1,6 +1,6 @@
 import { store, useConsumer } from '@/services/store/useStore';
 
-const _getBreakpint = () => {
+const __getBreakpoint = () => {
   const width = document.body.clientWidth;
   if (width < 576) {
     return { isXS: true, isMobile: true };
@@ -23,6 +23,13 @@ const _getBreakpint = () => {
   return { isXXXL: true, isPC: true };
 };
 
+const _getBreakpoint = () => {
+  const res = __getBreakpoint();
+  const width = document.body.clientWidth;
+  const height = document.body.clientHeight;
+  return { ...res, width, height };
+};
+
 interface DeviceSize {
   isMobile: boolean;
   isPC: boolean;
@@ -34,15 +41,17 @@ interface DeviceSize {
   isXL: boolean;
   isXXL: boolean;
   isXXXL: boolean;
+  width: number;
+  height: number;
 }
 
 const kScreenReSizeListenerKey = 'kScreenReSizeListenerKey';
 let _initScreenReSizeListener = false;
 const initScreenReSizeListener = () => {
   if (!_initScreenReSizeListener) {
-    // 全局只初始化一次
+    // 全剧只初始化一次
     setInterval(() => {
-      store.set(kScreenReSizeListenerKey, _getBreakpint());
+      store.set(kScreenReSizeListenerKey, _getBreakpoint());
     }, 100);
     _initScreenReSizeListener = true;
   }
@@ -51,5 +60,5 @@ const initScreenReSizeListener = () => {
 export const useBreakpoint = (): DeviceSize => {
   initScreenReSizeListener();
   const [breakpoint] = useConsumer(kScreenReSizeListenerKey);
-  return breakpoint ?? _getBreakpint();
+  return breakpoint ?? _getBreakpoint();
 };

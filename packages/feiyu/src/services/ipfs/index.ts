@@ -7,6 +7,7 @@ import { http } from '../http';
 const ipfsUpload = async (text: string): Promise<string | undefined> => {
   const data = new Blob([text], { type: 'text/json' });
   const res = await http.post('https://api.nft.storage/upload/', data, {
+    timeout: 30 * 1000, // 30s
     blob: true,
     cacheKey: text,
     headers: {

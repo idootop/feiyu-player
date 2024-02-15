@@ -37,12 +37,12 @@ div:focus {
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
-.hide-scollbar::-webkit-scrollbar {
+.hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
-.hide-scollbar {
+.hide-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }

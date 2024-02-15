@@ -283,7 +283,7 @@ const Play = () => {
       ) : (
         <Box />
       )}
-      <Expand className="hide-scollbar" overflowY="scroll" margin="10px 0 0 0">
+      <Expand className="hide-scrollbar" overflowY="scroll" margin="10px 0 0 0">
         <Box width="100%" height="100%">
           <Box
             width="100%"

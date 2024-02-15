@@ -106,7 +106,7 @@ export const useDisclaimer = () => {
           overflowY="scroll"
           fontSize="14px"
           lineHeight="24px"
-          className="hide-scollbar"
+          className="hide-scrollbar"
         >
           本网站仅用于学习交流目的，演示网站上的所有功能仅供用户参考。本网站不承担任何形式的保证和责任，包括但不限于：
           <h4 style={{ margin: '4px 0' }}>服务内容</h4>

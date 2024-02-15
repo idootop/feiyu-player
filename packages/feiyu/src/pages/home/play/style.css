@@ -3,8 +3,26 @@
   height: auto !important;
 }
 
-.no-next {
-  display: none !important;
+.xgplayer xg-trigger .time-preview span.xg-cur {
+  color: #2d5cf6 !important;
+}
+
+.xgplayer xg-trigger .time-preview .xg-bar .xg-curbar {
+  background-color: #2d5cf6 !important;
+}
+
+.xgplayer .xgplayer-progress-played {
+  background: linear-gradient(-90deg, #2d5cf6 0%, #2d5cf6 100%) !important;
+}
+
+.xgplayer .xgplayer-drag {
+  background: #2d5cf6 !important;
+}
+
+.xgplayer .xgplayer-progress .xgplayer-progress-btn {
+  background: rgba(57, 91, 237, 0.304093) !important;
+  border: 0.5px solid rgba(57, 91, 237, 0.056545) !important;
+  box-shadow: 0 0 1px #2d5cf662 !important;
 }
 
 .play-button {
@@ -15,50 +33,14 @@
 }
 
 .play-button svg {
-  background: rgba(0, 0, 0, 0.58);
   border-radius: 100%;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .play-button svg:hover {
-  background: rgba(0, 0, 0, 0.38);
+  color: rgba(255, 255, 255, 1);
 }
 
-.xgplayer-skin-default .xgplayer-replay svg {
-  padding: 6px;
-}
-
-.xgplayer-skin-default .xgplayer-replay svg path {
-  transform: none !important;
-  fill: none !important;
-  stroke: #ddd;
-}
-
-.xgplayer-skin-default .xgplayer-replay svg:hover path {
-  stroke: #fff;
-}
-
-.xgplayer-skin-default .center-spinner {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  background: black;
-  z-index: 120;
-}
-.xgplayer-enter,
-.xgplayer-loading {
+.no-next {
   display: none !important;
-}
-
-.xgplayer-skin-default.xgplayer-is-enter .center-spinner {
-  display: flex;
-}
-
-.xgplayer-skin-default.xgplayer-isloading .center-spinner {
-  display: flex;
-  background: rgba(0, 0, 0, 0.1);
 }
