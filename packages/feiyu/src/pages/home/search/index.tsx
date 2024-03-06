@@ -12,10 +12,11 @@ import { Position } from '@/components/Stack/position';
 import { Text } from '@/components/Text';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useDarkMode } from '@/hooks/useDarkMode';
+import { newID } from '@/hooks/useID';
 import { PageBuilder } from '@/pages/app';
 import { usePage } from '@/services/routes/page';
 import { router } from '@/services/routes/router';
-import { newId, store, useConsumer, useInit } from '@/services/store/useStore';
+import { store, useConsumer, useInit } from '@/services/store/useStore';
 import { colors } from '@/styles/colors';
 import { isEqual } from '@/utils/diff';
 import { FeiyuMovie } from '@/utils/feiyu';
@@ -161,7 +162,7 @@ export const MovieItem = (props: {
   const { movie, jumpToPage, isActive } = props;
 
   const onClick = async () => {
-    store.set(kPlayPageId, { movie, pageId: newId() });
+    store.set(kPlayPageId, { movie, pageId: newID() });
     if (router.current !== '/home/play') {
       jumpToPage?.('play');
     }

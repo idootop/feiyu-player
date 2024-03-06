@@ -13,7 +13,7 @@ export const kHeaderHeight = '60px';
 
 export const MyHeader = () => {
   const { jumpToIndex, isIndexPage } = useHomePages();
-  const { isMobile } = useBreakpoint();
+  const { width } = useBreakpoint();
   const { openSideMenu } = useSideMenu();
 
   return (
@@ -32,7 +32,7 @@ export const MyHeader = () => {
       <Row
         cursor="pointer"
         onClick={() => {
-          if (isMobile) {
+          if (width < 1250) {
             // 移动端点击打开菜单栏
             openSideMenu();
           } else {
