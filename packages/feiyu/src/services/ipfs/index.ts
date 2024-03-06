@@ -19,8 +19,7 @@ const ipfsUpload = async (text: string): Promise<string | undefined> => {
 };
 export const ipfsURL = (cid: string) => {
   const gateway =
-    configs.current.ipfs?.gateway ??
-    'https://gateway.pinata.cloud/ipfs/{{cid}}';
+    configs.current.ipfs?.gateway ?? 'https://nftstorage.link/ipfs/{{cid}}';
   return gateway.replace('{{cid}}', cid);
 };
 export const ipfs = {

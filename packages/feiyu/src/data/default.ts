@@ -23,7 +23,7 @@ export const kDefaultConfig: FeiyuConfig = {
    * IPFS 配置（用于生成分享链接，导入导出配置文件）
    */
   ipfs: {
-    gateway: 'https://gateway.pinata.cloud/ipfs/{{cid}}',
+    gateway: 'https://nftstorage.link/ipfs/{{cid}}',
     token: 'xxxxxxxx', // 🔥 请到 https://nft.storage/ 自己申请 API key（免费）
   },
   /**

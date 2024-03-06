@@ -41,7 +41,7 @@
     }
   ],
   "ipfs": {
-    "gateway": "https://gateway.pinata.cloud/ipfs/{{cid}}",
+    "gateway": "https://nftstorage.link/ipfs/{{cid}}",
     "token": "xxxxxxxx"
   },
   "randomEmojis": ["🐮", "🐰"],
@@ -156,7 +156,7 @@ export const kDefaultConfig = {
    * IPFS 配置（用于生成分享链接，导入导出配置文件）
    */
   ipfs: {
-    gateway: "https://gateway.pinata.cloud/ipfs/{{cid}}",
+    gateway: "https://nftstorage.link/ipfs/{{cid}}",
     token: "xxxxxxxx", // 🔥 请到 https://nft.storage/ 自己申请 API key（免费）
   },
   /**
@@ -175,7 +175,8 @@ export const kDefaultConfig = {
       id: "26302614",
       isNew: false,
       title: "请回答1988",
-      cover: "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2272563445.jpg",
+      cover:
+        "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2272563445.jpg",
       rate: "9.7",
     },
   ],
