@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-unfetch';
 
-import { configs } from '@/data/config/manager';
+import { configs } from '@/data/config';
 import { AbortConfig } from '@/utils/abort';
 import { jsonDecode, jsonEncode } from '@/utils/base';
 import { isNotEmpty, isObject } from '@/utils/is';

@@ -1,4 +1,4 @@
-import { configs } from '@/data/config/manager';
+import { configs } from '@/data/config';
 import { http } from '@/services/http';
 
 import { withAbort } from '../abort';

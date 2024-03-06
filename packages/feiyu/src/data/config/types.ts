@@ -79,10 +79,6 @@ export type FeiyuConfig = {
    */
   ipfs?: IPFSConfig;
   /**
-   * 随机表情列表
-   */
-  randomEmojis?: string[];
-  /**
    * 推荐电影列表
    */
   recommendMovies?: string[];

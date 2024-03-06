@@ -23,11 +23,11 @@ import { Box } from '@/components/Box';
 import { Center, Column, Expand, Row } from '@/components/Flex';
 import { Text } from '@/components/Text';
 import {
-  ConfigManager,
+  APPConfig,
   configs,
   kSubscribesKey,
   SubscribesStore,
-} from '@/data/config/manager';
+} from '@/data/config';
 import { Subscribe } from '@/data/config/types';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useDarkMode } from '@/hooks/useDarkMode';
@@ -210,7 +210,7 @@ const TableRow = (props: {
   const { isMobile, selected, setCurrent, subscribe } = props;
   const hasRefresh = isNotEmpty(subscribe.link);
   const hasEdit = isEmpty(subscribe.link);
-  const hasDelete = subscribe.key !== ConfigManager.defaultKey;
+  const hasDelete = subscribe.key !== APPConfig.defaultKey;
   const dropList = (
     <Menu style={{ width: '90px' }}>
       {hasEdit ? (

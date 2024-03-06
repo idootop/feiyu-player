@@ -1,10 +1,11 @@
 import { pickOne } from '../utils/base';
-import { configs } from './config/manager';
+import { configs } from './config';
 
 export const randomMovie = () => {
   return pickOne(
     configs.current.recommendMovies ?? [
       '请回答1988',
+      '漫长的季节',
       '白色巨塔',
       '非自然死亡',
       '半泽直树',

@@ -1,4 +1,4 @@
-import { configs } from '@/data/config/manager';
+import { configs } from '@/data/config';
 import { jsonEncode } from '@/utils/base';
 
 import { cache } from '../cache';

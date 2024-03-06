@@ -6,7 +6,7 @@ import { Box } from '@/components/Box';
 import { Dialog } from '@/components/Dialog';
 import { Expand, Row } from '@/components/Flex';
 import { Text } from '@/components/Text';
-import { ConfigManager, configs } from '@/data/config/manager';
+import { APPConfig, configs } from '@/data/config';
 import { Subscribe } from '@/data/config/types';
 import { store, useConsumer, useProvider } from '@/services/store/useStore';
 import { colors } from '@/styles/colors';
@@ -248,7 +248,7 @@ export const SubscribeDetailModal = () => {
   const [data] = useConsumer<SettingModals>(kSettingModals);
   const { showDetail, subscribe } = data ?? {};
   const isEdit = isEmpty(subscribe?.link);
-  const isDelete = subscribe?.key === ConfigManager.defaultKey;
+  const isDelete = subscribe?.key === APPConfig.defaultKey;
   const [input, setInput] = useState('');
   const [waiting, setWaiting] = useState(false);
   const [leadWaiting, setLeadWaiting] = useState(false);

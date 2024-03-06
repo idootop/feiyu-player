@@ -4,6 +4,7 @@ import {
   Empty,
   Image,
   Input,
+  Link,
   List,
   Modal,
   Rate,
@@ -17,7 +18,7 @@ import { InputKey } from '@/components/InputKey';
 import { Loading } from '@/components/Loading';
 import { LongText } from '@/components/LongText';
 import { Text } from '@/components/Text';
-import { randomEmoji } from '@/data/emojis';
+import { APPConfig } from '@/data/config';
 import { randomMovie } from '@/data/movies';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useScreen } from '@/hooks/useScreen';
@@ -245,30 +246,36 @@ const SearchModal = () => {
       <Empty
         icon={
           <Box fontSize="64px" color={colors.text} margin="20px">
-            {isMobile ? (
-              <img
-                src="/logo.svg"
-                style={{
-                  objectFit: 'cover',
-                  width: '64px',
-                  height: '64px',
-                  borderRadius: '10px',
-                }}
-              />
-            ) : (
-              randomEmoji()
-            )}
+            <img
+              src="/logo.svg"
+              style={{
+                objectFit: 'cover',
+                width: '64px',
+                height: '64px',
+                borderRadius: '10px',
+              }}
+            />
           </Box>
         }
         description={
-          <Box
-            fontSize="16px"
-            fontWeight="bold"
-            color={colors.text2}
-            margin="20px"
-          >
-            「 飞鱼 ~ 」
-          </Box>
+          <p>
+            <Box
+              fontSize="16px"
+              fontWeight="bold"
+              color={colors.text2}
+              margin="20px"
+            >
+              飞鱼 v{APPConfig.version}
+            </Box>
+            Made with ❤️ by
+            <Link
+              href="https://github.com/idootop/feiyu-player"
+              target="_blank"
+            >
+              {' '}
+              Del.Wang{' '}
+            </Link>
+          </p>
         }
       />
     </Column>

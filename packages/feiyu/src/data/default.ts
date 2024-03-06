@@ -1,6 +1,4 @@
-import { FeiyuConfig } from './config/types';
-
-export const kDefaultConfig: FeiyuConfig = {
+export default {
   feiyu: 'config',
   /**
    * 代理请求接口（必填）
@@ -27,27 +25,11 @@ export const kDefaultConfig: FeiyuConfig = {
     token: 'xxxxxxxx', // 🔥 请到 https://nft.storage/ 自己申请 API key（免费）
   },
   /**
-   * 随机表情列表
-   */
-  randomEmojis: [
-    '🐹',
-    '🐮',
-    '🐯',
-    '🐰',
-    '🐲',
-    '🐍',
-    '🦄',
-    '🐏',
-    '🐵',
-    '🐣',
-    '🐶',
-    '🐷',
-  ],
-  /**
    * 推荐电影列表
    */
   recommendMovies: [
     '请回答1988',
+    '漫长的季节',
     '白色巨塔',
     '非自然死亡',
     '半泽直树',
@@ -61,9 +43,12 @@ export const kDefaultConfig: FeiyuConfig = {
     '东京爱情故事',
   ],
   /**
-   * 热门电影榜单（也可以是返回HotMovie[]格式JSON文件的接口，方便获取最新的热门榜单）
+   * 热门电影榜单
+   * 
+   * 也可以是返回 HotMovie[] 数据的 JSON 接口，方便获取最新热门影视剧
+   * 
+   * 比如：https://example.com/hotMovies.json，返回值：[{"title":"漫长的季节",...}, ...]
    */
-  // hotMovies: 'https://xxx.xx/hotMovies.json',
   hotMovies: [
     {
       id: '26302614',
@@ -391,14 +376,6 @@ export const kDefaultConfig: FeiyuConfig = {
       title: '我可能遇到了救星',
       cover:
         'https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2885046844.jpg',
-      rate: '8.0',
-    },
-    {
-      id: '34467461',
-      isNew: false,
-      title: '巴比伦',
-      cover:
-        'https://img1.doubanio.com/view/photo/s_ratio_poster/public/p2884457470.jpg',
       rate: '8.0',
     },
     {

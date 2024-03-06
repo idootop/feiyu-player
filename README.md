@@ -44,7 +44,6 @@
     "gateway": "https://nftstorage.link/ipfs/{{cid}}",
     "token": "xxxxxxxx"
   },
-  "randomEmojis": ["🐮", "🐰"],
   "recommendMovies": ["请回答1988", "东京爱情故事"],
   "hotMovies": [
     {
@@ -133,7 +132,7 @@ yarn && yarn deploy
 配置参数示例如下：
 
 ```typescript
-export const kDefaultConfig = {
+export default {
   feiyu: "config",
   /**
    * 代理请求接口（必填）
@@ -160,15 +159,15 @@ export const kDefaultConfig = {
     token: "xxxxxxxx", // 🔥 请到 https://nft.storage/ 自己申请 API key（免费）
   },
   /**
-   * 随机表情列表
-   */
-  randomEmojis: ["🐰"],
-  /**
    * 推荐电影列表
    */
   recommendMovies: ["请回答1988"],
   /**
    * 热门电影榜单
+   * 
+   * 也可以是返回 HotMovie[] 数据的 JSON 接口，方便获取最新热门影视剧
+   * 
+   * 比如：https://example.com/hotMovies.json，返回值：[{"title":"漫长的季节",...}, ...]
    */
   hotMovies: [
     {
@@ -180,8 +179,6 @@ export const kDefaultConfig = {
       rate: "9.7",
     },
   ],
-  // 也可以是返回JSON格式数据的接口，方便获取最新的热门榜单
-  // hotMovies: 'https://xxx.xx/hotMovies.json',
 };
 ```
 

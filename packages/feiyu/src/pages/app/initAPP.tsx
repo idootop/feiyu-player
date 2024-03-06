@@ -5,7 +5,7 @@ import { registerSW } from 'virtual:pwa-register';
 import { Box } from '@/components/Box';
 import { Dialog } from '@/components/Dialog';
 import { Text } from '@/components/Text';
-import { configs } from '@/data/config/manager';
+import { configs } from '@/data/config';
 import { usePWA } from '@/hooks/usePWA';
 import { cache } from '@/services/cache';
 import { useFallbackToIndex } from '@/services/routes/page';

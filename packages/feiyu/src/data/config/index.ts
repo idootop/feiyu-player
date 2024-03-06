@@ -6,7 +6,7 @@ import { timestamp } from '@/utils/base';
 import { deepClone } from '@/utils/clone';
 import { isNotEmpty } from '@/utils/is';
 
-import { kDefaultConfig } from '../default';
+import defaultConfig from '../default';
 import { subscribeStorage } from './storage';
 import { FeiyuConfig, Subscribe } from './types';
 
@@ -19,14 +19,15 @@ export interface SubscribesStore {
 
 export const kSubscribesKey = 'kSubscribesKey';
 
-export class ConfigManager {
+export class APPConfig {
+  static version = '1.0.0';
   static defaultKey = '默认订阅';
   static defaultConfig: Subscribe = {
     feiyu: 'subscribe',
-    key: ConfigManager.defaultKey,
+    key: APPConfig.defaultKey,
     link: undefined,
     lastUpdate: 1676205769619,
-    config: kDefaultConfig,
+    config: defaultConfig as any,
   };
 
   private get _subscribes() {
@@ -37,7 +38,7 @@ export class ConfigManager {
   private get _currentSubscribe() {
     return (
       store.get<SubscribesStore>(kSubscribesKey)?.currentSubscribe ??
-      ConfigManager.defaultKey
+      APPConfig.defaultKey
     );
   }
 
@@ -51,7 +52,7 @@ export class ConfigManager {
 
   get current(): FeiyuConfig {
     this.init(); // 被动初始化
-    return this._subscribes[this._currentSubscribe]?.config ?? kDefaultConfig;
+    return this._subscribes[this._currentSubscribe]?.config ?? defaultConfig;
   }
 
   get allowSexy() {
@@ -88,14 +89,14 @@ export class ConfigManager {
     }
     this.inited = true;
     // 添加默认配置
-    _subscribes[ConfigManager.defaultKey] = ConfigManager.defaultConfig;
+    _subscribes[APPConfig.defaultKey] = APPConfig.defaultConfig;
     // 加载本地订阅配置
     const subscribes = await subscribeStorage.getAll();
     subscribes.forEach((e) => {
       _subscribes[e.key] = e;
     });
     // 从本地读取当前使用的配置记录
-    let _currentSubscribe = ConfigManager.defaultKey;
+    let _currentSubscribe = APPConfig.defaultKey;
     const current = subscribeStorage.current();
     if (current) {
       _currentSubscribe = current;
@@ -308,16 +309,16 @@ export class ConfigManager {
     if (success) {
       const _subscribes = this._subscribes;
       delete _subscribes[key];
-      if (!_subscribes[ConfigManager.defaultKey]) {
-        _subscribes[ConfigManager.defaultKey] = ConfigManager.defaultConfig;
+      if (!_subscribes[APPConfig.defaultKey]) {
+        _subscribes[APPConfig.defaultKey] = APPConfig.defaultConfig;
       }
       // 重置为默认值
-      const flag = await this.setCurrent(ConfigManager.defaultKey);
+      const flag = await this.setCurrent(APPConfig.defaultKey);
       if (flag) {
         // 更新状态
         this._updateStore({
           subscribes: _subscribes,
-          currentSubscribe: ConfigManager.defaultKey,
+          currentSubscribe: APPConfig.defaultKey,
         });
         return true;
       }
@@ -333,14 +334,14 @@ export class ConfigManager {
     const success = await subscribeStorage.clear();
     if (success) {
       // 重置为默认值
-      const flag = await this.setCurrent(ConfigManager.defaultKey);
+      const flag = await this.setCurrent(APPConfig.defaultKey);
       if (flag) {
         // 更新状态
         this._updateStore({
           subscribes: {
-            [ConfigManager.defaultKey]: ConfigManager.defaultConfig,
+            [APPConfig.defaultKey]: APPConfig.defaultConfig,
           },
-          currentSubscribe: ConfigManager.defaultKey,
+          currentSubscribe: APPConfig.defaultKey,
         });
         return true;
       }
@@ -368,4 +369,4 @@ export class ConfigManager {
   }
 }
 
-export const configs = new ConfigManager();
+export const configs = new APPConfig();

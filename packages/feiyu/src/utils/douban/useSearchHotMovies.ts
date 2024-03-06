@@ -1,4 +1,4 @@
-import { configs } from '@/data/config/manager';
+import { configs } from '@/data/config';
 import { useSearchDatas } from '@/hooks/useSearchDatas';
 import { http } from '@/services/http';
 import { store } from '@/services/store/useStore';
