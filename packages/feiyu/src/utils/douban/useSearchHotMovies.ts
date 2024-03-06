@@ -1,19 +1,20 @@
+import { XSta } from 'xsta';
+
 import { configs } from '@/data/config';
 import { useSearchDatas } from '@/hooks/useSearchDatas';
 import { http } from '@/services/http';
-import { store } from '@/services/store/useStore';
 
 import { isString } from '../is';
 import { DoubanHotMovie } from '.';
 
 export const kHotMoviesKey = 'kHotMovies';
-export const getHotMovies = () => store.get<DoubanHotMovie[]>(kHotMoviesKey);
+export const getHotMovies = () => XSta.get<DoubanHotMovie[]>(kHotMoviesKey);
 
 export const useSearchHotMovies = () => {
   return useSearchDatas<any, DoubanHotMovie>({
     isEqual: () => false,
     async onSearch() {
-      const currenHotMovies = store.get(kHotMoviesKey);
+      const currenHotMovies = XSta.get(kHotMoviesKey);
       if (currenHotMovies) return currenHotMovies;
       const hotMovies = configs.current.hotMovies;
       const movies = isString(hotMovies)
@@ -22,7 +23,7 @@ export const useSearchHotMovies = () => {
       if (isString(movies)) {
         return []; // 非预期数据
       }
-      store.set(kHotMoviesKey, movies);
+      XSta.set(kHotMoviesKey, movies);
       return movies;
     },
   });

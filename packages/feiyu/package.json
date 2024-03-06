@@ -18,7 +18,8 @@
     "react-lazy-load": "^4.0.1",
     "wouter": "^2.12.1",
     "xgplayer": "^3.0.12",
-    "xgplayer-hls": "^3.0.12"
+    "xgplayer-hls": "^3.0.12",
+    "xsta": "^1.0.2"
   },
   "devDependencies": {
     "@types/node": "^18.11.16",

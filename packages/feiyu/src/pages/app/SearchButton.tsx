@@ -11,6 +11,7 @@ import {
 } from '@arco-design/web-react';
 import { IconSearch } from '@arco-design/web-react/icon';
 import { useCallback, useEffect } from 'react';
+import { useXState } from 'xsta';
 
 import { Box } from '@/components/Box';
 import { Column, Expand, Row } from '@/components/Flex';
@@ -21,8 +22,8 @@ import { Text } from '@/components/Text';
 import { APPConfig } from '@/data/config';
 import { randomMovie } from '@/data/movies';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
+import { useRefCallback } from '@/hooks/useRefCallback';
 import { useScreen } from '@/hooks/useScreen';
-import { useRefCallback, useStore } from '@/services/store/useStore';
 import { colors } from '@/styles/colors';
 import { DoubanSearchDetail } from '@/utils/douban';
 import { useSearchKeywords } from '@/utils/douban/useSearchKeywords';
@@ -33,7 +34,7 @@ import { useHomePages } from '../home';
 const kShowSearchModal = 'showSearchModal';
 export const SearchButton = () => {
   const { isXS } = useBreakpoint();
-  const [_, setShowSearchModal] = useStore(kShowSearchModal, false);
+  const [_, setShowSearchModal] = useXState(kShowSearchModal, false);
   const openSearchModalRef = useRefCallback(() => {
     setShowSearchModal(true);
   });
@@ -88,7 +89,7 @@ export const SearchButton = () => {
 };
 
 const SearchModal = () => {
-  const [showSearchModal, setShowSearchModal] = useStore(kShowSearchModal);
+  const [showSearchModal, setShowSearchModal] = useXState(kShowSearchModal);
   const { jumpToPage } = useHomePages();
   const { isMobile } = useBreakpoint();
 

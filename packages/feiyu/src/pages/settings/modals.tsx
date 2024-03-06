@@ -1,6 +1,7 @@
 import { Input, Message, Modal } from '@arco-design/web-react';
 import TextArea from '@arco-design/web-react/es/Input/textarea';
 import { useEffect, useState } from 'react';
+import { useXConsumer, useXProvider, XSta } from 'xsta';
 
 import { Box } from '@/components/Box';
 import { Dialog } from '@/components/Dialog';
@@ -8,7 +9,6 @@ import { Expand, Row } from '@/components/Flex';
 import { Text } from '@/components/Text';
 import { APPConfig, configs } from '@/data/config';
 import { Subscribe } from '@/data/config/types';
-import { store, useConsumer, useProvider } from '@/services/store/useStore';
 import { colors } from '@/styles/colors';
 import { jsonDecode, jsonEncode } from '@/utils/base';
 import { clipboard } from '@/utils/clipborad';
@@ -26,8 +26,8 @@ interface SettingModals {
 }
 
 export const setSettingModals = (option: Partial<SettingModals>) => {
-  store.set(kSettingModals, {
-    ...(store.get(kSettingModals) ?? {}),
+  XSta.set(kSettingModals, {
+    ...(XSta.get(kSettingModals) ?? {}),
     ...option,
   });
 };
@@ -42,7 +42,7 @@ const _initSettingModalStates = {
   url: undefined,
 };
 export const useInitSettingModals = () => {
-  useProvider<SettingModals>(kSettingModals, _initSettingModalStates);
+  useXProvider<SettingModals>(kSettingModals, _initSettingModalStates);
 };
 
 export const showAddSubscribeModal = (flag = true) => {
@@ -52,7 +52,7 @@ export const showAddSubscribeModal = (flag = true) => {
   });
 };
 export const AddSubscribeModal = () => {
-  const [data] = useConsumer<SettingModals>(kSettingModals);
+  const [data] = useXConsumer<SettingModals>(kSettingModals);
   const { showAdd } = data ?? {};
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
@@ -143,7 +143,7 @@ export const showImportSubscribeModal = (flag = true) => {
   });
 };
 export const ImportSubscribeModal = () => {
-  const [data] = useConsumer<SettingModals>(kSettingModals);
+  const [data] = useXConsumer<SettingModals>(kSettingModals);
   const { showImport } = data ?? {};
   const [link, setLink] = useState('');
   const [waiting, setWaiting] = useState(false);
@@ -205,7 +205,7 @@ export const showExportSubscribeModal = (flag = true) => {
   setSettingModals({ ..._initSettingModalStates, showExport: flag });
 };
 export const ExportSubscribeModal = () => {
-  const [data] = useConsumer<SettingModals>(kSettingModals);
+  const [data] = useXConsumer<SettingModals>(kSettingModals);
   const { showExport } = data ?? {};
   const [waiting, setWaiting] = useState(false);
   useEffect(() => {
@@ -245,7 +245,7 @@ export const showSubscribeDetailModal = (
   setSettingModals({ ..._initSettingModalStates, showDetail: flag, subscribe });
 };
 export const SubscribeDetailModal = () => {
-  const [data] = useConsumer<SettingModals>(kSettingModals);
+  const [data] = useXConsumer<SettingModals>(kSettingModals);
   const { showDetail, subscribe } = data ?? {};
   const isEdit = isEmpty(subscribe?.link);
   const isDelete = subscribe?.key === APPConfig.defaultKey;
@@ -409,7 +409,7 @@ export const showDeleteSubscribeModal = (
   setSettingModals({ showDelete: flag, subscribe });
 };
 export const DeleteSubscribeModal = () => {
-  const [data] = useConsumer<SettingModals>(kSettingModals);
+  const [data] = useXConsumer<SettingModals>(kSettingModals);
   const { showDelete, subscribe } = data ?? {};
   return (
     <Dialog
@@ -447,7 +447,7 @@ export const showCopyModal = (url: string) => {
   setSettingModals({ url });
 };
 export const CopyModal = () => {
-  const [data] = useConsumer<SettingModals>(kSettingModals);
+  const [data] = useXConsumer<SettingModals>(kSettingModals);
   const { url } = data ?? {};
   return (
     <Modal

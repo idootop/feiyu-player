@@ -2617,6 +2617,11 @@ ext@^1.1.2:
   dependencies:
     type "^2.7.2"
 
+external-shallow-equal@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/external-shallow-equal/-/external-shallow-equal-1.0.0.tgz#c1b712d17ef41e40e0aa3c84155695538305775c"
+  integrity sha512-OGermv+d6hXdjdV/rQMIrPqXv4phLC/mIu1wb3dgZ6iLTTt/Ee4svWWsJdZouIZoassSqRZ4aUIoFghzkmClpA==
+
 fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
@@ -5162,6 +5167,13 @@ xgplayer@^3.0.12:
     downloadjs "1.4.7"
     eventemitter3 "^4.0.7"
     xgplayer-subtitles "3.0.13"
+
+xsta@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/xsta/-/xsta-1.0.2.tgz#0e765fdb6288877e4308ff65ee2d9234979fb522"
+  integrity sha512-0LNAIXinjZQVBxefTh0qT+cYMKcmp7sG8smuvlI/g9trM3wkmoD5BUwiUCdlZK6i/muja4c0RDjUxpKwcUzNYQ==
+  dependencies:
+    external-shallow-equal "^1.0.0"
 
 yallist@^3.0.2:
   version "3.1.1"

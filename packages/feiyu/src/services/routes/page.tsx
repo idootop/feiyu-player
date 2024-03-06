@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 
+import { useInit } from '@/hooks/useInit';
 import { useLLocation } from '@/services/routes/location';
 import { NavigateOption, router } from '@/services/routes/router';
 import { lastOf } from '@/utils/base';
 import { isNotEqual } from '@/utils/diff';
 import { isNotEmpty } from '@/utils/is';
-
-import { useInit } from '../store/useStore';
 
 export interface RoutePage {
   key: string;

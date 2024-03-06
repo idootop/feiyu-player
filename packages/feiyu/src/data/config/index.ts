@@ -1,7 +1,8 @@
+import { XSta } from 'xsta';
+
 import { http } from '@/services/http';
 import { ipfs, ipfsURL } from '@/services/ipfs';
 import { storage } from '@/services/storage/storage';
-import { store } from '@/services/store/useStore';
 import { timestamp } from '@/utils/base';
 import { deepClone } from '@/utils/clone';
 import { isNotEmpty } from '@/utils/is';
@@ -31,20 +32,20 @@ export class APPConfig {
   };
 
   private get _subscribes() {
-    const origin = store.get<SubscribesStore>(kSubscribesKey)?.subscribes ?? {};
+    const origin = XSta.get<SubscribesStore>(kSubscribesKey)?.subscribes ?? {};
     return deepClone<Record<string, Subscribe>>(origin);
   }
 
   private get _currentSubscribe() {
     return (
-      store.get<SubscribesStore>(kSubscribesKey)?.currentSubscribe ??
+      XSta.get<SubscribesStore>(kSubscribesKey)?.currentSubscribe ??
       APPConfig.defaultKey
     );
   }
 
   private _updateStore(data: Partial<SubscribesStore>) {
-    const old = store.get<SubscribesStore>(kSubscribesKey) ?? {};
-    store.set(kSubscribesKey, {
+    const old = XSta.get<SubscribesStore>(kSubscribesKey) ?? {};
+    XSta.set(kSubscribesKey, {
       ...old,
       ...data,
     });

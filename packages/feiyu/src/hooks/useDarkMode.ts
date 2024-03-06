@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
+import { useXState } from 'xsta';
 
 import { storage } from '@/services/storage/storage';
 
-import { useStore } from '../services/store/useStore';
 
 const _darkModeKey = 'isDarkMode';
 
 export const useDarkMode = () => {
-  const [isDarkMode, setIsDarkMode] = useStore<boolean>(_darkModeKey);
+  const [isDarkMode, setIsDarkMode] = useXState<boolean>(_darkModeKey);
   const switchDarkMode: any = () => {
     if (isDarkMode) {
       document.body.setAttribute('arco-theme', 'light');

@@ -1,7 +1,8 @@
 import { useCallback, useRef } from 'react';
 
 import { useAbort } from '@/hooks/useAbort';
-import { useRebuildRef } from '@/services/store/useStore';
+
+import { useRebuildRef } from './useRebuild';
 
 const _isEqual = (a: any, b: any) => a === b;
 

@@ -4,9 +4,9 @@ import 'xgplayer/dist/index.min.css';
 import { forwardRef, useEffect, useRef } from 'react';
 import XgPlayer, { Events } from 'xgplayer/es/player';
 import HlsPlugin from 'xgplayer-hls';
+import { XSta } from 'xsta';
 
 import { Box } from '@/components/Box';
-import { store } from '@/services/store/useStore';
 import { lastOf } from '@/utils/base';
 import { addClass, removeClass } from '@/utils/dom';
 
@@ -45,9 +45,9 @@ export const Player = forwardRef(
         player.current.src = '';
         return;
       }
-      store.set(kPlayerKey, props);
+      XSta.set(kPlayerKey, props);
       setTimeout(() => {
-        const { current, playList } = store.get<PlayerConfig>(kPlayerKey) ?? {};
+        const { current, playList } = XSta.get<PlayerConfig>(kPlayerKey) ?? {};
         if (!player.current) {
           // 初始化视频播放器
           player.current = new XgPlayer({
@@ -65,7 +65,7 @@ export const Player = forwardRef(
           });
           player.current.on(Events.PLAYNEXT, () => {
             const { current, playList, onPlayNext } =
-              store.get<PlayerConfig>(kPlayerKey)!;
+              XSta.get<PlayerConfig>(kPlayerKey)!;
             const hasNext = lastOf(playList) !== current;
             if (hasNext) {
               // 选中并播放下一集

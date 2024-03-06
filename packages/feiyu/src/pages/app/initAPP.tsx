@@ -6,11 +6,11 @@ import { Box } from '@/components/Box';
 import { Dialog } from '@/components/Dialog';
 import { Text } from '@/components/Text';
 import { configs } from '@/data/config';
+import { useInit } from '@/hooks/useInit';
 import { usePWA } from '@/hooks/usePWA';
 import { cache } from '@/services/cache';
 import { useFallbackToIndex } from '@/services/routes/page';
 import { storage } from '@/services/storage/storage';
-import { useInit } from '@/services/store/useStore';
 
 import { kRoutePages } from '..';
 

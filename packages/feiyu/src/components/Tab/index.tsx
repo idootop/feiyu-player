@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 
-import { useInit, useRebuild, useRebuildRef } from '@/services/store/useStore';
+import { useInit } from '@/hooks/useInit';
+import { useRebuild, useRebuildRef } from '@/hooks/useRebuild';
 import { colors } from '@/styles/colors';
 
 import { Box } from '../Box';

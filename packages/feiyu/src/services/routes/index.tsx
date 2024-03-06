@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 import { Router } from 'wouter';
+import { useXProvider, XSta } from 'xsta';
 
 import { BoxProps } from '@/components/Box';
 import { AsyncBuilder, TabPages } from '@/components/Tab';
 import { TabPageController } from '@/components/Tab/state';
-import { store, useInit, useProvider } from '@/services/store/useStore';
+import { useInit } from '@/hooks/useInit';
 import { flattenChildren } from '@/utils/flatten';
 
 import { useRouterInit } from './listener';
-import { multipathMatcher, useLLocation } from './location';
+import { multiPathMatcher, useLLocation } from './location';
 import { router } from './router';
 
 const _lRoutesKey = (key: string, id = '0') => `LRoutes-${key}-${id}`;
@@ -16,7 +17,7 @@ const _lRoutesKey = (key: string, id = '0') => `LRoutes-${key}-${id}`;
  * key 为当前 LRoutes 的 parent
  */
 export const getLRoutesController = (key: string, id = '0') =>
-  store.get<TabPageController>(_lRoutesKey(key, id));
+  XSta.get<TabPageController>(_lRoutesKey(key, id));
 
 export const LRouter = (
   props: BoxProps & { base?: string; hash?: boolean },
@@ -27,7 +28,7 @@ export const LRouter = (
   // 初始化 router
   useRouterInit();
   return (
-    <Router hook={useLLocation as any} matcher={multipathMatcher as any}>
+    <Router hook={useLLocation as any} matcher={multiPathMatcher as any}>
       {props.children}
     </Router>
   );
@@ -69,7 +70,7 @@ export const LRoutes = (props: {
         pages,
       }),
   );
-  useProvider(key, controller);
+  useXProvider(key, controller);
   useEffect(() => {
     controller.jumpTo(current.key);
   }, [current.key]);

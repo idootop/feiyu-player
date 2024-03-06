@@ -6,6 +6,7 @@ import {
   IconSwap,
 } from '@arco-design/web-react/icon';
 import { useEffect, useRef, useState } from 'react';
+import { useXConsumer } from 'xsta';
 
 import { Box } from '@/components/Box';
 import { Column, Expand, Row } from '@/components/Flex';
@@ -14,18 +15,14 @@ import { SearchEmpty } from '@/components/SearchEmpty';
 import { Text } from '@/components/Text';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useDarkMode } from '@/hooks/useDarkMode';
+import { useInit } from '@/hooks/useInit';
 import { Size, useMeasure } from '@/hooks/useMeasure';
+import { useRebuild, useRebuildRef } from '@/hooks/useRebuild';
 import { PageBuilder } from '@/pages/app';
 import { ipfs } from '@/services/ipfs';
 import { addSearchParams } from '@/services/routes/location';
 import { usePage } from '@/services/routes/page';
 import { router } from '@/services/routes/router';
-import {
-  useConsumer,
-  useInit,
-  useRebuild,
-  useRebuildRef,
-} from '@/services/store/useStore';
 import { colors } from '@/styles/colors';
 import { clipboard } from '@/utils/clipborad';
 import { isEqual } from '@/utils/diff';
@@ -88,7 +85,7 @@ const Play = () => {
   const { query, isActive } = usePage('/home/play');
   const { cid, ep: _ep } = query;
   const ep = parseInt(_ep ?? '1', 10);
-  const [pageData] = useConsumer(kPlayPageId);
+  const [pageData] = useXConsumer(kPlayPageId);
   const { pageId, movie: currentData } = pageData ?? {};
 
   const { isDarkMode } = useDarkMode();
@@ -376,9 +373,9 @@ const Play = () => {
 };
 
 const MovieList = () => {
-  const [data] = useConsumer<any>(kCurrentSearchMovies);
+  const [data] = useXConsumer<any>(kCurrentSearchMovies);
   const { movies = [], searching, sort } = data ?? {};
-  const [pageData] = useConsumer(kPlayPageId);
+  const [pageData] = useXConsumer(kPlayPageId);
   const { movie: currentMovie } = pageData ?? {};
   const rebuild = useRebuild();
   // 电影列表搜索结果大于1个时，展示电影搜索列表

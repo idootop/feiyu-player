@@ -1,10 +1,11 @@
 import makeMatcher from 'wouter/matcher';
 import { navigate, useLocationProperty } from 'wouter/use-location';
+import { useXConsumer, XSta } from 'xsta';
 
+import { useInit } from '@/hooks/useInit';
 import { useInterval } from '@/hooks/useInterval';
 import { isEmpty } from '@/utils/is';
 
-import { store, useConsumer, useInit } from '../store/useStore';
 import { router } from './router';
 
 const defaultMatcher = makeMatcher();
@@ -12,7 +13,7 @@ const defaultMatcher = makeMatcher();
 /*
  * A custom routing matcher function that supports multipath routes
  */
-export const multipathMatcher = (patterns, path) => {
+export const multiPathMatcher = (patterns, path) => {
   for (const pattern of [patterns].flat()) {
     const [match, params] = defaultMatcher(pattern, path);
     if (match) return [match, params];
@@ -81,7 +82,7 @@ export const useInitLocationListener = () => {
 
 const kLocationRefresh = 'kLocationRefresh';
 export const refreshLocation = () => {
-  store.set(kLocationRefresh, !store.get(kLocationRefresh));
+  XSta.set(kLocationRefresh, !XSta.get(kLocationRefresh));
 };
 export const useLLocation = (): [
   string,
@@ -93,11 +94,11 @@ export const useLLocation = (): [
   ) => void,
 ] => {
   useInit(() => {
-    if (isEmpty(store.get(kLocationRefresh))) {
-      store.set(kLocationRefresh, false);
+    if (isEmpty(XSta.get(kLocationRefresh))) {
+      XSta.set(kLocationRefresh, false);
     }
   });
-  useConsumer(kLocationRefresh);
+  useXConsumer(kLocationRefresh);
   const location = useLocationProperty(getLocation);
   return [location, lNavigate];
 };

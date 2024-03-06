@@ -1,10 +1,9 @@
 import { useRegisterSW } from 'virtual:pwa-register/react';
-
-import { useStore } from '@/services/store/useStore';
+import { useXState } from 'xsta';
 
 const kInstalledPWA = 'kInstalledPWA';
 export const usePWA = () => {
-  const [installed, setInstalled] = useStore(kInstalledPWA);
+  const [installed, setInstalled] = useXState(kInstalledPWA);
   const {
     offlineReady: [offlineReady, setOfflineReady],
     needRefresh: [needRefresh, setNeedRefresh],

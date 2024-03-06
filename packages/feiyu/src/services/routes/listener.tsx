@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
+import { useInit } from '@/hooks/useInit';
 import { ArrayElement } from '@/utils/types';
 
-import { useInit } from '../store/useStore';
 import { getLocation, useInitLocationListener } from './location';
 import { router } from './router';
 

@@ -18,6 +18,7 @@ import {
   IconLoop,
   IconMore,
 } from '@arco-design/web-react/icon';
+import { useXConsumer } from 'xsta';
 
 import { Box } from '@/components/Box';
 import { Center, Column, Expand, Row } from '@/components/Flex';
@@ -31,7 +32,6 @@ import {
 import { Subscribe } from '@/data/config/types';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useDarkMode } from '@/hooks/useDarkMode';
-import { useConsumer } from '@/services/store/useStore';
 import { colors } from '@/styles/colors';
 import { isEmpty, isNotEmpty } from '@/utils/is';
 
@@ -117,7 +117,7 @@ const SubscribeHeader = (props: { isMobile: boolean }) => {
 
 const SubscribeTable = (props: { isMobile: boolean }) => {
   const { isMobile } = props;
-  const [data] = useConsumer<SubscribesStore>(kSubscribesKey);
+  const [data] = useXConsumer<SubscribesStore>(kSubscribesKey);
   const { currentSubscribe, subscribes = [] } = data ?? {};
 
   const setCurrent = (key: string) => {
@@ -355,7 +355,7 @@ const TableRow = (props: {
 
 const CurrentHeader = (props: { isMobile: boolean }) => {
   const { isMobile: _ } = props;
-  const [data] = useConsumer<SubscribesStore>(kSubscribesKey);
+  const [data] = useXConsumer<SubscribesStore>(kSubscribesKey);
   const { allowSexy, allowMovieCommentary } = data ?? {};
   return (
     <Column width="100%" className="subscribe-title" alignItems="start">

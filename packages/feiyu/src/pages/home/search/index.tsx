@@ -1,6 +1,7 @@
 import { Button } from '@arco-design/web-react';
 import { IconLeft, IconSort } from '@arco-design/web-react/icon';
 import { useEffect } from 'react';
+import { useXConsumer, XSta } from 'xsta';
 
 import { Box } from '@/components/Box';
 import { Center, Column, Expand, Row } from '@/components/Flex';
@@ -13,10 +14,10 @@ import { Text } from '@/components/Text';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useDarkMode } from '@/hooks/useDarkMode';
 import { newID } from '@/hooks/useID';
+import { useInit } from '@/hooks/useInit';
 import { PageBuilder } from '@/pages/app';
 import { usePage } from '@/services/routes/page';
 import { router } from '@/services/routes/router';
-import { store, useConsumer, useInit } from '@/services/store/useStore';
 import { colors } from '@/styles/colors';
 import { isEqual } from '@/utils/diff';
 import { FeiyuMovie } from '@/utils/feiyu';
@@ -46,14 +47,14 @@ const Search = () => {
 
   // 更新当前的搜索结果（透传数据给播放页面）
   useEffect(() => {
-    store.set(kCurrentSearchMovies, {
+    XSta.set(kCurrentSearchMovies, {
       searching,
       movies,
       sort,
     });
   }, [movies.length, searching]);
 
-  const [pageData] = useConsumer(kPlayPageId);
+  const [pageData] = useXConsumer(kPlayPageId);
   const { movie: currentMovie } = pageData ?? {};
 
   const body = initial ? (
@@ -162,7 +163,7 @@ export const MovieItem = (props: {
   const { movie, jumpToPage, isActive } = props;
 
   const onClick = async () => {
-    store.set(kPlayPageId, { movie, pageId: newID() });
+    XSta.set(kPlayPageId, { movie, pageId: newID() });
     if (router.current !== '/home/play') {
       jumpToPage?.('play');
     }

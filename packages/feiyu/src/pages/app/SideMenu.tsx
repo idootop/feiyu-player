@@ -1,10 +1,10 @@
 import { Drawer, Menu, Message } from '@arco-design/web-react';
+import { useXState } from 'xsta';
 
 import { Box } from '@/components/Box';
 import { Row } from '@/components/Flex';
 import { kRoutePages } from '@/pages';
 import { usePages } from '@/services/routes/page';
-import { useStore } from '@/services/store/useStore';
 import { colors } from '@/styles/colors';
 
 import { kHeaderHeight } from './MyHeader';
@@ -15,7 +15,7 @@ export const kSideWidth = 220;
 const kSideMenu = 'showSideMenu';
 
 export const useSideMenu = () => {
-  const [showSideMenu, setShowSideMenu] = useStore(kSideMenu);
+  const [showSideMenu, setShowSideMenu] = useXState(kSideMenu);
   return {
     isShowSideMenu: showSideMenu,
     openSideMenu() {
@@ -30,7 +30,7 @@ export const useSideMenu = () => {
 export const SideMenu = () => <MyMenu key="SideMenu" />;
 
 export const SideDrawer = () => {
-  const [showSideMenu, setShowSideMenu] = useStore(kSideMenu);
+  const [showSideMenu, setShowSideMenu] = useXState(kSideMenu);
   return (
     <Drawer
       width={kSideWidth}

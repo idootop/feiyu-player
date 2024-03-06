@@ -1,4 +1,4 @@
-import { store, useConsumer } from '@/services/store/useStore';
+import { useXConsumer, XSta } from "xsta";
 
 const __getBreakpoint = () => {
   const width = document.body.clientWidth;
@@ -51,7 +51,7 @@ const initScreenReSizeListener = () => {
   if (!_initScreenReSizeListener) {
     // 全剧只初始化一次
     setInterval(() => {
-      store.set(kScreenReSizeListenerKey, _getBreakpoint());
+      XSta.set(kScreenReSizeListenerKey, _getBreakpoint());
     }, 100);
     _initScreenReSizeListener = true;
   }
@@ -59,6 +59,6 @@ const initScreenReSizeListener = () => {
 
 export const useBreakpoint = (): DeviceSize => {
   initScreenReSizeListener();
-  const [breakpoint] = useConsumer(kScreenReSizeListenerKey);
+  const [breakpoint] = useXConsumer(kScreenReSizeListenerKey);
   return breakpoint ?? _getBreakpoint();
 };
