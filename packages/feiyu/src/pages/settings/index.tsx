@@ -360,7 +360,7 @@ const CurrentHeader = (props: { isMobile: boolean }) => {
   return (
     <Column width="100%" className="subscribe-title" alignItems="start">
       <Text fontSize="16px" fontWeight="500">
-        搜索过滤开关
+        搜索时屏蔽以下内容
       </Text>
       <Row>
         <Row
