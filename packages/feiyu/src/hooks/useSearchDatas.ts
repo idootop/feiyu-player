@@ -17,6 +17,7 @@ export const useSearchDatas = <Q = any, R = any>(config: {
   onlyCallback?: boolean;
 }): {
   search: (query: Q) => void;
+  refresh: () => void;
   initial: boolean;
   searching: boolean;
   reset: () => void;
@@ -56,8 +57,7 @@ export const useSearchDatas = <Q = any, R = any>(config: {
     rebuildRef.current.rebuild();
   }, []);
 
-  const search = useCallback(async (newQuery: Q) => {
-    if (isEqual(ref.current.query, newQuery)) return;
+  const _search = useCallback(async (newQuery: Q) => {
     abortSearch(); // 终止之前的搜索 promise 和 callback
     ref.current.initial = false;
     ref.current.query = newQuery;
@@ -96,7 +96,15 @@ export const useSearchDatas = <Q = any, R = any>(config: {
   return {
     initial,
     searching: ref.current.searching,
-    search,
+    search: (newQuery: Q) => {
+      if (isEqual(ref.current.query, newQuery)) {
+        return;
+      }
+      return _search(newQuery);
+    },
+    refresh: () => {
+      return _search(ref.current.query);
+    },
     reset,
     datas,
     query: ref.current.query,

@@ -18,16 +18,14 @@ import { useHomePages } from '..';
 
 const Hot = () => {
   const {
-    search,
+    refresh,
     initial,
     searching,
     datas: hotMovies,
     noData,
   } = useSearchHotMovies();
   const { jumpToPage } = useHomePages();
-  useInit(() => {
-    search('refresh');
-  });
+  useInit(refresh);
   return initial ? (
     <Box />
   ) : searching && noData ? (
@@ -39,11 +37,7 @@ const Hot = () => {
       width="100%"
       height="calc(80vh - 60px)"
       justifyContent="center"
-      onClick={() => {
-        if (noData) {
-          search('refresh');
-        }
-      }}
+      onClick={refresh}
     >
       <SearchEmpty />
     </Column>

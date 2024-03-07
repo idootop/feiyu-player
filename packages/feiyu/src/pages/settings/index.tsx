@@ -25,7 +25,7 @@ import { Center, Column, Expand, Row } from '@/components/Flex';
 import { Text } from '@/components/Text';
 import {
   APPConfig,
-  configs,
+  appConfig,
   kSubscribesKey,
   SubscribesStore,
 } from '@/data/config';
@@ -62,8 +62,8 @@ const SubscribeHeader = (props: { isMobile: boolean }) => {
       <Menu.Item
         key="更新订阅"
         onClick={async () => {
-          await configs.refreshAll();
-          Message.success('已刷新');
+          await appConfig.refreshAll();
+          Message.success('已更新');
         }}
       >
         <IconLoop style={{ marginRight: '4px' }} />
@@ -121,7 +121,7 @@ const SubscribeTable = (props: { isMobile: boolean }) => {
   const { currentSubscribe, subscribes = [] } = data ?? {};
 
   const setCurrent = (key: string) => {
-    configs.setCurrent(key);
+    appConfig.setCurrent(key);
   };
   const datas = Object.values(subscribes);
   return (
@@ -188,7 +188,7 @@ const TableHeader = (props: { isMobile: boolean }) => {
             订阅名称
           </Text>
         ) : (
-          <Text maxLines={1} padding="0 16px">
+          <Text maxLines={1} width="100%" padding="0 16px">
             订阅链接
           </Text>
         )}
@@ -208,8 +208,8 @@ const TableRow = (props: {
   setCurrent: (key: string) => void;
 }) => {
   const { isMobile, selected, setCurrent, subscribe } = props;
-  const hasRefresh = isNotEmpty(subscribe.link);
-  const hasEdit = isEmpty(subscribe.link);
+  const hasRefresh = isNotEmpty(subscribe.upstream);
+  const hasEdit = isEmpty(subscribe.upstream);
   const hasDelete = subscribe.key !== APPConfig.defaultKey;
   const dropList = (
     <Menu style={{ width: '90px' }}>
@@ -238,9 +238,9 @@ const TableRow = (props: {
         <Menu.Item
           key="更新"
           onClick={async () => {
-            const success = await configs.refreshSubscribe(subscribe.key);
+            const success = await appConfig.refreshSubscribe(subscribe.key);
             if (success) {
-              Message.success('已刷新');
+              Message.success('已更新');
             } else {
               Message.error('刷新失败');
             }
@@ -330,8 +330,13 @@ const TableRow = (props: {
             {subscribe.key}
           </Text>
         ) : (
-          <Text maxLines={1} padding="0 16px">
-            {subscribe.link ?? '-'}
+          <Text
+            maxLines={1}
+            width="100%"
+            padding="0 16px"
+            wordBreak="break-all"
+          >
+            {subscribe.upstream ?? '-'}
           </Text>
         )}
       </Expand>
@@ -360,7 +365,7 @@ const CurrentHeader = (props: { isMobile: boolean }) => {
   return (
     <Column width="100%" className="subscribe-title" alignItems="start">
       <Text fontSize="16px" fontWeight="500">
-        搜索时屏蔽以下内容
+        搜索结果屏蔽以下内容
       </Text>
       <Row>
         <Row
@@ -377,7 +382,7 @@ const CurrentHeader = (props: { isMobile: boolean }) => {
             checked={!allowMovieCommentary}
             onChange={(value) => {
               if (!allowMovieCommentary === !value) {
-                configs.toggleAllowMovieCommentary();
+                appConfig.toggleAllowMovieCommentary();
               }
             }}
           />
@@ -395,7 +400,7 @@ const CurrentHeader = (props: { isMobile: boolean }) => {
             checked={!allowSexy}
             onChange={(value) => {
               if (!allowSexy === !value) {
-                configs.toggleAllowSexy();
+                appConfig.toggleAllowSexy();
               }
             }}
           />

@@ -1,4 +1,4 @@
-import { configs } from '@/data/config';
+import { appConfig } from '@/data/config';
 import { http } from '@/services/http';
 
 import { withAbort } from '../abort';
@@ -53,7 +53,7 @@ class Feiyu {
   ) {
     const { callback, signal, concurrent = false } = config ?? {};
     const results: FeiyuMovie[] = [];
-    const sites: any = configs.current.movieSites ?? [];
+    const sites: any = appConfig.current.movieSites ?? [];
     if (!concurrent) {
       for (const site of sites) {
         // 搜索电影列表
@@ -129,7 +129,7 @@ class Feiyu {
       }))
       .filter((e) => e.id && e.name);
 
-    if (!configs.allowMovieCommentary) {
+    if (!appConfig.allowMovieCommentary) {
       // 去掉电影解说
       videoList = videoList.filter(
         (e) =>
@@ -146,7 +146,7 @@ class Feiyu {
       );
     }
 
-    if (!configs.allowSexy) {
+    if (!appConfig.allowSexy) {
       // 去掉伦理片
       videoList = videoList.filter((e) => !e.type.includes('伦理'));
     }

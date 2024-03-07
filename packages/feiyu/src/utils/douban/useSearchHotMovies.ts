@@ -1,6 +1,6 @@
 import { XSta } from 'xsta';
 
-import { configs } from '@/data/config';
+import { appConfig } from '@/data/config';
 import { useSearchDatas } from '@/hooks/useSearchDatas';
 import { http } from '@/services/http';
 
@@ -16,7 +16,7 @@ export const useSearchHotMovies = () => {
     async onSearch() {
       const currenHotMovies = XSta.get(kHotMoviesKey);
       if (currenHotMovies) return currenHotMovies;
-      const hotMovies = configs.current.hotMovies;
+      const hotMovies = appConfig.current.hotMovies;
       const movies = isString(hotMovies)
         ? await http.get(hotMovies as string)
         : hotMovies;

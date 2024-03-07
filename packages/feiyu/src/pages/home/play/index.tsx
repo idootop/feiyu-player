@@ -1,4 +1,4 @@
-import { Button, Message, Modal } from '@arco-design/web-react';
+import { Button, Link, Message, Modal } from '@arco-design/web-react';
 import {
   IconLeft,
   IconShareExternal,
@@ -24,7 +24,6 @@ import { addSearchParams } from '@/services/routes/location';
 import { usePage } from '@/services/routes/page';
 import { router } from '@/services/routes/router';
 import { colors } from '@/styles/colors';
-import { clipboard } from '@/utils/clipborad';
 import { isEqual } from '@/utils/diff';
 import { FeiyuMovie } from '@/utils/feiyu';
 import { isEmpty, isNotEmpty } from '@/utils/is';
@@ -108,7 +107,7 @@ const Play = () => {
 
   const $ShareModal = (
     <Modal
-      title="请手动复制 🔗"
+      title="分享链接"
       visible={isNotEmpty(shareURL)}
       onCancel={() => setShareURL('')}
       footer={null}
@@ -118,7 +117,13 @@ const Play = () => {
         margin: '20px',
       }}
     >
-      <Text style={{ padding: '20px', color: '#3d7ff6' }}>{shareURL}</Text>
+      <Link
+        style={{ padding: '20px', color: '#3d7ff6', wordBreak: 'break-all' }}
+        href={shareURL}
+        target="_blank"
+      >
+        {shareURL}
+      </Link>
     </Modal>
   );
 
@@ -134,12 +139,7 @@ const Play = () => {
       const shareUrl = new URL(window.location.href.replace('#/', ''));
       shareUrl.searchParams.set('cid', _cid);
       const url = shareUrl.href.replace('/home', '/#/home');
-      const success = await clipboard.write(url);
-      if (success) {
-        Message.info('分享链接已复制');
-      } else {
-        setShareURL(url);
-      }
+      setShareURL(url);
     } else {
       Message.info('分享失败');
     }

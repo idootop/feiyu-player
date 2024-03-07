@@ -44,15 +44,15 @@ export interface Subscribe {
   /**
    * 配置版本号 (1.0.0)
    */
-  feiyu: string;
+  version: string;
   /**
    * 订阅名称（不可编辑）
    */
   key: string;
   /**
-   * 订阅地址（本地配置无此参数）
+   * 订阅链接（本地配置无此参数）
    */
-  link?: string;
+  upstream?: string;
   /**
    * 最后更新时间
    */
@@ -60,18 +60,14 @@ export interface Subscribe {
   /**
    * 完整配置
    */
-  config: FeiyuConfig;
+  feiyu: FeiyuConfig;
 }
 
 export type FeiyuConfig = {
   /**
-   * 配置版本号 (1.0.0)
-   */
-  feiyu: string;
-  /**
    * 网络请求代理地址
    */
-  httpProxy?: string;
+  proxy?: string;
   /**
    * 资源站列表
    */

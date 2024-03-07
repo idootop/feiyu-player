@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-unfetch';
 
-import { configs } from '@/data/config';
+import { appConfig } from '@/data/config';
 import { AbortConfig } from '@/utils/abort';
 import { jsonDecode, jsonEncode } from '@/utils/base';
 import { isNotEmpty, isObject } from '@/utils/is';
@@ -148,8 +148,9 @@ const post = async (url: string, data?: any, config?: HttpConfig) => {
 };
 
 export const isValidProxy = async () => {
-  return configs.current.httpProxy
-    ? isNotEmpty(await http.get(configs.current.httpProxy))
+  // todo 注意，仅在网页端需要设置 proxy（桌面端走原生请求）
+  return appConfig.current.proxy
+    ? isNotEmpty(await http.get(appConfig.current.proxy))
     : false;
 };
 
@@ -166,10 +167,10 @@ export const http = {
      */
     get(url: string, query?: Record<string, any>, config?: HttpConfig): any {
       const { headers = {}, cache = true, signal } = config ?? {};
-      if (!configs.current.httpProxy) {
+      if (!appConfig.current.proxy) {
         return get(url, query, config);
       }
-      return get(configs.current.httpProxy, query, {
+      return get(appConfig.current.proxy, query, {
         ...config,
         headers: { ...kBaseHeaders, ...headers, [kProxyKey]: url },
         signal,
@@ -181,10 +182,10 @@ export const http = {
      */
     post(url: string, data?: any, config?: HttpConfig): any {
       const { headers = {}, cache = true, signal } = config ?? {};
-      if (!configs.current.httpProxy) {
+      if (!appConfig.current.proxy) {
         return post(url, data, config);
       }
-      return post(configs.current.httpProxy, data, {
+      return post(appConfig.current.proxy, data, {
         ...config,
         headers: { ...kBaseHeaders, ...headers, [kProxyKey]: url },
         signal,

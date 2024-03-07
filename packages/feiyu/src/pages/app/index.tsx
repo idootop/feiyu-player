@@ -4,6 +4,7 @@ import { Layout } from '@arco-design/web-react';
 
 import { Box, BoxProps } from '@/components/Box';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
+import { APPConfigModal, useInitAPPModals } from '@/overlays/APPConfigModal';
 import { colors } from '@/styles/colors';
 
 import { useDisclaimer, useInitAPP } from './initAPP';
@@ -20,6 +21,9 @@ export const App = () => {
   // 初始化APP
   useInitAPP();
 
+  // APP 全局弹窗
+  useInitAPPModals();
+
   // 免责声明弹窗
   const $Disclaimer = useDisclaimer();
 
@@ -28,6 +32,7 @@ export const App = () => {
       <MyHeader />
       <SideDrawer />
       {$Disclaimer}
+      <APPConfigModal />
       <Layout style={{ height: '100vh' }}>
         <Sider
           width={kSideWidth}

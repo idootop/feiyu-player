@@ -1,9 +1,9 @@
 import { pickOne } from '../utils/base';
-import { configs } from './config';
+import { appConfig } from './config';
 
 export const randomMovie = () => {
   return pickOne(
-    configs.current.recommendMovies ?? [
+    appConfig.current.recommendMovies ?? [
       '请回答1988',
       '漫长的季节',
       '白色巨塔',

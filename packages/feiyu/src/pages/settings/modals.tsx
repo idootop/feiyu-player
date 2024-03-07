@@ -1,17 +1,16 @@
-import { Input, Message, Modal } from '@arco-design/web-react';
+import { Input, Link, Message, Modal } from '@arco-design/web-react';
 import TextArea from '@arco-design/web-react/es/Input/textarea';
 import { useEffect, useState } from 'react';
 import { useXConsumer, useXProvider, XSta } from 'xsta';
 
 import { Box } from '@/components/Box';
 import { Dialog } from '@/components/Dialog';
-import { Column, Expand, Row } from '@/components/Flex';
+import { Expand, Row } from '@/components/Flex';
 import { Text } from '@/components/Text';
-import { APPConfig, configs } from '@/data/config';
+import { APPConfig, appConfig, isValidSubscribe } from '@/data/config';
 import { Subscribe } from '@/data/config/types';
 import { colors } from '@/styles/colors';
 import { jsonDecode, jsonEncode } from '@/utils/base';
-import { clipboard } from '@/utils/clipborad';
 import { isEmpty, isNotEmpty } from '@/utils/is';
 
 const kSettingModals = 'kSettingModals';
@@ -54,11 +53,9 @@ export const showAddSubscribeModal = (flag = true) => {
 export const AddSubscribeModal = () => {
   const [data] = useXConsumer<SettingModals>(kSettingModals);
   const { showAdd } = data ?? {};
-  const [name, setName] = useState('');
   const [config, setConfig] = useState('');
   const [waiting, setWaiting] = useState(false);
   const closeModal = () => {
-    setName('');
     setConfig('');
     setWaiting(false);
     showAddSubscribeModal(false);
@@ -70,68 +67,33 @@ export const AddSubscribeModal = () => {
       ok="保存"
       okWaiting={waiting}
       onOk={async () => {
-        if (isNotEmpty(name) && isNotEmpty(config)) {
+        if (isNotEmpty(config)) {
           setWaiting(true);
-          const result = await configs.addSubscribe(name, config);
-          if (result.includes('成功')) {
+          const successCount = await appConfig.importSubscribes(config);
+          if (successCount > 0) {
             Message.success('添加成功');
             closeModal();
           } else {
-            Message.info(result);
+            Message.info('添加失败');
           }
           setWaiting(false);
-        } else if (isNotEmpty(name)) {
-          Message.info('订阅地址不能为空');
         } else {
-          Message.info('订阅名称不能为空');
+          Message.info('请输入订阅链接或配置参数');
         }
       }}
       onCancel={() => {
         closeModal();
       }}
     >
-      <Row width="100%" paddingBottom="16px">
-        <Text
-          style={{
-            fontSize: '14px',
-            fontWeight: '400',
-            color: colors.text2,
-            paddingRight: '10px',
-          }}
-        >
-          订阅名称
-        </Text>
-        <Expand>
-          <Input
-            placeholder="请输入..."
-            value={name}
-            onChange={(s) => {
-              setName(s);
-            }}
-          />
-        </Expand>
-      </Row>
-      <Column width="100%" marginBottom="16px" alignItems="start">
-        <Text
-          style={{
-            fontSize: '14px',
-            fontWeight: '400',
-            color: colors.text2,
-            paddingBottom: '16px',
-          }}
-        >
-          订阅参数
-        </Text>
-        <TextArea
-          placeholder="请输入订阅链接或配置参数..."
-          autoSize={{ minRows: 6, maxRows: 6 }}
-          style={{ width: '100%' }}
-          value={config}
-          onChange={(s) => {
-            setConfig(s);
-          }}
-        />
-      </Column>
+      <TextArea
+        placeholder="请输入订阅链接或配置参数..."
+        autoSize={{ minRows: 6, maxRows: 6 }}
+        style={{ width: '100%', marginBottom: '16px' }}
+        value={config}
+        onChange={(s) => {
+          setConfig(s);
+        }}
+      />
     </Dialog>
   );
 };
@@ -160,7 +122,7 @@ export const ImportSubscribeModal = () => {
       onOk={async () => {
         if (isNotEmpty(link)) {
           setWaiting(true);
-          const result = await configs.importSubscribes(link);
+          const result = await appConfig.importSubscribes(link);
           if (result > 0) {
             Message.success(`新增${result}个订阅`);
             closeModal();
@@ -185,7 +147,7 @@ export const ImportSubscribeModal = () => {
             paddingRight: '10px',
           }}
         >
-          订阅地址
+          订阅链接
         </Text>
         <Expand>
           <Input
@@ -216,17 +178,11 @@ export const ExportSubscribeModal = () => {
         }
         setWaiting(true);
         Message.info('导出中');
-        const result = await configs.exportSubscribes();
+        const result = await appConfig.exportSubscribes();
         Message.clear();
         if (result) {
-          const success = await clipboard.write(result);
-          if (success) {
-            Message.success('分享链接已复制');
-            showExportSubscribeModal(false);
-          } else {
-            Message.success('导出成功');
-            showCopyModal(result);
-          }
+          Message.success('导出成功');
+          showCopyModal(result);
         } else {
           Message.error('导出失败，请先配置 NFT.Storage');
           showExportSubscribeModal(false);
@@ -247,7 +203,7 @@ export const showSubscribeDetailModal = (
 export const SubscribeDetailModal = () => {
   const [data] = useXConsumer<SettingModals>(kSettingModals);
   const { showDetail, subscribe } = data ?? {};
-  const isEdit = isEmpty(subscribe?.link);
+  const isEdit = isEmpty(subscribe?.upstream);
   const isDelete = subscribe?.key === APPConfig.defaultKey;
   const [input, setInput] = useState('');
   const [waiting, setWaiting] = useState(false);
@@ -257,7 +213,7 @@ export const SubscribeDetailModal = () => {
     showSubscribeDetailModal(undefined, false);
   };
   useEffect(() => {
-    const config = jsonEncode(subscribe?.config, true) ?? '';
+    const config = jsonEncode(subscribe, true) ?? '';
     if (input !== config) {
       // 设置当前的配置文本
       setInput(config);
@@ -265,7 +221,7 @@ export const SubscribeDetailModal = () => {
       setLeadWaiting(false);
       setDeleteWaiting(false);
     }
-  }, [subscribe?.config]);
+  }, [subscribe]);
   return !subscribe ? (
     <Box />
   ) : (
@@ -281,16 +237,11 @@ export const SubscribeDetailModal = () => {
       onLead={async () => {
         setLeadWaiting(true);
         Message.info('导出中');
-        const result = await configs.exportSubscribe(subscribe.key);
+        const result = await appConfig.exportSubscribe(subscribe.key);
         Message.clear();
         if (result) {
-          const success = await clipboard.write(result);
-          if (success) {
-            Message.success('分享链接已复制');
-          } else {
-            Message.success('导出成功');
-            showCopyModal(result);
-          }
+          Message.success('导出成功');
+          showCopyModal(result);
         } else {
           Message.error('导出失败，请先配置 NFT.Storage');
         }
@@ -300,17 +251,34 @@ export const SubscribeDetailModal = () => {
         setWaiting(true);
         if (isEdit) {
           // 保存
-          const config = jsonDecode(input);
-          if (config.feiyu !== 'config') {
+          const newSubscribe = jsonDecode(input);
+          if (!isValidSubscribe(newSubscribe)) {
             Message.error('无效的配置');
             setWaiting(false);
             return;
           }
-          const newData = {
-            ...subscribe!,
-            config,
-          };
-          const success = await configs.editSubscribe(newData);
+          // 默认订阅不能重命名
+          if (
+            subscribe.key === APPConfig.defaultKey &&
+            newSubscribe.key !== APPConfig.defaultKey
+          ) {
+            Message.info('默认订阅不支持重命名');
+            setWaiting(false);
+            return;
+          }
+          // 不能重名
+          if (
+            newSubscribe.key !== subscribe.key &&
+            appConfig.subscribes[newSubscribe.key]
+          ) {
+            Message.info('名称已存在，请重命名');
+            setWaiting(false);
+            return;
+          }
+          const success = await appConfig.editSubscribe(
+            subscribe,
+            newSubscribe,
+          );
           if (success) {
             Message.success('保存成功');
             closeModal();
@@ -319,7 +287,7 @@ export const SubscribeDetailModal = () => {
           }
         } else {
           // 更新
-          const success = await configs.refreshSubscribe(subscribe!.key);
+          const success = await appConfig.refreshSubscribe(subscribe!.key);
           if (success) {
             Message.success('更新成功');
           } else {
@@ -330,7 +298,7 @@ export const SubscribeDetailModal = () => {
       }}
       onCancel={async () => {
         setDeleteWaiting(true);
-        const success = await configs.remove(subscribe!.key);
+        const success = await appConfig.remove(subscribe!.key);
         if (success) {
           Message.success('删除成功');
           closeModal();
@@ -355,10 +323,16 @@ export const SubscribeDetailModal = () => {
               paddingRight: '10px',
             }}
           >
-            订阅地址
+            订阅链接
           </Text>
           <Expand>
-            <Input placeholder="请输入..." value={subscribe?.link} />
+            <Input
+              placeholder="请输入..."
+              value={subscribe?.upstream}
+              onChange={() => {
+                Message.info('当前订阅不可编辑');
+              }}
+            />
           </Expand>
         </Row>
       )}
@@ -383,6 +357,9 @@ export const SubscribeDetailModal = () => {
                 .toISOString()
                 .substring(0, 16)
                 .replace('T', ' ')}
+              onChange={() => {
+                Message.info('当前订阅不可编辑');
+              }}
             />
           </Expand>
         </Row>
@@ -395,6 +372,8 @@ export const SubscribeDetailModal = () => {
         onChange={(s) => {
           if (isEdit) {
             setInput(s);
+          } else {
+            Message.info('当前订阅不可编辑');
           }
         }}
       />
@@ -420,7 +399,7 @@ export const DeleteSubscribeModal = () => {
         showDeleteSubscribeModal(undefined, false);
       }}
       onOk={async () => {
-        const success = await configs.remove(subscribe!.key);
+        const success = await appConfig.remove(subscribe!.key);
         if (success) {
           Message.success('删除成功');
           showDeleteSubscribeModal(undefined, false);
@@ -451,7 +430,7 @@ export const CopyModal = () => {
   const { url } = data ?? {};
   return (
     <Modal
-      title="请手动复制链接"
+      title="分享链接"
       visible={isNotEmpty(url)}
       onCancel={() => {
         showCopyModal('');
@@ -463,7 +442,13 @@ export const CopyModal = () => {
         margin: '20px',
       }}
     >
-      <Text style={{ padding: '20px', color: '#3d7ff6' }}>{url}</Text>
+      <Link
+        style={{ padding: '20px', color: '#3d7ff6', wordBreak: 'break-all' }}
+        href={url}
+        target="_blank"
+      >
+        {url}
+      </Link>
     </Modal>
   );
 };

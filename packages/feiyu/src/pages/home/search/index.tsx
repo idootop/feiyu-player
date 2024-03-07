@@ -15,7 +15,9 @@ import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useDarkMode } from '@/hooks/useDarkMode';
 import { newID } from '@/hooks/useID';
 import { useInit } from '@/hooks/useInit';
+import { showAPPConfigModal } from '@/overlays/APPConfigModal';
 import { PageBuilder } from '@/pages/app';
+import { isValidProxy } from '@/services/http';
 import { usePage } from '@/services/routes/page';
 import { router } from '@/services/routes/router';
 import { colors } from '@/styles/colors';
@@ -35,15 +37,26 @@ const Search = () => {
 
   const {
     search,
+    refresh,
     initial,
     searching,
     datas: movies,
     noData,
     sort,
   } = useFeiyuSearch();
+
   useInit(() => {
     search(query.movie ?? '爱的迫降');
   }, [query.movie]);
+
+  useInit(async () => {
+    if (!initial && !searching && noData) {
+      const valid = await isValidProxy();
+      if (!valid) {
+        showAPPConfigModal();
+      }
+    }
+  }, [initial, searching, noData]);
 
   // 更新当前的搜索结果（透传数据给播放页面）
   useEffect(() => {
@@ -68,11 +81,7 @@ const Search = () => {
       width="100%"
       height="calc(80vh - 60px)"
       justifyContent="center"
-      onClick={() => {
-        if (noData) {
-          search('refresh');
-        }
-      }}
+      onClick={refresh}
     >
       <SearchEmpty />
     </Column>

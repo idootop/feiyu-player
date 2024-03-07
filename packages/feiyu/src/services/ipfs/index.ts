@@ -1,4 +1,4 @@
-import { configs } from '@/data/config';
+import { appConfig } from '@/data/config';
 import { jsonEncode } from '@/utils/base';
 
 import { cache } from '../cache';
@@ -11,7 +11,7 @@ const ipfsUpload = async (text: string): Promise<string | undefined> => {
     blob: true,
     cacheKey: text,
     headers: {
-      Authorization: `Bearer ${configs.current.ipfs?.token}`,
+      Authorization: `Bearer ${appConfig.current.ipfs?.token}`,
       'X-Client': 'nft.storage/js',
     },
   });
@@ -19,7 +19,7 @@ const ipfsUpload = async (text: string): Promise<string | undefined> => {
 };
 export const ipfsURL = (cid: string) => {
   const gateway =
-    configs.current.ipfs?.gateway ?? 'https://nftstorage.link/ipfs/{{cid}}';
+    appConfig.current.ipfs?.gateway ?? 'https://nftstorage.link/ipfs/{{cid}}';
   return gateway.replace('{{cid}}', cid);
 };
 export const ipfs = {
