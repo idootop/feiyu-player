@@ -250,9 +250,9 @@ const Play = () => {
           ? `${movie!.site}｜${currentVideo!.name}`
           : movie?.site}
       </Text>
-      {isNotEmpty(movie?.desp) ? (
+      {isNotEmpty(movie?.desc) ? (
         <Text width="100%" maxLines={2} expandable padding="5px 0">
-          {movie?.desp}
+          {movie?.desc}
         </Text>
       ) : (
         <Box />

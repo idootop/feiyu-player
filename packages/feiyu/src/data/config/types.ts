@@ -15,7 +15,7 @@ interface IPFSConfig {
 /**
  * 资源站
  */
-interface MovieSite {
+interface SearchProvider {
   /**
    * 资源站名称
    */
@@ -71,7 +71,7 @@ export type FeiyuConfig = {
   /**
    * 资源站列表
    */
-  movieSites?: MovieSite[];
+  searchProviders?: SearchProvider[];
   /**
    * 首页热门电影
    */

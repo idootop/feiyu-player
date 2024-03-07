@@ -1,12 +1,6 @@
 export default {
-  /**
-   * 代理请求接口
-   */
   proxy: 'https://example.com/release/proxy',
-  /**
-   * 资源站
-   */
-  movieSites: [
+  searchProviders: [
     {
       key: '资源站1',
       api: 'https://api1.example.com/api.php/provide/vod/at/xml',
@@ -16,18 +10,10 @@ export default {
       api: 'https://api2.example.com/api.php/provide/vod/at/xml',
     },
   ],
-  /**
-   * IPFS 配置（用于生成分享链接，导入导出配置文件）
-   *
-   * Token 请到 https://nft.storage/ 自己申请 API key（免费）
-   */
   ipfs: {
     gateway: 'https://nftstorage.link/ipfs/{{cid}}',
     token: 'xxxxxxxx',
   },
-  /**
-   * 推荐电影列表
-   */
   recommendMovies: [
     '请回答1988',
     '漫长的季节',
@@ -43,13 +29,6 @@ export default {
     '悠长假期',
     '东京爱情故事',
   ],
-  /**
-   * 热门电影榜单
-   *
-   * 也可以是返回 HotMovie[] 数据的 JSON 接口，方便获取最新热门影视剧
-   *
-   * 比如：https://example.com/hotMovies.json，返回值：[{"title":"漫长的季节",...}, ...]
-   */
   hotMovies: [
     {
       id: '26302614',

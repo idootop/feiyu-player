@@ -22,60 +22,37 @@
 
 ![](screenshots/play-preview.jpg)
 
-# ⚙️ 配置
+# 🚀 启动
 
-## 配置示例（JSON）
+[![Docker Image Version](https://img.shields.io/docker/v/idootop/feiyu?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/feiyu)
 
-```json
-{
-  "proxy": "https://xxx.xxx.com/release/proxy",
-  "movieSites": [
-    {
-      "key": "资源站1",
-      "api": "https://api1.xxx.com/api.php/provide/vod/at/xml"
-    },
-    {
-      "key": "资源站2",
-      "api": "https://api2.xxx.com/api.php/provide/vod/at/xml"
-    }
-  ],
-  "ipfs": {
-    "gateway": "https://nftstorage.link/ipfs/{{cid}}",
-    "token": "xxxxxxxx"
-  },
-  "recommendMovies": ["请回答1988", "东京爱情故事"],
-  "hotMovies": [
-    {
-      "id": "26302614",
-      "isNew": false,
-      "title": "请回答1988",
-      "cover": "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2272563445.jpg",
-      "rate": "9.7"
-    },
-    {
-      "id": "36036719",
-      "isNew": false,
-      "title": "快乐再出发 第二季",
-      "cover": "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2885581294.jpg",
-      "rate": "9.5"
-    }
-  ]
-}
+请先打开 `.feiyu.ts` 文件，按照下面的参数说明配置好，然后使用以下命令启动 docker：
+
+```shell
+# todo 镜像尚未发布，敬请期待
+docker run -d \
+    -p 3000:80 \
+    -v $(pwd)/.feiyu.ts:/usr/src/app/src/data/default.ts \
+    idootop/feiyu:1.0.0
 ```
 
 ## 参数说明
 
-### 请求代理 (httpProxy)
+### 搜索源 (searchProviders)
 
-为了使飞鱼网页正常运转，你可能需要自行部署或使用第三方请求代理，详见[飞鱼 Proxy](#%EF%B8%8F-%E9%A3%9E%E9%B1%BC-proxy)。
+要想正常使用飞鱼，你需要先配置「搜索源」。搜索源之于飞鱼，就好比光盘之于影碟机，磁带之于播放器。
 
-### 搜索源 (movieSites)
+飞鱼支持 [苹果 CMS](https://magicblack.github.io/)、[飞飞 CMS](https://www.feifeicms.org/) 等格式的搜索 API，如果你没听说过，请自行百度了解更多。
 
-飞鱼理论上支持 [苹果 CMS](https://magicblack.github.io/)、[飞飞 CMS](https://www.feifeicms.org/) 等搜索 API，请自行百度了解更多。
+> 注意：飞鱼只是一个在线视频播放器，并没有内置任何影视资源。
 
-> 注意：要想正常使用飞鱼，你可能需要先配置可用的「搜索源」。搜索源之于飞鱼，就好比光盘之于影碟机，磁带之于播放器。飞鱼只是一个在线视频播放器，没有内置任何数据。
+### 请求代理 (proxy)
+
+为了让飞鱼能够在网页端正常使用，需要使用飞鱼专用的请求代理云函数，详见[飞鱼 Proxy](#%EF%B8%8F-%E9%A3%9E%E9%B1%BC-proxy)。
 
 ### IPFS（可选）
+
+飞鱼内部默认使用 [NFT.storage](https://nft.storage/) 向 IPFS 中写入数据，当你在分享影片或导出订阅配置时，需要用到此服务。
 
 [IPFS（InterPlanetary File System）](https://ipfs.tech/)是一种点对点分布式文件存储和传输系统，旨在创建一个更加开放、高效、安全的网络，使用户可以更轻松地共享和访问数据。飞鱼使用 IPFS 作为去中心化存储，使数据的存储和传输更加安全、私密和高效。
 
@@ -83,17 +60,16 @@
 
 为了访问 IPFS 中的数据，你需要先配置 IPFS Gateway，常见的 IPFS 公共网关有 ipfs.io、dweb.link 等，你可以在此处查看更多信息：[https://ipfs.github.io/public-gateway-checker/](https://ipfs.github.io/public-gateway-checker/)
 
-#### NFT.strorage
+#### NFT.storage
 
-[NFT.strorage](https://nft.storage/) 提供免费的去中心化存储服务，同时支持 [IPFS](https://ipfs.tech/) 和 [Filecoin](https://filecoin.io/)。飞鱼内部默认使用 [NFT.strorage](https://nft.storage/) 向 IPFS 中写入数据。
-当在导出或分享数据时，你需要先在 [NFT.strorage](https://nft.storage/)注册账号并申请 API Key，然后到飞鱼设置页面填写 API Key。
+[NFT.storage](https://nft.storage/) 提供免费的去中心化存储服务，同时支持 [IPFS](https://ipfs.tech/) 和 [Filecoin](https://filecoin.io/)。你可以到 [NFT.storage](https://nft.storage/) 免费注册账号并申请 API Key，然后回到飞鱼设置页面修改你的 IPFS token。
 
 # ⚡️ 部署
 
 ## 🐟 飞鱼主项目
 
 ```bash
-# 切换到飞鱼主项目
+# 切换到项目所在路径
 cd packages/feiyu
 
 # 安装依赖，打包项目（构建产物在 dist 目录下）
@@ -107,6 +83,9 @@ yarn && yarn build
 ### SCF 👉 [feiyu-proxy](packages/feiyu-proxy)
 
 ```bash
+# 切换到项目所在路径
+cd packages/feiyu-proxy
+
 # 安装/更新 SCF 最新版本
 yarn global add serverless-cloud-framework@latest
 
@@ -117,67 +96,14 @@ yarn && yarn deploy
 ### Vercel 👉 [feiyu-proxy-vercel](packages/feiyu-proxy-vercel)
 
 ```bash
+# 切换到项目所在路径
+cd packages/feiyu-proxy-vercel
+
 # 安装/更新 Vercel 最新版本
 yarn global add vercel@latest
 
 # 安装依赖，部署项目
 yarn && yarn deploy
-```
-
-## 🔧 自定义配置
-
-你可以在 [packages/feiyu/src/data/default.ts](packages/feiyu/src/data/default.ts) ，修改飞鱼内置的默认配置，如代理地址，搜索源等。
-
-配置参数示例如下：
-
-```typescript
-export default {
-  /**
-   * 代理请求接口
-   */
-  httpProxy: "https://xxx.xxx.com/release/proxy",
-  /**
-   * 资源站
-   */
-  movieSites: [
-    {
-      key: "资源站1",
-      api: "https://api1.xxx.com/api.php/provide/vod/at/xml",
-    },
-    {
-      key: "资源站2",
-      api: "https://api2.xxx.com/api.php/provide/vod/at/xml",
-    },
-  ],
-  /**
-   * IPFS 配置（用于生成分享链接，导入导出配置文件）
-   */
-  ipfs: {
-    gateway: "https://nftstorage.link/ipfs/{{cid}}",
-    token: "xxxxxxxx", // 🔥 请到 https://nft.storage/ 自己申请 API key（免费）
-  },
-  /**
-   * 推荐电影列表
-   */
-  recommendMovies: ["请回答1988"],
-  /**
-   * 热门电影榜单
-   *
-   * 也可以是返回 HotMovie[] 数据的 JSON 接口，方便获取最新热门影视剧
-   *
-   * 比如：https://example.com/hotMovies.json，返回值：[{"title":"漫长的季节",...}, ...]
-   */
-  hotMovies: [
-    {
-      id: "26302614",
-      isNew: false,
-      title: "请回答1988",
-      cover:
-        "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2272563445.jpg",
-      rate: "9.7",
-    },
-  ],
-};
 ```
 
 # 💻 其他

@@ -6,7 +6,7 @@ import { isObject } from '../is';
 import { isValidM3U8 } from '../m3u8/valid';
 import { parseXML } from '../xml';
 
-interface MovieSite {
+interface SearchProvider {
   key: string;
   api: string;
 }
@@ -19,7 +19,7 @@ interface MovieBasic {
 interface Movie {
   site: string; // 资源站
   name: string; // 电影名称
-  desp: string; //简介
+  desc: string; //简介
   image: string; //封面
   videos: Video[]; //播放列表
 }
@@ -32,7 +32,7 @@ interface Video {
 export type FeiyuMovie = Movie & { videos: Video[] };
 type SearchCallback = (data: FeiyuMovie) => void;
 
-const _clearDesp = (str?: string) => {
+const _clearDesc = (str?: string) => {
   return (str ?? '暂无简介')
     .replace(/\s+/g, ' ') // 多个连续空格，替换成单个空格
     .replace(/\n/g, '')
@@ -53,7 +53,7 @@ class Feiyu {
   ) {
     const { callback, signal, concurrent = false } = config ?? {};
     const results: FeiyuMovie[] = [];
-    const sites: any = appConfig.current.movieSites ?? [];
+    const sites: any = appConfig.current.searchProviders ?? [];
     if (!concurrent) {
       for (const site of sites) {
         // 搜索电影列表
@@ -109,7 +109,7 @@ class Feiyu {
    * 搜索资源
    */
   private async _search(
-    site: MovieSite,
+    site: SearchProvider,
     videoName: string,
     signal?: AbortSignal,
   ): Promise<MovieBasic[]> {
@@ -157,7 +157,7 @@ class Feiyu {
    * 获取播放列表
    */
   private async _detail(
-    site: MovieSite,
+    site: SearchProvider,
     videoId: string,
     signal?: AbortSignal,
   ): Promise<Movie> {
@@ -173,7 +173,7 @@ class Feiyu {
     const videoInfo: Movie = {
       site: site.key,
       name: video?.name,
-      desp: _clearDesp(video?.des),
+      desc: _clearDesc(video?.des),
       image: video?.pic,
       videos: [],
     };

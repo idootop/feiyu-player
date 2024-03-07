@@ -42,11 +42,11 @@ export interface DoubanMovieDetail {
   /**
    * 长介绍：李政孝 / 玄彬 / 孙艺珍 / 韩国 / 8.3分
    */
-  longDesp?: string;
+  longDesc?: string;
   /**
    * 简介
    */
-  desp?: string;
+  desc?: string;
   /**
    * 标签（剧情 / 喜剧 / 爱情）
    */
@@ -196,27 +196,27 @@ export const douban = {
     const longTitle = result.match(
       /<input type="hidden" name="title" value="(.*?)">/,
     )?.[1];
-    let longDesp = result.match(
+    let longDesc = result.match(
       /<input type="hidden" name="desc" value="(.*?)">/,
     )?.[1];
-    const ratingPeople = longDesp?.match(/\(.*评价\)/)?.[0];
-    longDesp = longDesp
+    const ratingPeople = longDesc?.match(/\(.*评价\)/)?.[0];
+    longDesc = longDesc
       ?.replace('导演 ', '')
       .replace(' 主演 ', ' / ')
       .replace(ratingPeople ?? '', '');
-    if (longDesp?.startsWith(' / ')) {
-      longDesp = longDesp.replace(' / ', '');
+    if (longDesc?.startsWith(' / ')) {
+      longDesc = longDesc.replace(' / ', '');
     }
     const date = data['datePublished'] ?? '未知';
     const tags = data['genre']?.join(' / ') ?? '未知';
-    const desp = data['description'];
+    const desc = data['description'];
     const rating = data['aggregateRating']?.['ratingValue'] ?? '未知';
     return {
       longTitle,
-      longDesp,
+      longDesc,
       date: isString(date) ? date : date[0],
       tags,
-      desp,
+      desc,
       rating,
     };
   },
@@ -237,9 +237,8 @@ export const douban = {
       ? data.episodes_count + '集'
       : undefined;
     const comment = data?.short_comment?.content
-      ? `${data.short_comment.content}${
-          data.short_comment.author ? ' @' + data.short_comment.author : ''
-        }`
+      ? `${data.short_comment.content}${data.short_comment.author ? ' @' + data.short_comment.author : ''
+      }`
       : undefined;
     const longTitle = data?.title;
     const directors = data?.directors;
@@ -247,17 +246,17 @@ export const douban = {
     const region = data?.region;
     const duration = data?.duration;
     const peoples = [...(directors ?? []), ...(actors ?? [])].slice(0, 3);
-    let longDesp: any = [
+    let longDesc: any = [
       ...peoples,
       ...(region ? [region] : []),
       ...(data?.rate ? [data.rate + '分'] : ['暂无评分']),
     ].join(' / ');
-    if (!longDesp?.includes('/')) {
-      longDesp = undefined;
+    if (!longDesc?.includes('/')) {
+      longDesc = undefined;
     }
     return {
       longTitle,
-      longDesp,
+      longDesc,
       date,
       tags,
       comment,

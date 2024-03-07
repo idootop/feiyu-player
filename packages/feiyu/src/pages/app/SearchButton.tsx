@@ -365,7 +365,7 @@ const SearchItem = (props: {
         }
         description={
           <>
-            {movie.longDesp ?? movie.desp ? (
+            {movie.longDesc ?? movie.desc ? (
               <Rate
                 style={{
                   padding: '5px 0',
@@ -391,7 +391,7 @@ const SearchItem = (props: {
                 color: colors.text2,
               }}
             >
-              {movie.longDesp ?? movie.desp ?? movie.comment ?? movie.subTilte}
+              {movie.longDesc ?? movie.desc ?? movie.comment ?? movie.subTilte}
             </Text>
           </>
         }
