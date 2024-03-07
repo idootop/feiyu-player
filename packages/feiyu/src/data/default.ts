@@ -1,5 +1,5 @@
 export default {
-  feiyu: 'config',
+  feiyu: '1.0.0',
   /**
    * 代理请求接口（必填）
    */
@@ -19,10 +19,12 @@ export default {
   ],
   /**
    * IPFS 配置（用于生成分享链接，导入导出配置文件）
+   *
+   * Token 请到 https://nft.storage/ 自己申请 API key（免费）
    */
   ipfs: {
     gateway: 'https://nftstorage.link/ipfs/{{cid}}',
-    token: 'xxxxxxxx', // 🔥 请到 https://nft.storage/ 自己申请 API key（免费）
+    token: 'xxxxxxxx',
   },
   /**
    * 推荐电影列表
@@ -44,9 +46,9 @@ export default {
   ],
   /**
    * 热门电影榜单
-   * 
+   *
    * 也可以是返回 HotMovie[] 数据的 JSON 接口，方便获取最新热门影视剧
-   * 
+   *
    * 比如：https://example.com/hotMovies.json，返回值：[{"title":"漫长的季节",...}, ...]
    */
   hotMovies: [

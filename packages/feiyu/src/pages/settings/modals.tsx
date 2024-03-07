@@ -5,7 +5,7 @@ import { useXConsumer, useXProvider, XSta } from 'xsta';
 
 import { Box } from '@/components/Box';
 import { Dialog } from '@/components/Dialog';
-import { Expand, Row } from '@/components/Flex';
+import { Column, Expand, Row } from '@/components/Flex';
 import { Text } from '@/components/Text';
 import { APPConfig, configs } from '@/data/config';
 import { Subscribe } from '@/data/config/types';
@@ -55,11 +55,11 @@ export const AddSubscribeModal = () => {
   const [data] = useXConsumer<SettingModals>(kSettingModals);
   const { showAdd } = data ?? {};
   const [name, setName] = useState('');
-  const [link, setLink] = useState('');
+  const [config, setConfig] = useState('');
   const [waiting, setWaiting] = useState(false);
   const closeModal = () => {
     setName('');
-    setLink('');
+    setConfig('');
     setWaiting(false);
     showAddSubscribeModal(false);
   };
@@ -70,9 +70,9 @@ export const AddSubscribeModal = () => {
       ok="保存"
       okWaiting={waiting}
       onOk={async () => {
-        if (isNotEmpty(name) && isNotEmpty(link)) {
+        if (isNotEmpty(name) && isNotEmpty(config)) {
           setWaiting(true);
-          const result = await configs.addSubscribe(name, link);
+          const result = await configs.addSubscribe(name, config);
           if (result.includes('成功')) {
             Message.success('添加成功');
             closeModal();
@@ -111,27 +111,27 @@ export const AddSubscribeModal = () => {
           />
         </Expand>
       </Row>
-      <Row width="100%" paddingBottom="16px">
+      <Column width="100%" marginBottom="16px" alignItems="start">
         <Text
           style={{
             fontSize: '14px',
             fontWeight: '400',
             color: colors.text2,
-            paddingRight: '10px',
+            paddingBottom: '16px',
           }}
         >
-          订阅地址
+          订阅参数
         </Text>
-        <Expand>
-          <Input
-            placeholder="请输入..."
-            value={link}
-            onChange={(s) => {
-              setLink(s);
-            }}
-          />
-        </Expand>
-      </Row>
+        <TextArea
+          placeholder="请输入订阅链接或配置参数..."
+          autoSize={{ minRows: 6, maxRows: 6 }}
+          style={{ width: '100%' }}
+          value={config}
+          onChange={(s) => {
+            setConfig(s);
+          }}
+        />
+      </Column>
     </Dialog>
   );
 };

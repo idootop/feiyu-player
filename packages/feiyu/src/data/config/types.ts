@@ -41,7 +41,10 @@ export interface HotMovie {
  * 订阅配置
  */
 export interface Subscribe {
-  feiyu: 'subscribe';
+  /**
+   * 配置版本号 (1.0.0)
+   */
+  feiyu: string;
   /**
    * 订阅名称（不可编辑）
    */
@@ -61,7 +64,10 @@ export interface Subscribe {
 }
 
 export type FeiyuConfig = {
-  feiyu: 'config';
+  /**
+   * 配置版本号 (1.0.0)
+   */
+  feiyu: string;
   /**
    * 网络请求代理地址
    */

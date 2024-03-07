@@ -60,3 +60,16 @@ export function isFunction(e: unknown): boolean {
 export function isClass(e: any): boolean {
   return isFunction(e) && e.toString().startsWith('class ');
 }
+
+export function isValidUrl(str: string) {
+  const pattern = new RegExp(
+    '^(https?:\\/\\/)' + // 协议
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // 域名
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // 或IP(v4)地址
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // 端口和路径
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // 查询字符串
+      '(\\#[-a-z\\d_]*)?$', // fragment locator
+    'i',
+  );
+  return !!pattern.test(str);
+}
