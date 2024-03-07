@@ -21,17 +21,23 @@ export interface SubscribesStore {
 export const kSubscribesKey = 'kSubscribesKey';
 
 export const isValidSubscribe = (subscribe: any) => {
-  return subscribe?.version || isObject(subscribe.feiyu);
+  return (
+    isNotEmpty(subscribe?.version) &&
+    isNotEmpty(subscribe?.name) &&
+    isObject(subscribe.feiyu) &&
+    isArray(subscribe.feiyu.movieSites) &&
+    subscribe.feiyu.movieSites.length > 0 // 至少需要一个搜索源才能正常使用
+  );
 };
 
 export class APPConfig {
   static version = '1.0.0';
-  static defaultKey = '默认订阅';
+  static defaultName = '默认订阅';
   static defaultConfig: Subscribe = {
     version: APPConfig.version,
-    key: APPConfig.defaultKey,
-    lastUpdate: 1709781073831,
+    name: APPConfig.defaultName,
     feiyu: defaultConfig as any,
+    lastUpdate: 1709781073831,
   };
 
   private get _subscribes() {
@@ -46,7 +52,7 @@ export class APPConfig {
   private get _currentSubscribe() {
     return (
       XSta.get<SubscribesStore>(kSubscribesKey)?.currentSubscribe ??
-      APPConfig.defaultKey
+      APPConfig.defaultName
     );
   }
 
@@ -97,14 +103,14 @@ export class APPConfig {
     }
     this.initialized = true;
     // 添加默认配置
-    _subscribes[APPConfig.defaultKey] = APPConfig.defaultConfig;
+    _subscribes[APPConfig.defaultName] = APPConfig.defaultConfig;
     // 加载本地订阅配置
     const subscribes = await subscribeStorage.getAll();
     subscribes.forEach((e) => {
-      _subscribes[e.key] = e;
+      _subscribes[e.name] = e;
     });
     // 从本地读取当前使用的配置记录
-    let _currentSubscribe = APPConfig.defaultKey;
+    let _currentSubscribe = APPConfig.defaultName;
     const current = subscribeStorage.current();
     if (current) {
       _currentSubscribe = current;
@@ -123,9 +129,9 @@ export class APPConfig {
   /**
    * 导出单个订阅
    */
-  async exportSubscribe(key: string) {
+  async exportSubscribe(name: string) {
     await this.init();
-    const subscribe = this._subscribes[key];
+    const subscribe = this._subscribes[name];
     if (!subscribe) return false;
     const cid = await ipfs.writeJson([subscribe], true);
     return cid ? ipfsURL(cid) : undefined;
@@ -165,11 +171,11 @@ export class APPConfig {
     for (const subscribe of subscribes) {
       const upstream = subscribe.upstream;
       // 不能重名
-      let newKey = subscribe.key ?? '未知订阅';
-      while (_subscribes[newKey]) {
-        newKey = newKey + '(重名)';
+      let newName = subscribe.name ?? '未知订阅';
+      while (_subscribes[newName]) {
+        newName = newName + '(重名)';
       }
-      subscribe.key = newKey;
+      subscribe.name = newName;
       // 不重复添加相同的订阅源
       const subscribeKeys = Object.values(_subscribes);
       const alreadySubscribed =
@@ -179,9 +185,9 @@ export class APPConfig {
         continue; // 跳过已添加的订阅源
       }
       // 导入订阅
-      const success = await subscribeStorage.set(newKey, subscribe);
+      const success = await subscribeStorage.set(newName, subscribe);
       if (success) {
-        _subscribes[newKey] = subscribe;
+        _subscribes[newName] = subscribe;
         successItems += 1;
       }
     }
@@ -197,9 +203,9 @@ export class APPConfig {
   /**
    * 刷新单个订阅
    */
-  async refreshSubscribe(key: string) {
+  async refreshSubscribe(name: string) {
     await this.init();
-    const old = this._subscribes[key];
+    const old = this._subscribes[name];
     if (old) {
       const upstream = old.upstream;
       if (!upstream) {
@@ -213,13 +219,13 @@ export class APPConfig {
         // 更新订阅
         subscribe = {
           ...subscribe,
-          key: old.key, // 不更新原来的名称
+          name: old.name, // 不更新原来的名称
           lastUpdate: timestamp(),
         };
-        const success = await subscribeStorage.set(key, subscribe);
+        const success = await subscribeStorage.set(name, subscribe);
         if (success) {
           const _subscribes = this._subscribes;
-          _subscribes[key] = subscribe;
+          _subscribes[name] = subscribe;
           // 更新状态
           this._updateStore({
             subscribes: _subscribes,
@@ -237,23 +243,23 @@ export class APPConfig {
   async editSubscribe(oldSubscribe: Subscribe, newSubscribe: Subscribe) {
     await this.init();
     const currentSubscribe = subscribeStorage.current();
-    // 当订阅名称发生变化时，需要更新当前订阅的 key
+    // 当订阅名称发生变化时，需要更新当前的订阅的
     const needUpdateCurrent =
-      oldSubscribe.key != newSubscribe.key &&
-      currentSubscribe === newSubscribe.key;
+      oldSubscribe.name != newSubscribe.name &&
+      currentSubscribe === newSubscribe.name;
     newSubscribe = {
       ...newSubscribe,
       lastUpdate: timestamp(),
     };
-    await subscribeStorage.remove(oldSubscribe.key);
-    const success = await subscribeStorage.set(newSubscribe.key, newSubscribe);
+    await subscribeStorage.remove(oldSubscribe.name);
+    const success = await subscribeStorage.set(newSubscribe.name, newSubscribe);
     if (success) {
       const _subscribes = this._subscribes;
-      delete _subscribes[oldSubscribe.key];
-      _subscribes[newSubscribe.key] = newSubscribe;
+      delete _subscribes[oldSubscribe.name];
+      _subscribes[newSubscribe.name] = newSubscribe;
       // 更新状态
       if (needUpdateCurrent) {
-        const flag = await this.setCurrent(newSubscribe.key);
+        const flag = await this.setCurrent(newSubscribe.name);
         if (flag) {
           this._updateStore({
             subscribes: _subscribes,
@@ -276,29 +282,29 @@ export class APPConfig {
   async refreshAll() {
     await this.init();
     await Promise.all(
-      Object.keys(this._subscribes).map((key) => this.refreshSubscribe(key)),
+      Object.keys(this._subscribes).map((name) => this.refreshSubscribe(name)),
     );
   }
 
   /**
    * 删除订阅
    */
-  async remove(key: string) {
+  async remove(name: string) {
     await this.init();
-    const success = await subscribeStorage.remove(key);
+    const success = await subscribeStorage.remove(name);
     if (success) {
       const _subscribes = this._subscribes;
-      delete _subscribes[key];
-      if (!_subscribes[APPConfig.defaultKey]) {
-        _subscribes[APPConfig.defaultKey] = APPConfig.defaultConfig;
+      delete _subscribes[name];
+      if (!_subscribes[APPConfig.defaultName]) {
+        _subscribes[APPConfig.defaultName] = APPConfig.defaultConfig;
       }
       // 重置为默认值
-      const flag = await this.setCurrent(APPConfig.defaultKey);
+      const flag = await this.setCurrent(APPConfig.defaultName);
       if (flag) {
         // 更新状态
         this._updateStore({
           subscribes: _subscribes,
-          currentSubscribe: APPConfig.defaultKey,
+          currentSubscribe: APPConfig.defaultName,
         });
         return true;
       }
@@ -314,14 +320,14 @@ export class APPConfig {
     const success = await subscribeStorage.clear();
     if (success) {
       // 重置为默认值
-      const flag = await this.setCurrent(APPConfig.defaultKey);
+      const flag = await this.setCurrent(APPConfig.defaultName);
       if (flag) {
         // 更新状态
         this._updateStore({
           subscribes: {
-            [APPConfig.defaultKey]: APPConfig.defaultConfig,
+            [APPConfig.defaultName]: APPConfig.defaultConfig,
           },
-          currentSubscribe: APPConfig.defaultKey,
+          currentSubscribe: APPConfig.defaultName,
         });
         return true;
       }
@@ -332,15 +338,15 @@ export class APPConfig {
   /**
    * 选择当前订阅
    */
-  async setCurrent(key: string) {
+  async setCurrent(name: string) {
     await this.init();
     // 确保本地存在当前订阅
-    if (this._subscribes[key]) {
-      const success = await subscribeStorage.setCurrent(key);
+    if (this._subscribes[name]) {
+      const success = await subscribeStorage.setCurrent(name);
       if (success) {
         // 更新状态
         this._updateStore({
-          currentSubscribe: key,
+          currentSubscribe: name,
         });
         return true;
       }

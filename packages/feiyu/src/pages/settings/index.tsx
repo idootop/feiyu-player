@@ -120,15 +120,22 @@ const SubscribeTable = (props: { isMobile: boolean }) => {
   const [data] = useXConsumer<SubscribesStore>(kSubscribesKey);
   const { currentSubscribe, subscribes = [] } = data ?? {};
 
-  const setCurrent = (key: string) => {
-    appConfig.setCurrent(key);
+  const setCurrent = (name: string) => {
+    appConfig.setCurrent(name);
   };
-  const datas = Object.values(subscribes);
+  const items = Object.values(subscribes).sort((a, b) => {
+    const c = a.name;
+    const d = b.name;
+    return c.localeCompare(d, undefined, {
+      numeric: true,
+      sensitivity: 'base',
+    });
+  });
   return (
     <Box padding="20px 0" width="100%">
       <Column border={`1px solid ${colors.border}`} borderBottom="none">
         <TableHeader isMobile={isMobile} />
-        {datas.length < 1 ? (
+        {items.length < 1 ? (
           <Center
             className={'table-row'}
             width="100%"
@@ -140,11 +147,11 @@ const SubscribeTable = (props: { isMobile: boolean }) => {
             <Text>暂无数据</Text>
           </Center>
         ) : (
-          datas.map((subscribe) => {
-            const selected = currentSubscribe === subscribe.key;
+          items.map((subscribe) => {
+            const selected = currentSubscribe === subscribe.name;
             return (
               <TableRow
-                key={subscribe.key}
+                key={subscribe.name}
                 isMobile={isMobile}
                 selected={selected}
                 subscribe={subscribe}
@@ -205,12 +212,12 @@ const TableRow = (props: {
   isMobile: boolean;
   subscribe: Subscribe;
   selected: boolean;
-  setCurrent: (key: string) => void;
+  setCurrent: (name: string) => void;
 }) => {
   const { isMobile, selected, setCurrent, subscribe } = props;
   const hasRefresh = isNotEmpty(subscribe.upstream);
   const hasEdit = isEmpty(subscribe.upstream);
-  const hasDelete = subscribe.key !== APPConfig.defaultKey;
+  const hasDelete = subscribe.name !== APPConfig.defaultName;
   const dropList = (
     <Menu style={{ width: '90px' }}>
       {hasEdit ? (
@@ -238,7 +245,7 @@ const TableRow = (props: {
         <Menu.Item
           key="更新"
           onClick={async () => {
-            const success = await appConfig.refreshSubscribe(subscribe.key);
+            const success = await appConfig.refreshSubscribe(subscribe.name);
             if (success) {
               Message.success('已更新');
             } else {
@@ -295,7 +302,7 @@ const TableRow = (props: {
         }}
         onChange={(checked) => {
           if (checked) {
-            setCurrent(subscribe.key);
+            setCurrent(subscribe.name);
           }
         }}
       />
@@ -312,7 +319,7 @@ const TableRow = (props: {
             showSubscribeDetailModal(subscribe);
           }}
         >
-          {subscribe.key}
+          {subscribe.name}
         </Text>
       )}
       <Expand>
@@ -327,7 +334,7 @@ const TableRow = (props: {
               showSubscribeDetailModal(subscribe);
             }}
           >
-            {subscribe.key}
+            {subscribe.name}
           </Text>
         ) : (
           <Text

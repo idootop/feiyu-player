@@ -48,7 +48,7 @@ export interface Subscribe {
   /**
    * 订阅名称（不可编辑）
    */
-  key: string;
+  name: string;
   /**
    * 订阅链接（本地配置无此参数）
    */

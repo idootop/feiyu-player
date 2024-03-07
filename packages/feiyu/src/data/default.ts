@@ -1,20 +1,19 @@
 export default {
-  feiyu: '1.0.0',
   /**
-   * 代理请求接口（必填）
+   * 代理请求接口
    */
-  httpProxy: 'https://xxx.xxx.com/release/proxy',
+  proxy: 'https://example.com/release/proxy',
   /**
-   * 资源站（必填）
+   * 资源站
    */
   movieSites: [
     {
       key: '资源站1',
-      api: 'https://api1.xxx.com/api.php/provide/vod/at/xml',
+      api: 'https://api1.example.com/api.php/provide/vod/at/xml',
     },
     {
       key: '资源站2',
-      api: 'https://api2.xxx.com/api.php/provide/vod/at/xml',
+      api: 'https://api2.example.com/api.php/provide/vod/at/xml',
     },
   ],
   /**

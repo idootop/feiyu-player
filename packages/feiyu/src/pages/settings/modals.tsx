@@ -204,7 +204,7 @@ export const SubscribeDetailModal = () => {
   const [data] = useXConsumer<SettingModals>(kSettingModals);
   const { showDetail, subscribe } = data ?? {};
   const isEdit = isEmpty(subscribe?.upstream);
-  const isDelete = subscribe?.key === APPConfig.defaultKey;
+  const isDelete = subscribe?.name === APPConfig.defaultName;
   const [input, setInput] = useState('');
   const [waiting, setWaiting] = useState(false);
   const [leadWaiting, setLeadWaiting] = useState(false);
@@ -227,7 +227,7 @@ export const SubscribeDetailModal = () => {
   ) : (
     <Dialog
       visible={showDetail}
-      title={subscribe!.key}
+      title={subscribe.name}
       lead="导出"
       ok={isEdit ? '保存' : '更新'}
       cancel={isDelete ? '' : '删除'}
@@ -237,7 +237,7 @@ export const SubscribeDetailModal = () => {
       onLead={async () => {
         setLeadWaiting(true);
         Message.info('导出中');
-        const result = await appConfig.exportSubscribe(subscribe.key);
+        const result = await appConfig.exportSubscribe(subscribe.name);
         Message.clear();
         if (result) {
           Message.success('导出成功');
@@ -259,8 +259,8 @@ export const SubscribeDetailModal = () => {
           }
           // 默认订阅不能重命名
           if (
-            subscribe.key === APPConfig.defaultKey &&
-            newSubscribe.key !== APPConfig.defaultKey
+            subscribe.name === APPConfig.defaultName &&
+            newSubscribe.name !== APPConfig.defaultName
           ) {
             Message.info('默认订阅不支持重命名');
             setWaiting(false);
@@ -268,8 +268,8 @@ export const SubscribeDetailModal = () => {
           }
           // 不能重名
           if (
-            newSubscribe.key !== subscribe.key &&
-            appConfig.subscribes[newSubscribe.key]
+            newSubscribe.name !== subscribe.name &&
+            appConfig.subscribes[newSubscribe.name]
           ) {
             Message.info('名称已存在，请重命名');
             setWaiting(false);
@@ -287,7 +287,7 @@ export const SubscribeDetailModal = () => {
           }
         } else {
           // 更新
-          const success = await appConfig.refreshSubscribe(subscribe!.key);
+          const success = await appConfig.refreshSubscribe(subscribe!.name);
           if (success) {
             Message.success('更新成功');
           } else {
@@ -298,7 +298,7 @@ export const SubscribeDetailModal = () => {
       }}
       onCancel={async () => {
         setDeleteWaiting(true);
-        const success = await appConfig.remove(subscribe!.key);
+        const success = await appConfig.remove(subscribe!.name);
         if (success) {
           Message.success('删除成功');
           closeModal();
@@ -399,7 +399,7 @@ export const DeleteSubscribeModal = () => {
         showDeleteSubscribeModal(undefined, false);
       }}
       onOk={async () => {
-        const success = await appConfig.remove(subscribe!.key);
+        const success = await appConfig.remove(subscribe!.name);
         if (success) {
           Message.success('删除成功');
           showDeleteSubscribeModal(undefined, false);
@@ -416,7 +416,7 @@ export const DeleteSubscribeModal = () => {
           paddingBottom: '16px',
         }}
       >
-        确认删除「{subscribe?.key}」？
+        确认删除: {subscribe?.name}？
       </Text>
     </Dialog>
   );
