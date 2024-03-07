@@ -5,7 +5,7 @@ import { registerSW } from 'virtual:pwa-register';
 import { Box } from '@/components/Box';
 import { Dialog } from '@/components/Dialog';
 import { Text } from '@/components/Text';
-import { configs } from '@/data/config';
+import { appConfig } from '@/data/config';
 import { useInit } from '@/hooks/useInit';
 import { usePWA } from '@/hooks/usePWA';
 import { cache } from '@/services/cache';
@@ -16,7 +16,7 @@ import { kRoutePages } from '..';
 
 const _initAPP = async () => {
   // 初始化APP配置信息
-  await configs.init();
+  await appConfig.init();
   // 注册 service worker（自动更新）
   registerSW({ immediate: true });
   // 清除已过期的本地缓存
@@ -89,7 +89,7 @@ export const useDisclaimer = () => {
   return (
     <Dialog
       visible={show}
-      title="免责声明"
+      title="🚨 免责声明"
       ok="同意"
       onOk={() => {
         setShow(false);
@@ -108,19 +108,32 @@ export const useDisclaimer = () => {
           lineHeight="24px"
           className="hide-scrollbar"
         >
-          本网站仅用于学习交流目的，演示网站上的所有功能仅供用户参考。本网站不承担任何形式的保证和责任，包括但不限于：
-          <h4 style={{ margin: '4px 0' }}>服务内容</h4>
-          本网站的演示内容仅供用户参考。本网站不编辑、监控、修改和审核视频内容，对于视频内容的准确性、完整性和合法性不做任何保证。因此，对于用户使用本网站所产生的任何损失或后果，本网站概不承担任何责任。
-          <h4 style={{ margin: '4px 0' }}>用户行为</h4>
-          用户使用本网站的服务和内容是在自己的意愿和责任下进行的，本网站对用户的行为不承担任何法律责任。用户不得将本网站用于任何非法活动。
-          <h4 style={{ margin: '4px 0' }}>链接免责声明</h4>
-          本网站可能包含指向其他网站的链接，这些链接仅供用户参考。本网站不对链接指向的网站的准确性、完整性和合法性做出保证，也不对链接引发的任何法律纠纷和后果承担责任。
-          <h4 style={{ margin: '4px 0' }}>免责声明的更新</h4>
-          本网站有权随时更新本免责声明，并且用户应该定期查看本免责声明，以获取最新的信息。
-          <h4 style={{ margin: '4px 0' }}>其他</h4>
-          本免责声明的解释权归本网站所有。如果您对本免责声明或本网站有任何疑问，请联系我们。
+          最新版本: V1.0 生效日期: 2024年3月7日
+          <h4 style={{ margin: '4px 0' }}>一、网站性质与目的</h4>
+          1.1
+          本网站旨在演示影视播放器的技术功能，不存储、传播或提供任何视频内容。
           <br />
-          邮箱地址：help@xbox.work
+          1.2 本网站坚决支持版权保护，反对任何形式的非法分享或传播视频内容。
+          <h4 style={{ margin: '4px 0' }}>二、内容免责</h4>
+          2.1 本网站所示内容仅供技术演示参考，不构成对任何版权作品的侵犯。
+          <br />
+          2.2 网站不对内容的准确性、完整性和合法性作任何形式的陈述或保证。
+          <h4 style={{ margin: '4px 0' }}>三、用户规范</h4>
+          3.1 用户使用本网站即视为已阅读并同意本声明全部内容。
+          <br />
+          3.2
+          用户不得将本网站用于任何违法或侵犯他人权利的目的，产生的一切后果均由用户自行承担。
+          <h4 style={{ margin: '4px 0' }}>四、外部链接</h4>
+          4.1
+          本网站提供的任何外部链接仅为方便用户访问之目的，不构成对其内容的认可或推荐。
+          <br />
+          4.2 本网站对外部链接的内容及由此产生的任何法律纠纷不承担任何责任。
+          <h4 style={{ margin: '4px 0' }}>五、其他规定</h4>
+          5.1 本网站有权随时修改本声明，解释权归本网站所有。
+          <br />
+          5.2 如有任何疑问，请通过 help@xbox.work 与我们联系。
+          <br />
+          5.3 以上内容如有修改,将不另行通知。请用户定期查阅最新版本。
         </Text>
       </Box>
     </Dialog>
