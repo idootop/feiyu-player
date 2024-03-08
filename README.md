@@ -32,7 +32,7 @@
 # todo 镜像尚未发布，敬请期待
 docker run -d \
     -p 3000:80 \
-    -v $(pwd)/.feiyu.ts:/usr/src/app/src/data/default.ts \
+    -v $(pwd)/.feiyu.ts:/app/.feiyu.ts \
     idootop/feiyu:1.0.0
 ```
 
