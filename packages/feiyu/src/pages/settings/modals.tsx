@@ -7,11 +7,18 @@ import { Box } from '@/components/Box';
 import { Dialog } from '@/components/Dialog';
 import { Expand, Row } from '@/components/Flex';
 import { Text } from '@/components/Text';
-import { APPConfig, appConfig, isValidSubscribe } from '@/data/config';
+import {
+  appConfig,
+  isValidSubscribe,
+  kDefaultSubscribeName,
+  kSubscribesKey,
+  SubscribesStore,
+} from '@/data/config';
 import { Subscribe } from '@/data/config/types';
 import { colors } from '@/styles/colors';
-import { jsonDecode, jsonEncode } from '@/utils/base';
+import { jsonDecode, jsonEncode, timestamp } from '@/utils/base';
 import { isEmpty, isNotEmpty } from '@/utils/is';
+import { formateDateTime } from '@/utils/string';
 
 const kSettingModals = 'kSettingModals';
 interface SettingModals {
@@ -184,7 +191,7 @@ export const ExportSubscribeModal = () => {
           Message.success('导出成功');
           showCopyModal(result);
         } else {
-          Message.error('导出失败，请先配置 NFT.Storage');
+          Message.error('导出失败，请检查 IPFS 配置是否正确');
           showExportSubscribeModal(false);
         }
         setWaiting(false);
@@ -203,8 +210,8 @@ export const showSubscribeDetailModal = (
 export const SubscribeDetailModal = () => {
   const [data] = useXConsumer<SettingModals>(kSettingModals);
   const { showDetail, subscribe } = data ?? {};
-  const isEdit = isEmpty(subscribe?.upstream);
-  const isDelete = subscribe?.name === APPConfig.defaultName;
+  const isEdit = isEmpty(subscribe?.server);
+  const isDelete = subscribe?.name === kDefaultSubscribeName;
   const [input, setInput] = useState('');
   const [waiting, setWaiting] = useState(false);
   const [leadWaiting, setLeadWaiting] = useState(false);
@@ -222,6 +229,9 @@ export const SubscribeDetailModal = () => {
       setDeleteWaiting(false);
     }
   }, [subscribe]);
+  const [state] = useXConsumer<SubscribesStore>(kSubscribesKey);
+  const { subscribes = {} } = state ?? {};
+  const _current = subscribe?.name ? subscribes[subscribe?.name] : undefined;
   return !subscribe ? (
     <Box />
   ) : (
@@ -243,7 +253,7 @@ export const SubscribeDetailModal = () => {
           Message.success('导出成功');
           showCopyModal(result);
         } else {
-          Message.error('导出失败，请先配置 NFT.Storage');
+          Message.error('导出失败，请检查 IPFS 配置是否正确');
         }
         setLeadWaiting(false);
       }}
@@ -259,8 +269,8 @@ export const SubscribeDetailModal = () => {
           }
           // 默认订阅不能重命名
           if (
-            subscribe.name === APPConfig.defaultName &&
-            newSubscribe.name !== APPConfig.defaultName
+            subscribe.name === kDefaultSubscribeName &&
+            newSubscribe.name !== kDefaultSubscribeName
           ) {
             Message.info('默认订阅不支持重命名');
             setWaiting(false);
@@ -269,7 +279,7 @@ export const SubscribeDetailModal = () => {
           // 不能重名
           if (
             newSubscribe.name !== subscribe.name &&
-            appConfig.subscribes[newSubscribe.name]
+            appConfig.getSubscribes()[newSubscribe.name]
           ) {
             Message.info('名称已存在，请重命名');
             setWaiting(false);
@@ -328,7 +338,7 @@ export const SubscribeDetailModal = () => {
           <Expand>
             <Input
               placeholder="请输入..."
-              value={subscribe?.upstream}
+              value={isEdit ? subscribe?.server : _current?.server}
               onChange={() => {
                 Message.info('当前订阅不可编辑');
               }}
@@ -353,10 +363,11 @@ export const SubscribeDetailModal = () => {
           <Expand>
             <Input
               placeholder="请输入..."
-              value={new Date(subscribe!.lastUpdate)
-                .toISOString()
-                .substring(0, 16)
-                .replace('T', ' ')}
+              value={formateDateTime(
+                isEdit
+                  ? subscribe!.lastUpdate
+                  : _current?.lastUpdate ?? timestamp(),
+              )}
               onChange={() => {
                 Message.info('当前订阅不可编辑');
               }}
@@ -368,7 +379,7 @@ export const SubscribeDetailModal = () => {
         placeholder="请输入..."
         autoSize={{ minRows: 6, maxRows: 6 }}
         style={{ width: '100%', marginBottom: '16px' }}
-        value={input}
+        value={isEdit ? input : jsonEncode(_current, true) ?? ''}
         onChange={(s) => {
           if (isEdit) {
             setInput(s);

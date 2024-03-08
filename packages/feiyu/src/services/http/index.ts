@@ -83,7 +83,7 @@ const get = async (
     }),
     timeout,
   ).catch(() => {
-    console.error('🕙 请求超时');
+    console.error('❌ 请求超时');
     return undefined;
   });
   let result = await response?.text();
@@ -136,7 +136,7 @@ const post = async (url: string, data?: any, config?: HttpConfig) => {
     }),
     timeout,
   ).catch(() => {
-    console.error('🕙 请求超时');
+    console.error('❌ 请求超时');
     return undefined;
   });
   let result = await response?.text();
@@ -149,8 +149,9 @@ const post = async (url: string, data?: any, config?: HttpConfig) => {
 
 export const isValidProxy = async () => {
   // todo 注意，仅在网页端需要设置 proxy（桌面端走原生请求）
-  return appConfig.current.proxy
-    ? isNotEmpty(await http.get(appConfig.current.proxy))
+  const proxy = (await appConfig.get()).proxy
+  return proxy
+    ? isNotEmpty(await http.get(proxy))
     : false;
 };
 
@@ -165,12 +166,13 @@ export const http = {
     /**
      * Proxy 请求默认开启 cache
      */
-    get(url: string, query?: Record<string, any>, config?: HttpConfig): any {
+    async get(url: string, query?: Record<string, any>, config?: HttpConfig): Promise<any> {
       const { headers = {}, cache = true, signal } = config ?? {};
-      if (!appConfig.current.proxy) {
+      const proxy = (await appConfig.get()).proxy
+      if (!proxy) {
         return get(url, query, config);
       }
-      return get(appConfig.current.proxy, query, {
+      return get(proxy, query, {
         ...config,
         headers: { ...kBaseHeaders, ...headers, [kProxyKey]: url },
         signal,
@@ -180,12 +182,13 @@ export const http = {
     /**
      * Proxy 请求默认开启 cache
      */
-    post(url: string, data?: any, config?: HttpConfig): any {
+    async post(url: string, data?: any, config?: HttpConfig): Promise<any> {
       const { headers = {}, cache = true, signal } = config ?? {};
-      if (!appConfig.current.proxy) {
+      const proxy = (await appConfig.get()).proxy
+      if (!proxy) {
         return post(url, data, config);
       }
-      return post(appConfig.current.proxy, data, {
+      return post(proxy, data, {
         ...config,
         headers: { ...kBaseHeaders, ...headers, [kProxyKey]: url },
         signal,

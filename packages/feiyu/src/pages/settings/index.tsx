@@ -24,8 +24,8 @@ import { Box } from '@/components/Box';
 import { Center, Column, Expand, Row } from '@/components/Flex';
 import { Text } from '@/components/Text';
 import {
-  APPConfig,
   appConfig,
+  kDefaultSubscribeName,
   kSubscribesKey,
   SubscribesStore,
 } from '@/data/config';
@@ -34,6 +34,7 @@ import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useDarkMode } from '@/hooks/useDarkMode';
 import { colors } from '@/styles/colors';
 import { isEmpty, isNotEmpty } from '@/utils/is';
+import { formateDate } from '@/utils/string';
 
 import { PageBuilder } from '../app';
 import {
@@ -118,7 +119,7 @@ const SubscribeHeader = (props: { isMobile: boolean }) => {
 const SubscribeTable = (props: { isMobile: boolean }) => {
   const { isMobile } = props;
   const [data] = useXConsumer<SubscribesStore>(kSubscribesKey);
-  const { currentSubscribe, subscribes = [] } = data ?? {};
+  const { current: currentSubscribe, subscribes = {} } = data ?? {};
 
   const setCurrent = (name: string) => {
     appConfig.setCurrent(name);
@@ -215,9 +216,9 @@ const TableRow = (props: {
   setCurrent: (name: string) => void;
 }) => {
   const { isMobile, selected, setCurrent, subscribe } = props;
-  const hasRefresh = isNotEmpty(subscribe.upstream);
-  const hasEdit = isEmpty(subscribe.upstream);
-  const hasDelete = subscribe.name !== APPConfig.defaultName;
+  const hasRefresh = isNotEmpty(subscribe.server);
+  const hasEdit = isEmpty(subscribe.server);
+  const hasDelete = subscribe.name !== kDefaultSubscribeName;
   const dropList = (
     <Menu style={{ width: '90px' }}>
       {hasEdit ? (
@@ -343,12 +344,12 @@ const TableRow = (props: {
             padding="0 16px"
             wordBreak="break-all"
           >
-            {subscribe.upstream ?? '-'}
+            {subscribe.server ?? '-'}
           </Text>
         )}
       </Expand>
       <Text width={isMobile ? '85px' : '200px'}>
-        {new Date(subscribe.lastUpdate).toISOString().substring(0, 10)}
+        {formateDate(subscribe.lastUpdate)}
       </Text>
       <Center width="64px">
         <Dropdown

@@ -1,3 +1,5 @@
+import { FeiyuConfig } from "./config/types";
+
 export default {
   proxy: 'https://example.com/release/proxy',
   ipfs: {
@@ -364,4 +366,4 @@ export default {
       rate: '8.0',
     },
   ],
-};
+} as FeiyuConfig;

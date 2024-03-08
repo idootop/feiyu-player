@@ -53,7 +53,7 @@ class Feiyu {
   ) {
     const { callback, signal, concurrent = false } = config ?? {};
     const results: FeiyuMovie[] = [];
-    const sites: any = appConfig.current.searchProviders ?? [];
+    const sites: any = (await appConfig.get()).searchProviders ?? [];
     if (!concurrent) {
       for (const site of sites) {
         // 搜索电影列表

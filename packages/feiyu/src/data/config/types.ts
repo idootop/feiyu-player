@@ -52,7 +52,7 @@ export interface Subscribe {
   /**
    * 订阅链接（本地配置无此参数）
    */
-  upstream?: string;
+  server?: string;
   /**
    * 最后更新时间
    */
