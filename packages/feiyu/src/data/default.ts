@@ -1,33 +1,14 @@
 export default {
   proxy: 'https://example.com/release/proxy',
-  searchProviders: [
-    {
-      key: '资源站1',
-      api: 'https://api1.example.com/api.php/provide/vod/at/xml',
-    },
-    {
-      key: '资源站2',
-      api: 'https://api2.example.com/api.php/provide/vod/at/xml',
-    },
-  ],
   ipfs: {
     gateway: 'https://nftstorage.link/ipfs/{{cid}}',
     token: 'xxxxxxxx',
   },
-  recommendMovies: [
-    '请回答1988',
-    '漫长的季节',
-    '白色巨塔',
-    '非自然死亡',
-    '半泽直树',
-    '孤独又灿烂的神鬼怪',
-    '想见你',
-    '我们与恶的距离',
-    '俗女养成记',
-    '爱的迫降',
-    '恶作剧之吻',
-    '悠长假期',
-    '东京爱情故事',
+  searchProviders: [
+    {
+      key: '搜索源',
+      api: 'https://api1.example.com/api.php/provide/vod/at/xml',
+    },
   ],
   hotMovies: [
     {

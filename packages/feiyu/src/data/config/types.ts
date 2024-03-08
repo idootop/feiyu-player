@@ -65,10 +65,6 @@ export interface Subscribe {
 
 export type FeiyuConfig = {
   /**
-   * 网络请求代理地址
-   */
-  proxy?: string;
-  /**
    * 资源站列表
    */
   searchProviders?: SearchProvider[];
@@ -77,11 +73,11 @@ export type FeiyuConfig = {
    */
   hotMovies?: HotMovie[] | string;
   /**
+   * 网络请求代理地址
+   */
+  proxy?: string;
+  /**
    * IPFS 配置（用于生成分享链接，导入导出配置文件）
    */
   ipfs?: IPFSConfig;
-  /**
-   * 推荐电影列表
-   */
-  recommendMovies?: string[];
 };
