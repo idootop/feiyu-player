@@ -14,8 +14,8 @@ import { Subscribe } from './types';
 export interface SubscribesStore {
   current: string; // 当前选中的订阅名称
   subscribes: Record<string, Subscribe>; //订阅列表 map
-  allowSexy: boolean; // 不过滤伦理片
-  allowMovieCommentary: boolean; // 不过滤电影解说
+  adultContent: boolean; // 展示伦理片
+  movieCommentaries: boolean; // 展示电影解说
 }
 
 export const kSubscribesKey = 'kSubscribesKey';
@@ -39,26 +39,26 @@ export class APPConfig {
     XSta.set(kSubscribesKey, { ...old, ...data });
   }
 
-  get allowSexy() {
-    return storage.get('allowSexy');
+  get adultContent() {
+    return storage.get('adultContent');
   }
-  get allowMovieCommentary() {
-    return storage.get('allowMovieCommentary');
+  get movieCommentaries() {
+    return storage.get('movieCommentaries');
   }
 
-  toggleAllowSexy() {
-    const flag = !this.allowSexy;
-    storage.set('allowSexy', flag);
+  toggleAllowAdultContent() {
+    const flag = !this.adultContent;
+    storage.set('adultContent', flag);
     this.updateStore({
-      allowSexy: flag,
+      adultContent: flag,
     });
   }
 
-  toggleAllowMovieCommentary() {
-    const flag = !this.allowMovieCommentary;
-    storage.set('allowMovieCommentary', flag);
+  toggleAllowMovieCommentaries() {
+    const flag = !this.movieCommentaries;
+    storage.set('movieCommentaries', flag);
     this.updateStore({
-      allowMovieCommentary: flag,
+      movieCommentaries: flag,
     });
   }
 
@@ -147,8 +147,8 @@ export class APPConfig {
     this.updateStore({
       current,
       subscribes,
-      allowSexy: this.allowSexy,
-      allowMovieCommentary: this.allowMovieCommentary,
+      adultContent: this.adultContent,
+      movieCommentaries: this.movieCommentaries,
     });
     // 异步刷新所有订阅
     this.refreshAll();
@@ -161,7 +161,7 @@ export class APPConfig {
     await this.init();
     const subscribe = this.getSubscribes()[name];
     if (!subscribe) return false;
-    const cid = await ipfs.writeJson([subscribe], true);
+    const cid = await ipfs.writeJson(subscribe, true);
     return cid ? ipfsURL(cid) : undefined;
   }
 
@@ -180,16 +180,19 @@ export class APPConfig {
   async importSubscribes(data: string) {
     await this.init();
     let subscribes: Subscribe[] = [];
+    let result: any;
     const url = isValidUrl(data) ? data : undefined;
     if (url) {
-      const res = await http.get(url, undefined, {
+      result = await http.get(url, undefined, {
         cache: false,
       });
-      if (isArray(res)) {
-        subscribes = res;
-      }
     } else {
-      subscribes = [jsonDecode(data)];
+      result = jsonDecode(data);
+    }
+    if (isArray(result)) {
+      subscribes = result;
+    } else {
+      subscribes = [result];
     }
     subscribes = subscribes.filter(isValidSubscribe);
     let successItems = 0;
@@ -270,7 +273,7 @@ export class APPConfig {
   }
 
   /**
-   * 编辑单个订阅（本地配置，暂不支持重命名）
+   * 编辑单个订阅
    */
   async editSubscribe(oldSubscribe: Subscribe, newSubscribe: Subscribe) {
     await this.init();
