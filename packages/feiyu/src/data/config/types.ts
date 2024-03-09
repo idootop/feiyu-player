@@ -67,7 +67,7 @@ export type FeiyuConfig = {
   /**
    * 资源站列表
    */
-  searchProviders?: SearchProvider[];
+  videoSources?: SearchProvider[];
   /**
    * 首页热门电影
    */

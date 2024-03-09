@@ -6,15 +6,12 @@
 
 # ✨ 特性
 
-- 🌛 ｜亮暗色模式
-- 💅 ｜极简，高颜值
-- ✅ ｜开源免费无广告
-- 📱 ｜适配 PC、移动端
-- 🔍 ｜支持多源聚合搜索
-- 📃 ｜支持导入导出订阅配置
-- 📶 ｜支持 PWA ，可离线访问
-- 🕷️ ｜内置请求代理，无惧跨域
-- 💎 ｜使用去中心化存储（IPFS）
+- **极致体验**: 界面极简、高颜值，操作简单直观，给你极致观影体验。
+- **聚合搜索**: 支持同时搜索多个视频源，自动去除无效视频链接，一键播放。
+- **订阅分享**: 支持导入导出订阅配置，轻松管理和分享自定义的视频源等设置。
+- **高度开放**: 完全开源，免费使用，无任何广告植入，用户可自行部署和定制。
+- **全端支持**: 适配移动端、网页端和桌面端 (Windows/macOS/Linux)。
+- **其他特性**: 使用 IPFS 去中心化存储，支持 PWA 渐进式网页应用……
 
 # 🔥 预览
 
@@ -22,53 +19,154 @@
 
 ![](screenshots/play-preview.jpg)
 
-# 🚀 启动
+# ⚡️ 快速开始
+
+飞鱼提供 Docker 镜像一键部署，用户无需手动编译即可快速体验。
 
 [![Docker Image Version](https://img.shields.io/docker/v/idootop/feiyu?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/feiyu)
 
-请先打开 `.feiyu.ts` 文件，按照下面的参数说明配置好，然后使用以下命令启动 docker：
+```shell
+docker run -d -p 4399:3000 idootop/feiyu:1.0.0
+```
+
+启动成功后，即可通过 [http://localhost:4399](http://localhost:4399) 访问飞鱼。
+
+**自定义配置**
+
+如需自定义默认配置(如视频源等)，可在本地创建 `feiyu.json` 配置文件，并按如下方式挂载启动:
 
 ```shell
-# todo 镜像尚未发布，敬请期待
 docker run -d \
-    -p 3000:80 \
-    -v $(pwd)/.feiyu.ts:/app/.feiyu.ts \
+    -p 4399:3000 \
+    -v $(pwd)/feiyu.json:/home/static/feiyu.json \
     idootop/feiyu:1.0.0
 ```
 
-## 参数说明
+有关配置文件的编写格式和参数说明，请参考下面的「管理订阅」章节。
 
-### 搜索源 (searchProviders)
+# 📖 管理订阅
 
-要想正常使用飞鱼，你需要先配置「搜索源」。搜索源之于飞鱼，就好比光盘之于影碟机，磁带之于播放器。
+为了更灵活的管理视频源等配置，飞鱼支持通过订阅来分享和导入配置文件。
 
-飞鱼支持 [苹果 CMS](https://magicblack.github.io/)、[飞飞 CMS](https://www.feifeicms.org/) 等格式的搜索 API，如果你没听说过，请自行百度了解更多。
+你可参考本地的 `feiyu.example.json` 文件，根据下面的参数说明配置自己的订阅。
 
-> 注意：飞鱼只是一个在线视频播放器，并没有内置任何影视资源。
+## 视频源 (videoSources)
 
-### 请求代理 (proxy)
+视频源相当于飞鱼播放器的"光盘"，没有配置视频源，飞鱼将无法搜索和播放任何内容。
 
-为了让飞鱼能够在网页端正常使用，需要使用飞鱼专用的请求代理云函数，详见[飞鱼 Proxy](#%EF%B8%8F-%E9%A3%9E%E9%B1%BC-proxy)。
+作为一款通用播放器，**飞鱼本身不内置任何影视资源，也不提供或推荐任何特定的视频源**，用户需要自行添加符合规范的视频源。
 
-### IPFS（可选）
+飞鱼支持集成 [苹果 CMS](https://magicblack.github.io/)、[飞飞 CMS](https://www.feifeicms.org/) 等格式规范的视频源。如果你不了解这些格式，可以自行搜索了解更多详情。
 
-飞鱼内部默认使用 [NFT.storage](https://nft.storage/) 向 IPFS 中写入数据，当你在分享影片或导出订阅配置时，需要用到此服务。
+```json
+// 视频源参考配置格式
+{
+  "videoSources": [
+    {
+      "key": "视频源1",
+      "api": "https://api1.example.com/api.php/provide/vod/at/xml"
+    },
+    {
+      "key": "视频源2",
+      "api": "https://api2.example.com/api.php/provide/vod/at/xml"
+    }
+  ]
+}
+```
 
-[IPFS（InterPlanetary File System）](https://ipfs.tech/)是一种点对点分布式文件存储和传输系统，旨在创建一个更加开放、高效、安全的网络，使用户可以更轻松地共享和访问数据。飞鱼使用 IPFS 作为去中心化存储，使数据的存储和传输更加安全、私密和高效。
+## 热门影视 (hotMovies)
 
-#### Gateway
+你可以通过静态/动态配置两种方式，自定义首页显示的热门影视列表。
 
-为了访问 IPFS 中的数据，你需要先配置 IPFS Gateway，常见的 IPFS 公共网关有 ipfs.io、dweb.link 等，你可以在此处查看更多信息：[https://ipfs.github.io/public-gateway-checker/](https://ipfs.github.io/public-gateway-checker/)
+### 静态配置
 
-#### NFT.storage
+```json
+{
+  "hotMovies": [
+    {
+      "id": "26302614",
+      "isNew": false,
+      "title": "请回答1988",
+      "cover": "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2272563445.jpg",
+      "rate": "9.7"
+    },
+    {
+      "id": "25848328",
+      "isNew": false,
+      "title": "最后生还者 第一季",
+      "cover": "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2884221114.jpg",
+      "rate": "9.1"
+    }
+    // ...
+  ]
+}
+```
 
-[NFT.storage](https://nft.storage/) 提供免费的去中心化存储服务，同时支持 [IPFS](https://ipfs.tech/) 和 [Filecoin](https://filecoin.io/)。你可以到 [NFT.storage](https://nft.storage/) 免费注册账号并申请 API Key，然后回到飞鱼设置页面修改你的 IPFS token。
+### 动态配置
 
-# ⚡️ 部署
+你也可以配置一个返回热门影视数据的远程 JSON 接口地址，如:
 
-## 🐟 飞鱼主项目
+```json
+{
+  "hotMovies": "http://example.com/hotMovies.json"
+}
+```
+
+该接口需返回一个符合上述静态配置格式的热门影视数组
+
+```json
+// http://example.com/hotMovies.json
+[
+  {
+    "id": "26302614",
+    "isNew": false,
+    "title": "请回答1988",
+    "cover": "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2272563445.jpg",
+    "rate": "9.7"
+  },
+  {
+    "id": "25848328",
+    "isNew": false,
+    "title": "最后生还者 第一季",
+    "cover": "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2884221114.jpg",
+    "rate": "9.1"
+  }
+  // ...
+]
+```
+
+## 请求代理 (proxy)
+
+有些视频源可能无法直接在网页端使用，这是由于浏览器的同源策略限制，无法直接访问第三方资源。
+
+为解决这个跨域问题，飞鱼提供了一个专用的请求代理服务，具体使用方法请参阅「[飞鱼 Proxy](#-%E9%A3%9E%E9%B1%BC-proxy)」部分。
+
+> 注意: 这个代理服务并非常规的 http_proxy，而是使用飞鱼私有的代理协议，转发客户端发出的网络请求。
+
+## IPFS 配置（ipfs）
+
+飞鱼使用 IPFS 作为去中心化存储，用于分享影片和导出订阅配置等场景。
+
+[IPFS](https://ipfs.tech/) 是一种点对点分布式文件系统，旨在实现更开放、高效、安全的网络数据传输与共享。
+
+### gateway
+
+用于访问 IPFS 网络中的数据，常用的公共网关包括 ipfs.io、dweb.link 等。
+
+### token
+
+飞鱼默认使用 [NFT.storage](https://nft.storage/) 服务向 IPFS 网络中写入数据。
+
+[NFT.storage](https://nft.storage/) 提供免费的去中心化存储服务，需注册账号获取 token 后方可使用。
+
+# 📦 开发/部署
+
+## 飞鱼播放器
 
 ```bash
+# 克隆本项目
+git clone https://github.com/idootop/feiyu-player && cd feiyu-player
+
 # 切换到项目所在路径
 cd packages/feiyu
 
@@ -76,39 +174,51 @@ cd packages/feiyu
 yarn && yarn build
 ```
 
-## 🕷️ 飞鱼 Proxy
+## 飞鱼 Proxy
 
-为了解决 Web 环境下，访问第三方资源跨域的问题，飞鱼内置了一个 Proxy 云函数，通过服务端转发网络请求。你可以将其部署至 [腾讯云函数](https://cloud.tencent.com/product/scf)（付费）或 [Vercel Serverless Functions](https://vercel.com/docs/concepts/functions/serverless-functions/quickstart)（免费）。
-
-### SCF 👉 [feiyu-proxy](packages/feiyu-proxy)
+免费部署飞鱼 Proxy 到 [Vercel](https://vercel.com)（一个云服务提供，提供了便捷的 Serverless 云函数部署和管理功能）:
 
 ```bash
-# 切换到项目所在路径
-cd packages/feiyu-proxy
+# 克隆本项目
+git clone https://github.com/idootop/feiyu-player && cd feiyu-player
 
-# 安装/更新 SCF 最新版本
-yarn global add serverless-cloud-framework@latest
-
-# 安装依赖，部署项目
-yarn && yarn deploy
-```
-
-### Vercel 👉 [feiyu-proxy-vercel](packages/feiyu-proxy-vercel)
-
-```bash
 # 切换到项目所在路径
 cd packages/feiyu-proxy-vercel
 
-# 安装/更新 Vercel 最新版本
+# 安装并更新 Vercel CLI 到最新版本
 yarn global add vercel@latest
 
 # 安装依赖，部署项目
 yarn && yarn deploy
 ```
 
-# 💻 其他
+执行最后一条命令后，Vercel CLI 会启动浏览器并引导你完成免费注册和部署过程。待部署完成后，你会获得一个访问地址，请将此地址复制，并按照下面的示例，正确填入订阅配置中。
 
-本项目基于飞鱼 [Flutter 版](https://github.com/idootop/feiyu_flutter)（iOS/Android），进一步扩展支持 Web 端和桌面端。
+```json
+{
+  "proxy": "https://xxx.vercel.app/api/proxy"
+}
+```
+
+这样就可以通过该代理服务，正常搜索和访问各种第三方视频资源了。
+
+# 🐟 关于飞鱼
+
+飞鱼的初衷，是希望**让每个人都能随时随地尽情享受视频的乐趣!**
+
+飞鱼项目最初是一款基于 [Flutter](https://flutter.dev/) 框架开发的移动端跨平台视频播放器，支持 iOS 和 Android 系统。
+
+本次开源的飞鱼项目，是在[飞鱼 Flutter 版](https://github.com/idootop/feiyu_flutter)的基础上演进而来，保留了原有的部分特性和功能。
+
+同时新增了诸多适配网页和桌面环境所需的改进和优化，为用户提供更多跨平台体验选择。
+
+- 移动端: 支持 iOS 和 Android
+- Web 端: 支持所有现代桌面和移动浏览器
+- 桌面端: 支持 Windows、macOS 和 Linux 系统
+
+如果你对飞鱼有任何反馈或建议，欢迎随时与我分享。
+
+Enjoy!
 
 # 🚨 免责声明
 

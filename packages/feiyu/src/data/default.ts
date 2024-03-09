@@ -1,4 +1,4 @@
-import { FeiyuConfig } from "./config/types";
+import { FeiyuConfig } from './config/types';
 
 export default {
   proxy: 'https://example.com/release/proxy',
@@ -6,9 +6,9 @@ export default {
     gateway: 'https://nftstorage.link/ipfs/{{cid}}',
     token: 'xxxxxxxx',
   },
-  searchProviders: [
+  videoSources: [
     {
-      key: '搜索源',
+      key: '视频源',
       api: 'https://api1.example.com/api.php/provide/vod/at/xml',
     },
   ],

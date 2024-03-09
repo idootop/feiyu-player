@@ -25,8 +25,8 @@ export const isValidSubscribe = (subscribe: any) => {
     isNotEmpty(subscribe?.version) &&
     isNotEmpty(subscribe?.name) &&
     isObject(subscribe.feiyu) &&
-    isArray(subscribe.feiyu.searchProviders) &&
-    subscribe.feiyu.searchProviders.length > 0 // 至少需要一个搜索源才能正常使用
+    isArray(subscribe.feiyu.videoSources) &&
+    subscribe.feiyu.videoSources.length > 0 // 至少需要一个视频源才能正常使用
   );
 };
 

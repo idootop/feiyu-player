@@ -62,7 +62,7 @@ export const APPConfigModal = () => {
           <br />
           1. 网络连接是否正常
           <br />
-          2. 搜索源配置是否正确
+          2. 视频源配置是否正确
           <br />
           3. 是否设置了有效的飞鱼 Proxy
         </Text>
