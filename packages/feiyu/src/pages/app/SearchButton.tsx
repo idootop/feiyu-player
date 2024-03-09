@@ -248,7 +248,7 @@ const SearchModal = () => {
         icon={
           <Box fontSize="64px" color={colors.text} margin="20px">
             <img
-              src="/logo.svg"
+              src="/logo.gif"
               style={{
                 objectFit: 'cover',
                 width: '64px',
