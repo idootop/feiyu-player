@@ -58,7 +58,13 @@ export const APPConfigModal = () => {
           lineHeight="24px"
           className="hide-scrollbar"
         >
-          请先打开设置，配置请求代理
+          搜索失败，请检查以下事项:
+          <br />
+          1. 网络连接是否正常
+          <br />
+          2. 搜索源配置是否正确
+          <br />
+          3. 是否设置了有效的飞鱼 Proxy
         </Text>
       </Box>
     </Dialog>
