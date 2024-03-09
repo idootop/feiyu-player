@@ -8,7 +8,7 @@
 - ~片源可用性检测~
 - ~网页 Metadata 更新~
 - ~导入导出~
-- Docker
+- ~Docker~
 - PC 客户端（Tauri）
 - 片源管理
 - 记忆播放位置
