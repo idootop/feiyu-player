@@ -1,7 +1,7 @@
 // {
 //   Type: 'Timer',
 //   TriggerName: 'EveryDay',
-//   Time: '2019-02-21T11:49:00Z',
+//   Time: '2019-03-21T11:49:00Z',
 //   Message: 'user define msg body',
 // }
 export interface TimerEvent {
@@ -14,23 +14,23 @@ export interface TimerEvent {
 // {
 //   httpMethod: 'POST',
 //   isBase64Encoded: false,
-//   path: '/svg-avatar',
+//   path: '/xxx',
 //   body: '{"a":123}',
 //   queryString: {
 //     aaa: '1234',
 //   },
 //   headers: {
-//     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:106.0) Gecko/20100101 Firefox/106.0',
-//     'x-api-requestid': '22293325848152463c398df3e21c7389',
-//     'x-b3-traceid': '22293325848152463c398df3e21c7389',
+//     'user-agent': 'xxx',
+//     'x-api-requestid': 'xxx',
+//     'x-b3-traceid': 'xxx',
 //     'x-api-scheme': 'https',
 //   },
 //   requestContext: {
 //     httpMethod: 'ANY',
 //     identity: {},
-//     path: '/svg-avatar',
-//     serviceId: 'service-886k0uiy',
-//     sourceIp: '50.7.158.186',
+//     path: '/xxx',
+//     serviceId: 'service-xxx',
+//     sourceIp: '50.xxx.xxx.xxx',
 //     stage: 'release',
 //   },
 //   headerParameters: {},

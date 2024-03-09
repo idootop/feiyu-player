@@ -6,14 +6,11 @@
     "resolveJsonModule": true,
     "strict": true,
     "esModuleInterop": true,
+    "noImplicitAny": false,
     "outDir": "build",
     "declaration": true,
     "sourceMap": true,
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": ["./*"]
-    }
   },
-  "include": ["./src", "test/index.ts"],
+  "include": ["./src",  "api/proxy.ts"],
   "exclude": ["node_modules"]
 }

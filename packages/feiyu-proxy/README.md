@@ -1,70 +1,33 @@
-# 快速构建 multi-scf-nodejs
+# 飞鱼 Proxy
 
-**中文** | [English](./README_EN.md)
+有些视频源可能无法直接在网页端使用，这是由于浏览器的同源策略限制，无法直接访问第三方资源。
 
-## 简介
+为解决这个跨域问题，飞鱼提供了一个专用的请求代理服务：飞鱼 Proxy
 
-multi-scf-nodejs 模板使用 Tencent SCF 组件及其触发器能力，方便的在腾讯云创建，配置和管理一个 multi-scf-nodejs 应用。
+> 注意: 这个代理服务并非常规的 http_proxy，而是使用飞鱼私有的代理协议，转发客户端发出的网络请求。
 
-## 快速开始
-
-### 1. 安装
+你可以使用以下命令，免费部署飞鱼 Proxy 到 [Vercel](https://vercel.com)（一个云服务提供，提供了便捷的 Serverless 云函数部署和管理功能）:
 
 ```bash
-# 安装 Serverless Cloud Framework
-npm install -g serverless-cloud-framework
+# 克隆本项目
+git clone https://github.com/idootop/feiyu-player && cd feiyu-player
+
+# 切换到项目所在路径
+cd packages/feiyu-proxy-vercel
+
+# 安装并更新 Vercel CLI 到最新版本
+yarn global add vercel@latest
+
+# 安装依赖，部署项目
+yarn && yarn deploy
 ```
 
-### 2. 创建
+执行最后一条命令后，Vercel CLI 会启动浏览器并引导你完成免费注册和部署过程。待部署完成后，你会获得一个访问地址，请将此地址复制，并按照下面的示例，正确填入订阅配置中。
 
-通过如下命令直接下载该例子：
-
-```bash
-scf init multi-scf-nodejs --name example
-cd example
+```json
+{
+  "proxy": "https://xxx.vercel.app/api/proxy"
+}
 ```
 
-### 3. 部署
-
-在 `serverless.yml` 文件所在的项目根目录，运行以下指令，将会弹出二维码，直接扫码授权进行部署：
-
-```bash
-scf deploy
-```
-
-> **说明**：如果鉴权失败，请参考 [权限配置](https://cloud.tencent.com/document/product/1154/43006) 进行授权。
-
-### 4. 查看状态
-
-执行以下命令，查看您部署的项目信息：
-
-```bash
-scf info
-```
-
-### 5. 移除
-
-可以通过以下命令移除 multi-scf-nodejs 应用
-
-```bash
-scf remove
-```
-
-### 账号配置（可选）
-
-serverless 默认支持扫描二维码登录，用户扫描二维码后会自动生成一个 `.env` 文件并将密钥存入其中.
-如您希望配置持久的环境变量/秘钥信息，也可以本地创建 `.env` 文件, 
-把从[API 密钥管理](https://console.cloud.tencent.com/cam/capi)中获取的 `SecretId` 和`SecretKey` 填入其中.
-
-> 如果没有腾讯云账号，可以在此[注册新账号](https://cloud.tencent.com/register)。
-
-```bash
-# 腾讯云的配置信息
-touch .env
-```
-
-```
-# .env file
-TENCENT_SECRET_ID=123
-TENCENT_SECRET_KEY=123
-```
+这样就可以通过该代理服务，正常搜索和访问各种第三方视频资源了。
