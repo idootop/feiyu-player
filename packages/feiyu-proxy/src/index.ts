@@ -11,7 +11,7 @@ export const kProxyHeader = "x-proxy-target";
 export const kProxyHeaders = "x-proxy-headers";
 
 // 默认响应
-const defaultResponse = scfResponse("404", { type: "text" });
+const defaultResponse = scfResponse("Hello world!", { type: "text" });
 
 // header: x-proxy-target
 export const main = async (event: SCFEvents) => {
