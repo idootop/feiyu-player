@@ -32,6 +32,7 @@ import {
 import { Subscribe } from '@/data/config/types';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useDarkMode } from '@/hooks/useDarkMode';
+import { cache } from '@/services/cache';
 import { colors } from '@/styles/colors';
 import { isEmpty, isNotEmpty } from '@/utils/is';
 import { formateDate } from '@/utils/string';
@@ -366,10 +367,10 @@ const TableRow = (props: {
   );
 };
 
-const CurrentHeader = (props: { isMobile: boolean }) => {
+const ContentFilter = (props: { isMobile: boolean }) => {
   const { isMobile: _ } = props;
   const [data] = useXConsumer<SubscribesStore>(kSubscribesKey);
-  const { allowSexy, allowMovieCommentary } = data ?? {};
+  const { adultContent, movieCommentaries } = data ?? {};
   return (
     <Column width="100%" className="subscribe-title" alignItems="start">
       <Text fontSize="16px" fontWeight="500">
@@ -387,10 +388,10 @@ const CurrentHeader = (props: { isMobile: boolean }) => {
             电影解说
           </Text>
           <Switch
-            checked={!allowMovieCommentary}
+            checked={!movieCommentaries}
             onChange={(value) => {
-              if (!allowMovieCommentary === !value) {
-                appConfig.toggleAllowMovieCommentary();
+              if (!movieCommentaries === !value) {
+                appConfig.toggleAllowMovieCommentaries();
               }
             }}
           />
@@ -405,15 +406,41 @@ const CurrentHeader = (props: { isMobile: boolean }) => {
             伦理片
           </Text>
           <Switch
-            checked={!allowSexy}
+            checked={!adultContent}
             onChange={(value) => {
-              if (!allowSexy === !value) {
-                appConfig.toggleAllowSexy();
+              if (!adultContent === !value) {
+                appConfig.toggleAllowAdultContent();
               }
             }}
           />
         </Row>
       </Row>
+    </Column>
+  );
+};
+
+const ClearCache = (props: { isMobile: boolean }) => {
+  const { isMobile: _ } = props;
+  return (
+    <Column width="100%" className="subscribe-title" alignItems="start">
+      <Text fontSize="16px" fontWeight="500">
+        清除缓存
+      </Text>
+
+      <Row>
+        <Text fontSize="14px" fontWeight="400" padding="8px 0 16px 0">
+          如果搜索结果异常或程序运行不正常，你可以尝试清除缓存以解决问题。该操作不会影响你的个人设置和数据。
+        </Text>
+      </Row>
+      <Button
+        type="primary"
+        onClick={async () => {
+          await cache.reset();
+          Message.success('已清除');
+        }}
+      >
+        一键清除
+      </Button>
     </Column>
   );
 };
@@ -425,7 +452,8 @@ const SettingsBody = (props: { isMobile: boolean }) => {
     <Column width="100%">
       <SubscribeHeader isMobile={isMobile} />
       <SubscribeTable isMobile={isMobile} />
-      <CurrentHeader isMobile={isMobile} />
+      <ContentFilter isMobile={isMobile} />
+      <ClearCache isMobile={isMobile} />
       <AddSubscribeModal />
       <ImportSubscribeModal />
       <ExportSubscribeModal />
