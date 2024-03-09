@@ -1,10 +1,10 @@
 import { FeiyuConfig } from './config/types';
 
 export default {
-  proxy: 'https://example.com/release/proxy',
+  proxy: 'https://example.vercel.app/api/proxy',
   ipfs: {
     gateway: 'https://nftstorage.link/ipfs/{{cid}}',
-    token: 'xxxxxxxx',
+    token: 'eyJhb...xxx',
   },
   videoSources: [
     {
