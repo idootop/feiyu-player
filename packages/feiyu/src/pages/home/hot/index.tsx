@@ -38,6 +38,7 @@ const Hot = () => {
       height="calc(80vh - 60px)"
       justifyContent="center"
       onClick={refresh}
+      cursor="pointer"
     >
       <SearchEmpty />
     </Column>
