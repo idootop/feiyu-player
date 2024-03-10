@@ -10,6 +10,7 @@
 - ~导入导出~
 - ~Docker~
 - PC 客户端（Tauri）
+- 自动构建（Github action）
 - 片源管理
 - 记忆播放位置
 - 历史记录

@@ -1,4 +1,5 @@
 import { Button, Notification } from '@arco-design/web-react';
+import { FeiyuDesktop } from 'feiyu-desktop';
 import { useEffect, useState } from 'react';
 import { registerSW } from 'virtual:pwa-register';
 
@@ -8,19 +9,24 @@ import { Text } from '@/components/Text';
 import { appConfig } from '@/data/config';
 import { useInit } from '@/hooks/useInit';
 import { usePWA } from '@/hooks/usePWA';
+import { useRebuildRef } from '@/hooks/useRebuild';
 import { cache } from '@/services/cache';
 import { useFallbackToIndex } from '@/services/routes/page';
 import { storage } from '@/services/storage/storage';
 
 import { kRoutePages } from '..';
 
-const _initAPP = async () => {
+const _initAPP = async (rebuildRef: any) => {
+  // 初始化桌面环境
+  await FeiyuDesktop.init?.();
   // 初始化APP配置信息
   await appConfig.init();
   // 注册 service worker（自动更新）
   registerSW({ immediate: true });
   // 清除已过期的本地缓存
   cache.clearExpired();
+  // 刷新 APP 页面
+  rebuildRef.current.rebuild();
 };
 
 export const useInitAPP = () => {
@@ -28,8 +34,9 @@ export const useInitAPP = () => {
   useFallbackToIndex(kRoutePages, { parent: '/' });
 
   // APP 初始化
+  const rebuildRef = useRebuildRef();
   useInit(() => {
-    _initAPP();
+    _initAPP(rebuildRef);
   }, []);
 
   // APP 升级弹窗
@@ -113,9 +120,11 @@ export const useDisclaimer = () => {
           1.1
           本网站旨在演示在线视频播放器的技术功能，不存储、传播或提供任何视频内容。
           <br />
-          1.2 本网站仅作为一个通用播放器使用，不针对任何特定内容提供源，仅供个人合法地点播、学习和研究使用。
+          1.2
+          本网站仅作为一个通用播放器使用，不针对任何特定内容提供源，仅供个人合法地点播、学习和研究使用。
           <h4 style={{ margin: '4px 0' }}>二、内容免责</h4>
-          2.1 用户应自行判断所播放内容的合法性并承担相应责任，本网站对用户播放的任何内容不承担任何责任。
+          2.1
+          用户应自行判断所播放内容的合法性并承担相应责任，本网站对用户播放的任何内容不承担任何责任。
           <br />
           2.2 本网站不对内容的准确性、完整性和合法性作任何形式的陈述或保证。
           <h4 style={{ margin: '4px 0' }}>三、用户规范</h4>
@@ -127,7 +136,8 @@ export const useDisclaimer = () => {
           4.1
           本网站提供的任何外部链接仅为方便用户访问之目的，不构成对其内容的认可或推荐。
           <br />
-          4.2 本网站对外部链接的内容（包括但不限于网页、图片或视频等）及由此产生的任何法律纠纷不承担任何责任。
+          4.2
+          本网站对外部链接的内容（包括但不限于网页、图片或视频等）及由此产生的任何法律纠纷不承担任何责任。
           <h4 style={{ margin: '4px 0' }}>五、其他规定</h4>
           5.1 本网站有权随时修改本声明，解释权归本网站所有。
           <br />

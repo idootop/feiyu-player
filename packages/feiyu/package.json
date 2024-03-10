@@ -4,13 +4,15 @@
   "type": "commonjs",
   "scripts": {
     "pwa": "ts-node scripts/pwa",
-    "dev": "vite",
-    "build": "vite build && yarn pwa",
-    "preview": "vite build && yarn pwa && vite preview"
+    "dev": "vite --force",
+    "desktop": "yarn add file:../feiyu-desktop && cp -f node_modules/feiyu-desktop/src/desktop.js node_modules/feiyu-desktop/src/index.js",
+    "build": "vite build --force && yarn pwa",
+    "preview": "vite build --force && yarn pwa && vite preview"
   },
   "dependencies": {
     "@arco-design/web-react": "^2.59.1",
     "fast-xml-parser": "^4.3.4",
+    "feiyu-desktop": "file:../feiyu-desktop",
     "isomorphic-unfetch": "^3.1.0",
     "localforage": "^1.10.0",
     "react": "^18.2.0",

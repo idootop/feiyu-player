@@ -1,0 +1,22 @@
+{
+  "name": "feiyu-desktop",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "files": [
+    "src"
+  ],
+  "module": "src/index.js",
+  "types": "src/index.d.ts",
+  "scripts": {
+    "icon": "tauri icon",
+    "dev": "tauri dev",
+    "build": "tauri build"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1"
+  }
+}
