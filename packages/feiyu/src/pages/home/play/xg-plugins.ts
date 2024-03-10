@@ -1,4 +1,6 @@
+import { FeiyuDesktop } from 'feiyu-desktop';
 import { Events, Plugin, Util } from 'xgplayer';
+import XgFullScreen from 'xgplayer/es/plugins/fullscreen';
 import XgPlayNext from 'xgplayer/es/plugins/playNext';
 import XgReplay from 'xgplayer/es/plugins/replay';
 
@@ -128,4 +130,67 @@ export class PlayNext extends XgPlayNext {
     e.stopPropagation();
     player.emit(Events.PLAYNEXT);
   };
+}
+
+export class FullScreen extends XgFullScreen {
+  static get pluginName() {
+    return 'fullscreen';
+  }
+
+  afterCreate() {
+    super.afterCreate();
+    this.on(Events.USER_ACTION, ({ action }) => {
+      if (action === 'switch_fullscreen') {
+        this.toggleDesktopFullScreen();
+      }
+    });
+    this.on(Events.SHORTCUT, ({ key }) => {
+      if (key === 'esc') {
+        this.toggleDesktopFullScreen(false);
+      }
+    });
+  }
+
+  toggleFullScreen = (e) => {
+    if (FeiyuDesktop.isDesktop) {
+      setTimeout(async () => {
+        const oldFullScreen = await FeiyuDesktop.window?.isFullscreen();
+        try {
+          super.toggleFullScreen(e);
+        } catch {
+          //
+        }
+        const newFullScreen = await FeiyuDesktop.window?.isFullscreen();
+        if (newFullScreen === oldFullScreen) {
+          await this.toggleDesktopFullScreen(!oldFullScreen);
+        }
+      });
+    } else {
+      super.toggleFullScreen(e);
+    }
+  };
+
+  async toggleDesktopFullScreen(fullscreen?: boolean) {
+    if (!FeiyuDesktop.isDesktop) {
+      return;
+    }
+    if (fullscreen == null) {
+      fullscreen = !(await FeiyuDesktop.window?.isFullscreen());
+    }
+    const player = document.getElementById('player');
+    const header = document.getElementsByClassName('app-header')[0];
+    const drawer = document.getElementsByClassName('arco-layout-sider')[0];
+
+    await FeiyuDesktop.window?.setFullscreen(fullscreen!);
+
+    if (fullscreen) {
+      player?.classList.add('player-fullscreen');
+      header?.classList.add('hide-fullscreen');
+      drawer?.classList.add('hide-fullscreen');
+    } else {
+      player?.classList.remove('player-fullscreen');
+      header?.classList.remove('hide-fullscreen');
+      drawer?.classList.remove('hide-fullscreen');
+    }
+  }
 }

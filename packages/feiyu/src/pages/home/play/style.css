@@ -3,6 +3,19 @@
   height: auto !important;
 }
 
+.player-fullscreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 100 !important;
+}
+
+.hide-fullscreen {
+  display: none !important;
+}
+
 .xgplayer xg-trigger .time-preview span.xg-cur {
   color: #2d5cf6 !important;
 }

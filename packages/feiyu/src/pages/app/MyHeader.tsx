@@ -18,7 +18,7 @@ export const MyHeader = () => {
 
   return (
     <Row
-      className="glass-effect"
+      className="glass-effect app-header"
       style={{
         position: 'fixed',
         top: '0px',
