@@ -161,19 +161,6 @@ docker run -d \
 
 # 📦 开发/部署
 
-## 飞鱼播放器
-
-```bash
-# 克隆本项目
-git clone https://github.com/idootop/feiyu-player && cd feiyu-player
-
-# 切换到项目所在路径
-cd packages/feiyu
-
-# 安装依赖，打包项目（构建产物在 dist 目录下）
-yarn && yarn build
-```
-
 ## 飞鱼 Proxy
 
 免费部署飞鱼 Proxy 到 [Vercel](https://vercel.com)（一个云服务提供，提供了便捷的 Serverless 云函数部署和管理功能）:
@@ -203,6 +190,34 @@ yarn && yarn deploy
 ```
 
 这样就可以通过该代理服务，正常搜索和访问各种第三方视频资源了。
+
+## 飞鱼网页版
+
+```bash
+# 克隆本项目
+git clone https://github.com/idootop/feiyu-player && cd feiyu-player
+
+# 切换到项目所在路径
+cd packages/feiyu
+
+# 安装依赖，并启动本地项目
+yarn && yarn dev
+```
+
+## 飞鱼桌面版
+
+桌面版基于 [Tauri](https://tauri.app/) 构建，请确保已正确配置开发环境。
+
+```bash
+# 克隆本项目
+git clone https://github.com/idootop/feiyu-player && cd feiyu-player
+
+# 切换到项目所在路径
+cd packages/feiyu-desktop
+
+# 安装依赖，并启动本地项目
+yarn && yarn dev
+```
 
 # 🐟 关于飞鱼
 

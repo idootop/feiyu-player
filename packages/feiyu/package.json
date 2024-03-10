@@ -5,7 +5,7 @@
   "scripts": {
     "pwa": "ts-node scripts/pwa",
     "dev": "vite --force",
-    "desktop": "yarn add file:../feiyu-desktop && cp -f node_modules/feiyu-desktop/src/desktop.js node_modules/feiyu-desktop/src/index.js",
+    "desktop": "yarn && cp -f node_modules/feiyu-desktop/src/desktop.js node_modules/feiyu-desktop/src/index.js",
     "build": "vite build --force && yarn pwa",
     "preview": "vite build --force && yarn pwa && vite preview"
   },
