@@ -259,7 +259,7 @@ const SearchModal = () => {
           </Box>
         }
         description={
-          <p>
+          <>
             <Box
               fontSize="16px"
               fontWeight="bold"
@@ -276,7 +276,7 @@ const SearchModal = () => {
               {' '}
               Del.Wang{' '}
             </Link>
-          </p>
+          </>
         }
       />
     </Column>
