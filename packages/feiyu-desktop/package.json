@@ -14,9 +14,10 @@
     "build": "tauri build"
   },
   "dependencies": {
-    "@tauri-apps/api": "^1"
+    "@tauri-apps/api": "^2.0.0-beta.4",
+    "@tauri-apps/plugin-os": "^2.0.0-beta.2"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1"
+    "@tauri-apps/cli": "^2.0.0-beta.8"
   }
 }

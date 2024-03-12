@@ -1,16 +1,16 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
-  "package": {
-    "productName": "飞鱼",
-    "version": "1.0.0"
-  },
+  "productName": "Feiyu",
+  "version": "1.0.0",
+  "identifier": "xbox.work.feiyu",
   "build": {
-    "beforeDevCommand": "cd ../feiyu && yarn desktop && yarn dev",
-    "beforeBuildCommand": "cd ../feiyu && yarn desktop && yarn build",
-    "devPath": "http://localhost:3000",
-    "distDir": "../feiyu/dist"
+    "beforeDevCommand": "cd ../feiyu && pnpm desktop && pnpm dev",
+    "beforeBuildCommand": "cd ../feiyu && pnpm desktop && pnpm build",
+    "frontendDist": "../feiyu/dist",
+    "devUrl": "http://localhost:3000"
   },
-  "tauri": {
+  "app": {
+    "withGlobalTauri": true,
     "windows": [
       {
         "fullscreen": false,
@@ -23,73 +23,40 @@
         "label": "main"
       }
     ],
-    "bundle": {
-      "active": true,
-      "targets": "all",
-      "identifier": "xbox.work.feiyu",
-      "copyright": "GPL-3.0-only",
-      "shortDescription": "一个漂亮得不像实力派的在线视频播放器 ✨",
-      "longDescription": "让每个人都能通过电影的力量，获得对生活的新体验和新认知，怀着永不熄灭的热忱，勇敢地去追求、去探索、去发现生命的意义和价值。",
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "deb": {
-        "depends": []
-      },
-      "macOS": {
-        "entitlements": null,
-        "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null
-      },
-      "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampUrl": "",
-        "wix": {
-          "language": "zh-CN"
-        }
+    "security": {
+      "csp": "default-src x-http: x-https: blob: data: filesystem: ws: http: https: 'unsafe-eval' 'unsafe-inline'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": "",
+      "wix": {
+        "language": "zh-CN"
       }
     },
-    "security": {
-      "csp": null,
-      "dangerousRemoteDomainIpcAccess": [
-        {
-          "domain": "**",
-          "windows": ["main"],
-          "enableTauriAPI": true
-        },
-        {
-          "domain": "*",
-          "windows": ["main"],
-          "enableTauriAPI": true
-        }
-      ]
+    "copyright": "GPL-3.0-only",
+    "shortDescription": "一个漂亮得不像实力派的在线视频播放器 ✨",
+    "longDescription": "让每个人都能通过电影的力量，获得对生活的新体验和新认知，怀着永不熄灭的热忱，勇敢地去追求、去探索、去发现生命的意义和价值。",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "macOS": {
+      "entitlements": null,
+      "frameworks": [],
+      "providerShortName": null,
+      "signingIdentity": null
     },
-    "allowlist": {
-      "process": {
-        "all": true
-      },
-      "os": {
-        "all": true
-      },
-      "window": {
-        "all": true
-      },
-      "dialog": {
-        "all": true
-      },
-      "shell": {
-        "all": true
-      },
-      "http": {
-        "all": true,
-        "request": true,
-        "scope": ["http://**", "http://*", "https://**", "https://*"]
+    "linux": {
+      "deb": {
+        "depends": []
       }
     }
   }

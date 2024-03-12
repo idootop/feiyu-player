@@ -18,7 +18,7 @@ import { kRoutePages } from '..';
 
 const _initAPP = async (rebuildRef: any) => {
   // 初始化桌面环境
-  await FeiyuDesktop.init?.();
+  await FeiyuDesktop.init();
   // 初始化APP配置信息
   await appConfig.init();
   // 注册 service worker（自动更新）

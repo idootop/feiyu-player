@@ -1,21 +1,19 @@
 [package]
 name = "feiyu-desktop"
 version = "1.0.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "一个漂亮得不像实力派的在线视频播放器 ✨"
+authors = ["Del.Wang"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1", features = [] }
+tauri-build = { version = "2.0.0-beta", features = [] }
 
 [dependencies]
-tauri = { version = "1", features = [ "os-all", "window-all", "process-all", "dialog-all", "http-all", "shell-all"] }
+tauri = { version = "2.0.0-beta", features = [] }
+tauri-plugin-os = "2.0.0-beta.2"
+tauri-plugin-http = "2.0.0-beta.2"
+tauri-plugin-shell = "2.0.0-beta.2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-
-[features]
-# This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!
-custom-protocol = ["tauri/custom-protocol"]
-

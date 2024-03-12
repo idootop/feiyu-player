@@ -1,12 +1,12 @@
-import { invoke } from "@tauri-apps/api/tauri";
-import { WebviewWindow } from "@tauri-apps/api/window";
+import { invoke } from "@tauri-apps/api/core";
+import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 
 declare class _FeiyuDesktop {
   isDesktop: boolean;
   isMac: boolean;
   isWindows: boolean;
   isLinux: boolean;
-  init?: () => Promise<void>;
+  init: () => Promise<void>;
   invoke?: typeof invoke;
   window?: WebviewWindow;
 }
