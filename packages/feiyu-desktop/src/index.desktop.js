@@ -1,6 +1,7 @@
-import { invoke } from "@tauri-apps/api/tauri";
-import { appWindow } from "@tauri-apps/api/window";
-import { type as osType } from "@tauri-apps/api/os";
+import { invoke } from "@tauri-apps/api/core";
+import { getCurrent } from "@tauri-apps/api/webviewWindow";
+import { type as osType } from "@tauri-apps/plugin-os";
+import { CORSRequestInterceptor } from "./cors";
 
 class _FeiyuDesktop {
   isDesktop = true;
@@ -12,8 +13,9 @@ class _FeiyuDesktop {
   window = null;
 
   async init() {
+    CORSRequestInterceptor.init();
     this.invoke = invoke;
-    this.window = appWindow;
+    this.window = getCurrent();
     const type = await osType();
     this.isMac = type === "Darwin";
     this.isWindows = type === "Windows_NT";

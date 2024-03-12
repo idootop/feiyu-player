@@ -1,11 +1,11 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
-  "productName": "Feiyu",
+  "productName": "feiyu",
   "version": "1.0.0",
   "identifier": "xbox.work.feiyu",
   "build": {
-    "beforeDevCommand": "cd ../feiyu && pnpm desktop && pnpm dev",
-    "beforeBuildCommand": "cd ../feiyu && pnpm desktop && pnpm build",
+    "beforeDevCommand": "cp -f src/index.desktop.js src/index.js && cd ../feiyu && pnpm i && pnpm dev",
+    "beforeBuildCommand": "cp -f src/index.desktop.js src/index.js && cd ../feiyu && pnpm i && pnpm build",
     "frontendDist": "../feiyu/dist",
     "devUrl": "http://localhost:3000"
   },
