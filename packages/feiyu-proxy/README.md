@@ -16,10 +16,10 @@ git clone https://github.com/idootop/feiyu-player && cd feiyu-player
 cd packages/feiyu-proxy-vercel
 
 # 安装并更新 Vercel CLI 到最新版本
-yarn global add vercel@latest
+pnpm install -g vercel@latest
 
 # 安装依赖，部署项目
-yarn && yarn deploy
+pnpm install && pnpm deploy
 ```
 
 执行最后一条命令后，Vercel CLI 会启动浏览器并引导你完成免费注册和部署过程。待部署完成后，你会获得一个访问地址，请将此地址复制，并按照下面的示例，正确填入订阅配置中。

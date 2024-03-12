@@ -5,9 +5,9 @@
   "scripts": {
     "pwa": "ts-node scripts/pwa",
     "dev": "vite --force",
-    "desktop": "yarn && cp -f node_modules/feiyu-desktop/src/desktop.js node_modules/feiyu-desktop/src/index.js",
-    "build": "vite build --force && yarn pwa",
-    "preview": "vite build --force && yarn pwa && vite preview"
+    "desktop": "pnpm i && cp -f node_modules/feiyu-desktop/src/desktop.js node_modules/feiyu-desktop/src/index.js",
+    "build": "vite build --force && pnpm pwa",
+    "preview": "vite build --force && pnpm pwa && vite preview"
   },
   "dependencies": {
     "@arco-design/web-react": "^2.59.1",
