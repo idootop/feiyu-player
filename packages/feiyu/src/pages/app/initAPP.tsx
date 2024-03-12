@@ -36,7 +36,9 @@ export const useInitAPP = () => {
   // APP 初始化
   const rebuildRef = useRebuildRef();
   useInit(() => {
-    _initAPP(rebuildRef);
+    _initAPP(rebuildRef).catch((e) => {
+      console.trace('❌ initAPP error', e);
+    });
   }, []);
 
   // APP 升级弹窗
