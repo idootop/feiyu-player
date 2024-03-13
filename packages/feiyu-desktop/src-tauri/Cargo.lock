@@ -788,6 +788,7 @@ dependencies = [
 name = "feiyu-desktop"
 version = "1.0.0"
 dependencies = [
+ "once_cell",
  "serde",
  "serde_json",
  "tauri",

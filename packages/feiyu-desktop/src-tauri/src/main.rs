@@ -7,15 +7,7 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
-use tauri::http::header::{
-    ACCESS_CONTROL_ALLOW_CREDENTIALS, ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS,
-    ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_SECURITY_POLICY, CONTENT_SECURITY_POLICY_REPORT_ONLY,
-    HOST, ORIGIN, REFERER, STRICT_TRANSPORT_SECURITY, X_FRAME_OPTIONS,
-};
-use tauri::http::{HeaderValue, Method, Request, Response, StatusCode};
 use tauri::Manager;
-use tauri_plugin_http::reqwest;
-
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_os::init())
@@ -28,22 +20,49 @@ fn main() {
         })
         .register_asynchronous_uri_scheme_protocol("x-http", move |_app, req, responder| {
             tauri::async_runtime::spawn(async move {
-                let resp = handle_request(req).await;
-                responder.respond(resp);
+                if let Some(resp) = handle_request(req).await {
+                    responder.respond(resp);
+                }
             });
         })
         .register_asynchronous_uri_scheme_protocol("x-https", move |_app, req, responder| {
             tauri::async_runtime::spawn(async move {
-                let resp = handle_request(req).await;
-                responder.respond(resp);
+                if let Some(resp) = handle_request(req).await {
+                    responder.respond(resp);
+                }
             });
         })
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![greet, cancel_request])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
 
-async fn handle_request(request: Request<Vec<u8>>) -> Response<Vec<u8>> {
+use once_cell::sync::Lazy;
+use std::collections::HashSet;
+use std::sync::{Arc, Mutex};
+static REQUEST_POOL: Lazy<Arc<Mutex<HashSet<u64>>>> =
+    Lazy::new(|| Arc::new(Mutex::new(HashSet::new())));
+
+#[tauri::command]
+fn cancel_request(request_id: u64) {
+    let mut pool = REQUEST_POOL.lock().unwrap();
+    pool.remove(&request_id);
+}
+
+static REQUEST_ID_HEADER: &str = "x-request-id";
+use tauri::http::{HeaderValue, Method, Request, Response, StatusCode};
+async fn handle_request(mut request: Request<Vec<u8>>) -> Option<Response<Vec<u8>>> {
+    let mut request_id: Option<u64> = None;
+
+    if let Some(request_id_header) = request.headers().get(REQUEST_ID_HEADER) {
+        if let Ok(id) = request_id_header.to_str().unwrap().parse::<u64>() {
+            request_id = Some(id);
+            // 请求开始，添加当前 request id 到请求池
+            REQUEST_POOL.lock().unwrap().insert(id);
+        }
+        request.headers_mut().remove(REQUEST_ID_HEADER);
+    }
+
     let mut response = match cors_request(request).await {
         Ok(res) => res,
         Err(err) => Response::builder()
@@ -52,6 +71,15 @@ async fn handle_request(request: Request<Vec<u8>>) -> Response<Vec<u8>> {
             .unwrap(),
     };
 
+    if let Some(id) = request_id {
+        if !REQUEST_POOL.lock().unwrap().contains(&id) {
+            // 请求已被取消,不再处理响应
+            return None;
+        }
+        // 请求结束，从请求池移除当前 request id
+        REQUEST_POOL.lock().unwrap().remove(&id);
+    }
+
     response
         .headers_mut()
         .insert(ACCESS_CONTROL_ALLOW_ORIGIN, HeaderValue::from_static("*"));
@@ -59,9 +87,15 @@ async fn handle_request(request: Request<Vec<u8>>) -> Response<Vec<u8>> {
     println!("✅ Status: {}", response.status());
     println!("✅ Headers: {:#?}", response.headers());
 
-    return response;
+    Some(response)
 }
 
+use tauri::http::header::{
+    ACCESS_CONTROL_ALLOW_CREDENTIALS, ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS,
+    ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_SECURITY_POLICY, CONTENT_SECURITY_POLICY_REPORT_ONLY,
+    HOST, ORIGIN, REFERER, STRICT_TRANSPORT_SECURITY, X_FRAME_OPTIONS,
+};
+use tauri_plugin_http::reqwest;
 async fn cors_request(
     request: Request<Vec<u8>>,
 ) -> Result<Response<Vec<u8>>, Box<dyn std::error::Error>> {
@@ -121,9 +155,12 @@ async fn cors_request(
             }
             Ok(resp.body(res.bytes().await?.to_vec()).unwrap())
         }
-        Err(err) => Ok(Response::builder()
-            .status(StatusCode::BAD_REQUEST)
-            .body(err.to_string().into_bytes())
-            .unwrap()),
+        Err(err) => {
+            println!("❌ Request Error: {:#?}", err);
+            Ok(Response::builder()
+                .status(StatusCode::BAD_REQUEST)
+                .body(err.to_string().into_bytes())
+                .unwrap())
+        }
     }
 }
