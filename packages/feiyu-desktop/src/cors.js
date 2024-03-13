@@ -6,14 +6,18 @@ class _CORSRequestInterceptor {
     fetch = this.interceptFetch.bind(this);
   }
 
-  init() {
+  _isEnableCORS = () => true;
+  init(callback) {
+    this._isEnableCORS = callback;
     console.log("✅ CORS Interceptor initialized");
   }
 
   async interceptFetch(input, init) {
     let url = input instanceof Request ? input.url : input.toString();
-    if (url.startsWith("https://") || url.startsWith("http://")) {
-      url = "x-" + url;
+    if (this._isEnableCORS()) {
+      if (url.startsWith("https://") || url.startsWith("http://")) {
+        url = "x-" + url;
+      }
     }
 
     console.log("🔥 Request", url);
