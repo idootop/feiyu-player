@@ -185,7 +185,7 @@ pnpm install && pnpm deploy
 
 ```json
 {
-  "proxy": "https://xxx.vercel.app/api/proxy"
+  "proxy": "https://example.vercel.app/api/proxy"
 }
 ```
 

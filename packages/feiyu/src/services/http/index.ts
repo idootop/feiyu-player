@@ -147,12 +147,18 @@ const post = async (url: string, data?: any, config?: HttpConfig) => {
   return result;
 };
 
+const getCurrentProxy = async () => {
+  const proxy = (await appConfig.get()).proxy;
+  if (!proxy || proxy === 'https://example.vercel.app/api/proxy') {
+    // 尚未设置 proxy
+    return undefined;
+  }
+  return proxy;
+};
+
 export const isValidProxy = async () => {
-  // todo 注意，仅在网页端需要设置 proxy（桌面端走原生请求）
-  const proxy = (await appConfig.get()).proxy
-  return proxy
-    ? isNotEmpty(await http.get(proxy))
-    : false;
+  const proxy = await getCurrentProxy();
+  return proxy ? isNotEmpty(await http.get(proxy)) : false;
 };
 
 export const http = {
@@ -166,9 +172,13 @@ export const http = {
     /**
      * Proxy 请求默认开启 cache
      */
-    async get(url: string, query?: Record<string, any>, config?: HttpConfig): Promise<any> {
+    async get(
+      url: string,
+      query?: Record<string, any>,
+      config?: HttpConfig,
+    ): Promise<any> {
       const { headers = {}, cache = true, signal } = config ?? {};
-      const proxy = (await appConfig.get()).proxy
+      const proxy = await getCurrentProxy();
       if (!proxy) {
         return get(url, query, config);
       }
@@ -184,7 +194,7 @@ export const http = {
      */
     async post(url: string, data?: any, config?: HttpConfig): Promise<any> {
       const { headers = {}, cache = true, signal } = config ?? {};
-      const proxy = (await appConfig.get()).proxy
+      const proxy = await getCurrentProxy();
       if (!proxy) {
         return post(url, data, config);
       }
