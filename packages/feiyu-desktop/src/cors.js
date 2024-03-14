@@ -16,35 +16,40 @@ class _CORSRequestInterceptor {
   }
 
   async interceptFetch(input, init) {
-    let request_id = 0;
+    let id = 0;
     let url = input instanceof Request ? input.url : input.toString();
-    const enableCORS =
-      this._isEnableCORS() &&
-      (url.startsWith("https://") || url.startsWith("http://"));
+    const enableCORS = this._isEnableCORS() && /^(?:x-)?https?:\/\//i.test(url);
     if (enableCORS) {
-      url = "x-" + url;
-      request_id = this._request_id++;
+      if (!url.startsWith("x-")) {
+        url = "x-" + url;
+      }
+      id = this._request_id++;
       init = {
         ...init,
         headers: {
           ...init?.headers,
-          "x-request-id": request_id.toString(),
+          "x-request-id": id.toString(),
         },
       };
     }
 
-    console.log("🔥 Request", url);
-
     try {
+      this._log(id, "🔥 Request", url);
       const response = await this._originalFetch(url, init);
-      console.log("✅ Response", response);
+      this._log(id, "✅ Response", response);
       return response;
     } catch (error) {
-      console.error("❌ Fetch failed", error);
-      if (request_id) {
-        await invoke("cancel_cors_request", { id: request_id });
+      this._log(id, "❌ Fetch failed", error);
+      if (id) {
+        await invoke("cancel_cors_request", { id });
       }
       return error;
+    }
+  }
+
+  _log(id, text, data) {
+    if (id) {
+      console.log(text + " " + id, data);
     }
   }
 }

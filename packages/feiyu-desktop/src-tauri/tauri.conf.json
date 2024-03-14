@@ -24,7 +24,7 @@
       }
     ],
     "security": {
-      "csp": "default-src x-http: x-https: blob: data: filesystem: ws: http: https: 'unsafe-eval' 'unsafe-inline'"
+      "csp": "default-src x-http: x-https: 'self'; connect-src ipc: http://ipc.localhostdefault-src"
     }
   },
   "bundle": {
