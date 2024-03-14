@@ -42,7 +42,7 @@ class _CORSRequestInterceptor {
     } catch (error) {
       console.error("❌ Fetch failed", error);
       if (request_id) {
-        await invoke("cancel_request", { id: request_id });
+        await invoke("cancel_cors_request", { id: request_id });
       }
       return error;
     }
