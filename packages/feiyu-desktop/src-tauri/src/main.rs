@@ -44,26 +44,35 @@ static REQUEST_POOL: Lazy<Arc<Mutex<HashSet<u64>>>> =
     Lazy::new(|| Arc::new(Mutex::new(HashSet::new())));
 
 #[tauri::command]
-fn cancel_request(request_id: u64) {
+fn cancel_request(id: u64) {
     let mut pool = REQUEST_POOL.lock().unwrap();
-    pool.remove(&request_id);
+    pool.remove(&id);
+    println!("❌ Request {}: Canceled", id);
 }
 
 static REQUEST_ID_HEADER: &str = "x-request-id";
 use tauri::http::{HeaderValue, Method, Request, Response, StatusCode};
 async fn handle_request(mut request: Request<Vec<u8>>) -> Option<Response<Vec<u8>>> {
     let mut request_id: Option<u64> = None;
-
     if let Some(request_id_header) = request.headers().get(REQUEST_ID_HEADER) {
         if let Ok(id) = request_id_header.to_str().unwrap().parse::<u64>() {
             request_id = Some(id);
-            // 请求开始，添加当前 request id 到请求池
-            REQUEST_POOL.lock().unwrap().insert(id);
         }
-        request.headers_mut().remove(REQUEST_ID_HEADER);
+    }
+    if request_id == None {
+        return Some(
+            Response::builder()
+                .status(StatusCode::BAD_REQUEST)
+                .body(Vec::new())
+                .unwrap(),
+        );
     }
 
-    let mut response = match cors_request(request).await {
+    // 请求开始，添加当前 request id 到请求池
+    REQUEST_POOL.lock().unwrap().insert(request_id?);
+    request.headers_mut().remove(REQUEST_ID_HEADER);
+
+    let mut response = match cors_request(request, request_id?).await {
         Ok(res) => res,
         Err(err) => Response::builder()
             .status(StatusCode::BAD_REQUEST)
@@ -71,14 +80,12 @@ async fn handle_request(mut request: Request<Vec<u8>>) -> Option<Response<Vec<u8
             .unwrap(),
     };
 
-    if let Some(id) = request_id {
-        if !REQUEST_POOL.lock().unwrap().contains(&id) {
-            // 请求已被取消,不再处理响应
-            return None;
-        }
-        // 请求结束，从请求池移除当前 request id
-        REQUEST_POOL.lock().unwrap().remove(&id);
+    if !REQUEST_POOL.lock().unwrap().contains(&request_id?) {
+        // 请求已被取消,不再处理响应
+        return None;
     }
+    // 请求结束，从请求池移除当前 request id
+    REQUEST_POOL.lock().unwrap().remove(&request_id?);
 
     response
         .headers_mut()
@@ -98,6 +105,7 @@ use tauri::http::header::{
 use tauri_plugin_http::reqwest;
 async fn cors_request(
     request: Request<Vec<u8>>,
+    request_id: u64,
 ) -> Result<Response<Vec<u8>>, Box<dyn std::error::Error>> {
     let url = request
         .uri()
@@ -128,8 +136,8 @@ async fn cors_request(
     headers.insert(REFERER, HeaderValue::from_str(&url).unwrap());
     headers.insert(ORIGIN, HeaderValue::from_str(&origin).unwrap());
 
-    println!("🔥 Request {:?}", url);
-    println!("🔥 Headers: {:#?}", headers);
+    println!("🔥 Request {}: {:?}", request_id, url);
+    println!("🔥 Headers {}: {:#?}", request_id, headers);
 
     let client = reqwest::Client::new();
     match client
@@ -156,7 +164,7 @@ async fn cors_request(
             Ok(resp.body(res.bytes().await?.to_vec()).unwrap())
         }
         Err(err) => {
-            println!("❌ Request Error: {:#?}", err);
+            println!("❌ Request {}: {:?}", request_id, err);
             Ok(Response::builder()
                 .status(StatusCode::BAD_REQUEST)
                 .body(err.to_string().into_bytes())
