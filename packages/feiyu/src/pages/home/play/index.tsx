@@ -76,7 +76,7 @@ const usePlayIPFSData = (props: { cid?: string; data?: any }) => {
   return dataRef.current;
 };
 
-const Play = () => {
+const PlayerPage = () => {
   /**
    * query: cid[电影详情数据ipfs cid], ep[当前播放集数]
    * data: movie[电影详情数据]
@@ -224,10 +224,10 @@ const Play = () => {
 
   const $PlayList = (
     <Column
+      alignItems="start"
       width={isMobile ? '100%' : '320px'}
       height={isMobile ? undefined : playerSize?.height}
       maxHeight={isMobile ? undefined : playerSize?.height}
-      alignItems="start"
       padding={isMobile ? '10px 0 0 0' : '0 0 0 20px'}
     >
       <Row width="100%">
@@ -280,7 +280,11 @@ const Play = () => {
       ) : (
         <Box />
       )}
-      <Expand className="hide-scrollbar" overflowY="scroll" margin="10px 0 0 0">
+      <Expand
+        className="normal-scrollbar"
+        overflowY="scroll"
+        margin="10px 0 0 0"
+      >
         <Box width="100%" height="100%">
           <Box
             width="100%"
@@ -436,4 +440,4 @@ const MovieList = () => {
   );
 };
 
-export default <Play />;
+export default <PlayerPage />;

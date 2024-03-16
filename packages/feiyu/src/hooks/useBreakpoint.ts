@@ -1,7 +1,7 @@
-import { useXConsumer, XSta } from "xsta";
+import { useXConsumer, XSta } from 'xsta';
 
-const __getBreakpoint = () => {
-  const width = document.body.clientWidth;
+const _getBreakpoint = () => {
+  const width = window.innerWidth;
   if (width < 576) {
     return { isXS: true, isMobile: true };
   }
@@ -23,13 +23,6 @@ const __getBreakpoint = () => {
   return { isXXXL: true, isPC: true };
 };
 
-const _getBreakpoint = () => {
-  const res = __getBreakpoint();
-  const width = document.body.clientWidth;
-  const height = document.body.clientHeight;
-  return { ...res, width, height };
-};
-
 interface DeviceSize {
   isMobile: boolean;
   isPC: boolean;
@@ -41,15 +34,13 @@ interface DeviceSize {
   isXL: boolean;
   isXXL: boolean;
   isXXXL: boolean;
-  width: number;
-  height: number;
 }
 
 const kScreenReSizeListenerKey = 'kScreenReSizeListenerKey';
 let _initScreenReSizeListener = false;
 const initScreenReSizeListener = () => {
   if (!_initScreenReSizeListener) {
-    // 全剧只初始化一次
+    // 全局只初始化一次
     setInterval(() => {
       XSta.set(kScreenReSizeListenerKey, _getBreakpoint());
     }, 100);

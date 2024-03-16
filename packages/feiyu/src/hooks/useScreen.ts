@@ -3,15 +3,15 @@ import { useEffect, useRef, useState } from 'react';
 export const useScreen = () => {
   const ref = useRef<any>();
   const [screen, setScreen] = useState({
-    width: document.body.clientWidth,
-    height: document.body.clientHeight,
+    width: window.innerWidth,
+    height: window.innerHeight,
   });
   ref.current = setScreen;
 
   const _handleResize = () => {
     ref.current({
-      width: document.body.clientWidth,
-      height: document.body.clientHeight,
+      width: window.innerWidth,
+      height: window.innerHeight,
     });
   };
 

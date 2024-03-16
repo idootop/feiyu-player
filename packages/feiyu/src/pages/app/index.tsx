@@ -3,21 +3,18 @@ import './style.css';
 import { Layout } from '@arco-design/web-react';
 
 import { Box, BoxProps } from '@/components/Box';
-import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { APPConfigModal, useInitAPPModals } from '@/overlays/APPConfigModal';
 import { colors } from '@/styles/colors';
 
 import { useDisclaimer, useInitAPP } from './initAPP';
 import { kHeaderHeight, MyHeader } from './MyHeader';
 import { RootPages } from './RootPages';
-import { kSideWidth, SideDrawer, SideMenu } from './SideMenu';
+import { kSideWidth, SideDrawer, SideMenu, useSideMenu } from './SideMenu';
 
 const Sider = Layout.Sider;
 const Content = Layout.Content;
 
 export const App = () => {
-  const { width } = useBreakpoint();
-
   // 初始化APP
   useInitAPP();
 
@@ -27,27 +24,26 @@ export const App = () => {
   // 免责声明弹窗
   const $Disclaimer = useDisclaimer();
 
+  const { hideSideMenu, collapsed } = useSideMenu();
+
   return (
     <>
       <MyHeader />
       <SideDrawer />
       {$Disclaimer}
       <APPConfigModal />
-      <Layout style={{ height: '100vh' }}>
+      <Layout>
         <Sider
+          collapsed={collapsed}
           width={kSideWidth}
           style={{
             height: '100vh',
-            display: width < 1250 ? 'none' : 'block',
+            display: hideSideMenu ? 'none' : 'block',
           }}
         >
           <SideMenu />
         </Sider>
-        <Content
-          style={{
-            background: colors.bg,
-          }}
-        >
+        <Content style={{ background: colors.bg }}>
           <Box width="100%" height="100vh">
             <RootPages />
           </Box>

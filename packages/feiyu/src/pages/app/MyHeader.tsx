@@ -2,7 +2,6 @@ import { Message } from '@arco-design/web-react';
 
 import { Expand, Row } from '@/components/Flex';
 import { SwitchDark } from '@/components/SwitchDark';
-import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useIsFullscreen } from '@/hooks/useIsFullscreen';
 import { colors } from '@/styles/colors';
 
@@ -15,8 +14,7 @@ export const kHeaderHeight = '60px';
 
 export const MyHeader = () => {
   const { jumpToIndex, isIndexPage } = useHomePages();
-  const { width } = useBreakpoint();
-  const { openSideMenu } = useSideMenu();
+  const { hideSideMenu, openSideDrawer } = useSideMenu();
   const { showTitleBar } = useIsFullscreen();
 
   return (
@@ -45,9 +43,9 @@ export const MyHeader = () => {
           marginTop={showTitleBar ? '14px' : undefined}
           cursor="pointer"
           onClick={() => {
-            if (width < 1250) {
+            if (hideSideMenu) {
               // 移动端点击打开菜单栏
-              openSideMenu();
+              openSideDrawer();
             } else {
               if (!isIndexPage) {
                 jumpToIndex(); // 回到首页

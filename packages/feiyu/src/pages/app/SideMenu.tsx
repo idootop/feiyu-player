@@ -1,8 +1,9 @@
 import { Drawer, Menu, Message } from '@arco-design/web-react';
-import { useXState } from 'xsta';
+import { useXState, XSta } from 'xsta';
 
 import { Box } from '@/components/Box';
 import { Row } from '@/components/Flex';
+import { useScreen } from '@/hooks/useScreen';
 import { kRoutePages } from '@/pages';
 import { usePages } from '@/services/routes/page';
 import { colors } from '@/styles/colors';
@@ -11,50 +12,34 @@ import { kHeaderHeight } from './MyHeader';
 
 const MenuItem = Menu.Item;
 
-export const kSideWidth = 220;
-const kSideMenu = 'showSideMenu';
-
+export const kSideWidth = 200;
+const kShowSideDrawer = 'showSideDrawer';
+const closeSideDrawer = () => XSta.set(kShowSideDrawer, false);
 export const useSideMenu = () => {
-  const [showSideMenu, setShowSideMenu] = useXState(kSideMenu);
+  const [showSideDrawer, setShowSideDrawer] = useXState(kShowSideDrawer);
+  const { width } = useScreen();
+  const { location } = usePages();
+  const hideSideMenu =
+    width < 650 || // 移动端
+    (location === '/home/play' && width < 1250); // 播放页
   return {
-    isShowSideMenu: showSideMenu,
-    openSideMenu() {
-      setShowSideMenu(true);
+    collapsed: width < 910,
+    hideSideMenu,
+    showSideDrawer,
+    openSideDrawer() {
+      setShowSideDrawer(true);
     },
-    closeSideMenu() {
-      setShowSideMenu(false);
+    closeSideDrawer() {
+      setShowSideDrawer(false);
     },
   };
 };
 
-export const SideMenu = () => <MyMenu key="SideMenu" />;
-
-export const SideDrawer = () => {
-  const [showSideMenu, setShowSideMenu] = useXState(kSideMenu);
-  return (
-    <Drawer
-      width={kSideWidth}
-      title={null}
-      footer={null}
-      closable={false}
-      visible={showSideMenu}
-      placement="left"
-      onCancel={() => {
-        setShowSideMenu(false);
-      }}
-      mountOnEnter
-      unmountOnExit
-    >
-      <MyMenu key="SideDrawer" showLogo />
-    </Drawer>
-  );
-};
-
-const MyMenu = (props?: { showLogo?: boolean }) => {
-  const { showLogo } = props ?? {};
+const MyMenu = (props?: { isDrawer?: boolean }) => {
+  const { isDrawer = false } = props ?? {};
+  const showLogo = isDrawer;
   const { currentPage, jumpToPage, isIndexPage } = usePages();
   const { jumpToIndex } = usePages({ parent: '/home', index: 'hot' });
-  const { closeSideMenu } = useSideMenu();
   return (
     <Menu
       mode="vertical"
@@ -74,7 +59,7 @@ const MyMenu = (props?: { showLogo?: boolean }) => {
             cursor="pointer"
             onClick={() => {
               // 收起侧边栏
-              closeSideMenu();
+              closeSideDrawer();
               if (!isIndexPage) {
                 jumpToIndex(); // 回到首页
               } else {
@@ -104,7 +89,7 @@ const MyMenu = (props?: { showLogo?: boolean }) => {
             key={page.key}
             onClick={() => {
               // 收起侧边栏
-              closeSideMenu();
+              closeSideDrawer();
               // 跳转页面
               const available = ['home', 'settings'].includes(page.key);
               if (available) {
@@ -124,5 +109,29 @@ const MyMenu = (props?: { showLogo?: boolean }) => {
         );
       })}
     </Menu>
+  );
+};
+
+export const SideMenu = () => <MyMenu key="SideMenu" />;
+
+export const SideDrawer = () => {
+  const [showSideDrawer, setShowSideDrawer] = useXState(kShowSideDrawer);
+  return (
+    <Drawer
+      width={kSideWidth}
+      height="100vh"
+      title={null}
+      footer={null}
+      closable={false}
+      visible={showSideDrawer}
+      placement="left"
+      onCancel={() => {
+        setShowSideDrawer(false);
+      }}
+      mountOnEnter
+      unmountOnExit
+    >
+      <MyMenu key="SideDrawer" isDrawer />
+    </Drawer>
   );
 };
