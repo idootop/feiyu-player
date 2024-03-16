@@ -45,6 +45,13 @@ const MyMenu = (props?: { isDrawer?: boolean }) => {
       mode="vertical"
       selectedKeys={[currentPage!]}
       style={{ height: '100%' }}
+      tooltipProps={{
+        mini: true,
+        prefixCls: 'feiyu',
+        style: {
+          zIndex: 11,
+        },
+      }}
     >
       <Row
         style={{
@@ -87,6 +94,7 @@ const MyMenu = (props?: { isDrawer?: boolean }) => {
         return (
           <MenuItem
             key={page.key}
+            renderItemInTooltip={() => page.title}
             onClick={() => {
               // 收起侧边栏
               closeSideDrawer();
