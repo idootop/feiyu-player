@@ -33,6 +33,13 @@ export const range = (start: number, end?: number) => {
   return Array.from({ length: end - start }, (_, index) => start + index);
 };
 
+/**
+ * clamp(-1,0,1)=0
+ */
+export function clamp(num: number, min: number, max: number): number {
+  return num < max ? (num > min ? num : min) : max;
+}
+
 export const toSet = <T = any>(datas: T[], byKey?: (e: T) => any) => {
   if (byKey) {
     const keys = {};

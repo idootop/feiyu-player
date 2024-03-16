@@ -13,17 +13,18 @@ import { Column, Expand, Row } from '@/components/Flex';
 import { Loading } from '@/components/Loading';
 import { SearchEmpty } from '@/components/SearchEmpty';
 import { Text } from '@/components/Text';
-import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useDarkMode } from '@/hooks/useDarkMode';
 import { useInit } from '@/hooks/useInit';
 import { Size, useMeasure } from '@/hooks/useMeasure';
 import { useRebuild, useRebuildRef } from '@/hooks/useRebuild';
+import { useScreen } from '@/hooks/useScreen';
 import { PageBuilder } from '@/pages/app';
 import { ipfs } from '@/services/ipfs';
 import { addSearchParams } from '@/services/routes/location';
 import { usePage } from '@/services/routes/page';
 import { router } from '@/services/routes/router';
 import { colors } from '@/styles/colors';
+import { clamp } from '@/utils/base';
 import { isEqual } from '@/utils/diff';
 import { FeiyuMovie } from '@/utils/feiyu';
 import { isEmpty, isNotEmpty } from '@/utils/is';
@@ -88,8 +89,11 @@ const PlayerPage = () => {
   const { pageId, movie: currentData } = pageData ?? {};
 
   const { isDarkMode } = useDarkMode();
-  const { isMobile } = useBreakpoint();
   const { jumpToPage } = useHomePages();
+
+  const { width } = useScreen();
+  const isMobile = width < 750;
+  const descWidth = clamp(320 - (960 - width), 180, 320);
 
   const {
     loading: _loading,
@@ -225,7 +229,7 @@ const PlayerPage = () => {
   const $PlayList = (
     <Column
       alignItems="start"
-      width={isMobile ? '100%' : '320px'}
+      width={isMobile ? '100%' : descWidth + 'px'}
       height={isMobile ? undefined : playerSize?.height}
       maxHeight={isMobile ? undefined : playerSize?.height}
       padding={isMobile ? '10px 0 0 0' : '0 0 0 20px'}
@@ -251,7 +255,15 @@ const PlayerPage = () => {
           : movie?.site}
       </Text>
       {isNotEmpty(movie?.desc) ? (
-        <Text width="100%" maxLines={2} expandable padding="5px 0">
+        <Text
+          className="normal-scrollbar"
+          overflowX="hidden"
+          overflowY="scroll"
+          width="100%"
+          maxLines={2}
+          expandable
+          padding="5px 0"
+        >
           {movie?.desc}
         </Text>
       ) : (
@@ -282,6 +294,7 @@ const PlayerPage = () => {
       )}
       <Expand
         className="normal-scrollbar"
+        overflowX="hidden"
         overflowY="scroll"
         margin="10px 0 0 0"
       >
