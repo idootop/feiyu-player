@@ -1,0 +1,15 @@
+.titlebar {
+  display: flex;
+  gap: 6px;
+  position: fixed;
+  top: 8px;
+  left: 8px;
+}
+
+.feiyu-content {
+  color: #fff;
+  background: #1f1f1f;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}

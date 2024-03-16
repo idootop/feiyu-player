@@ -1,3 +1,10 @@
+.app-header {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .glass-effect {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
@@ -54,6 +61,7 @@ div[data-type='offscreen-wrapper'] {
   .arco-notification {
     width: 100% !important;
   }
+
   .arco-notification-wrapper-bottomRight {
     width: 100%;
     bottom: 0 !important;

@@ -13,6 +13,10 @@
     "tray:default",
     "shell:allow-open",
     "window:allow-close",
+    "window:allow-minimize",
+    "window:allow-toggle-maximize",
+    "window:allow-start-dragging",
+    "window:allow-is-fullscreen",
     "window:allow-set-fullscreen",
     "os:allow-os-type"
   ]

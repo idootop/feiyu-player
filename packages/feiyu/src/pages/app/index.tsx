@@ -36,7 +36,10 @@ export const App = () => {
       <Layout style={{ height: '100vh' }}>
         <Sider
           width={kSideWidth}
-          style={{ display: width < 1250 ? 'none' : 'block' }}
+          style={{
+            height: '100vh',
+            display: width < 1250 ? 'none' : 'block',
+          }}
         >
           <SideMenu />
         </Sider>

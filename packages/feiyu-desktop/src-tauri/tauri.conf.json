@@ -13,14 +13,14 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "fullscreen": false,
-        "height": 600,
-        "width": 800,
-        "resizable": true,
         "title": "飞鱼",
-        "visible": true,
+        "width": 800,
+        "height": 600,
+        "minWidth": 300,
+        "minHeight": 600,
         "center": true,
-        "label": "main"
+        "hiddenTitle": true,
+        "decorations": false
       }
     ],
     "security": {
