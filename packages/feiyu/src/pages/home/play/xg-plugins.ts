@@ -182,18 +182,22 @@ export class FullScreen extends XgFullScreen {
     }
     const player = document.getElementById('player');
     const header = document.getElementsByClassName('app-header')[0];
-    const drawer = document.getElementsByClassName('arco-layout-sider')[0];
+    const drawers = document.getElementsByClassName('arco-layout-sider');
 
     await FeiyuDesktop.window?.setFullscreen(fullscreen!);
 
     if (fullscreen) {
       player?.classList.add('player-fullscreen');
       header?.classList.add('hide-fullscreen');
-      drawer?.classList.add('hide-fullscreen');
+      Array.from(drawers).forEach((drawer) => {
+        drawer.classList.add('hide-fullscreen');
+      });
     } else {
       player?.classList.remove('player-fullscreen');
       header?.classList.remove('hide-fullscreen');
-      drawer?.classList.remove('hide-fullscreen');
+      Array.from(drawers).forEach((drawer) => {
+        drawer.classList.remove('hide-fullscreen');
+      });
     }
   }
 }
