@@ -14,8 +14,8 @@
     "windows": [
       {
         "title": "飞鱼",
-        "width": 800,
-        "height": 600,
+        "width": 950,
+        "height": 650,
         "minWidth": 300,
         "minHeight": 600,
         "center": true,

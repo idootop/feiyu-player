@@ -1,0 +1,33 @@
+.hide-scrollbar {
+  scrollbar-width: none !important;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+
+.normal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.normal-scrollbar:hover {
+  scrollbar-color: var(--color-neutral-3) transparent;
+}
+
+.normal-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.normal-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: transparent;
+}
+
+.normal-scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.normal-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: var(--color-neutral-3);
+}
