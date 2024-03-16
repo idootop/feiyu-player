@@ -4,6 +4,8 @@ import XgFullScreen from 'xgplayer/es/plugins/fullscreen';
 import XgPlayNext from 'xgplayer/es/plugins/playNext';
 import XgReplay from 'xgplayer/es/plugins/replay';
 
+import { setPlayerFullScreenCallback } from '@/hooks/useIsFullscreen';
+
 export class Loading extends Plugin {
   static get pluginName() {
     return 'loading';
@@ -141,14 +143,15 @@ export class FullScreen extends XgFullScreen {
     super.afterCreate();
     this.on(Events.USER_ACTION, ({ action }) => {
       if (action === 'switch_fullscreen') {
-        this.toggleDesktopFullScreen();
+        this.setPlayerFullScreen();
       }
     });
     this.on(Events.SHORTCUT, ({ key }) => {
       if (key === 'esc') {
-        this.toggleDesktopFullScreen(false);
+        this.setPlayerFullScreen(false);
       }
     });
+    setPlayerFullScreenCallback(this.setPlayerFullScreen);
   }
 
   toggleFullScreen = (e) => {
@@ -162,7 +165,7 @@ export class FullScreen extends XgFullScreen {
         }
         const newFullScreen = await FeiyuDesktop.window?.isFullscreen();
         if (newFullScreen === oldFullScreen) {
-          await this.toggleDesktopFullScreen(!oldFullScreen);
+          await this.setPlayerFullScreen(!oldFullScreen);
         }
       });
     } else {
@@ -170,7 +173,7 @@ export class FullScreen extends XgFullScreen {
     }
   };
 
-  async toggleDesktopFullScreen(fullscreen?: boolean) {
+  async setPlayerFullScreen(fullscreen?: boolean) {
     if (!FeiyuDesktop.isDesktop) {
       return;
     }

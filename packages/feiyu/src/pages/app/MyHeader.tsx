@@ -3,12 +3,13 @@ import { Message } from '@arco-design/web-react';
 import { Expand, Row } from '@/components/Flex';
 import { SwitchDark } from '@/components/SwitchDark';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
+import { useIsFullscreen } from '@/hooks/useIsFullscreen';
 import { colors } from '@/styles/colors';
 
 import { useHomePages } from '../home';
 import { SearchButton } from './SearchButton';
 import { useSideMenu } from './SideMenu';
-import { TitleBar, useIsFullscreen } from './TitleBar';
+import { TitleBar } from './TitleBar';
 
 export const kHeaderHeight = '60px';
 

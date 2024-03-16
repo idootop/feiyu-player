@@ -2,9 +2,8 @@ import './styles.css';
 
 import { Tooltip } from '@arco-design/web-react';
 import { FeiyuDesktop } from 'feiyu-desktop';
-import { useXState } from 'xsta';
 
-import { useInit } from '@/hooks/useInit';
+import { useIsFullscreen } from '@/hooks/useIsFullscreen';
 
 const TitleButton = (props: {
   color: string;
@@ -35,24 +34,9 @@ const TitleButton = (props: {
     </Tooltip>
   );
 };
-export const useIsFullscreen = () => {
-  const [isFullscreen, setIsFullscreen] = useXState('kIsFullscreen');
-  const showTitleBar = FeiyuDesktop.isDesktop && !isFullscreen;
-  return { isFullscreen, setIsFullscreen, showTitleBar };
-};
 
 export const TitleBar = () => {
-  const { showTitleBar, setIsFullscreen } = useIsFullscreen();
-  useInit(() => {
-    FeiyuDesktop.window?.onResized(() => {
-      const maybeIsFullscreen = window.innerWidth === window.screen.availWidth;
-      if (maybeIsFullscreen) {
-        FeiyuDesktop.window?.isFullscreen().then(setIsFullscreen);
-      } else {
-        setIsFullscreen(false);
-      }
-    });
-  }, []);
+  const { showTitleBar } = useIsFullscreen();
   return showTitleBar ? (
     <div data-tauri-drag-region className={'titlebar app-header'}>
       <TitleButton
