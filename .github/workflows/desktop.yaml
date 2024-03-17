@@ -45,7 +45,7 @@ jobs:
         if: matrix.platform == 'ubuntu-20.04'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
+          sudo apt-get install -y libglib2.0-dev libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
 
       - name: Install feiyu web dependencies
         run: cd packages/feiyu && pnpm i
@@ -65,7 +65,7 @@ jobs:
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
           # lib
           PKG_CONFIG_SYSROOT_DIR: '/'
-          PKG_CONFIG_PATH: '/usr/lib/x86_64-linux-gnu/pkgconfig/:$PKG_CONFIG_PATH'
+          PKG_CONFIG_PATH: '/usr/lib/x86_64-linux-gnu/pkgconfig/:${{ env.PKG_CONFIG_PATH }}'
         with:
           tagName: "v__VERSION__"
           releaseName: "v__VERSION__"
