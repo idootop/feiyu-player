@@ -3,6 +3,7 @@ import { IconLeft, IconSort } from '@arco-design/web-react/icon';
 import { useEffect } from 'react';
 import { useXConsumer, XSta } from 'xsta';
 
+import { PageBuilder } from '@/app';
 import { Box } from '@/components/Box';
 import { Center, Column, Expand, Row } from '@/components/Flex';
 import { LazyImage } from '@/components/LazyImage/LazyImage';
@@ -16,7 +17,6 @@ import { useDarkMode } from '@/hooks/useDarkMode';
 import { newID } from '@/hooks/useID';
 import { useInit } from '@/hooks/useInit';
 import { showAPPConfigModal } from '@/overlays/APPConfigModal';
-import { PageBuilder } from '@/pages/app';
 import { isValidProxy } from '@/services/http';
 import { usePage } from '@/services/routes/page';
 import { router } from '@/services/routes/router';
@@ -25,7 +25,7 @@ import { isEqual } from '@/utils/diff';
 import { FeiyuMovie } from '@/utils/feiyu';
 import { useFeiyuSearch } from '@/utils/feiyu/useFeiyuSearch';
 
-import { useHomePages } from '..';
+import { useHomePages } from '../useHomePages';
 
 export const kCurrentSearchMovies = 'kCurrentSearchMovies';
 

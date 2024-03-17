@@ -1,6 +1,6 @@
 import { Box } from '@/components/Box';
 
-import { PageBuilder } from '../app';
+import { PageBuilder } from '../../app';
 
 const Playlist = () => {
   return (

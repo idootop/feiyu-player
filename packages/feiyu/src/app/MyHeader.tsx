@@ -5,7 +5,7 @@ import { SwitchDark } from '@/components/SwitchDark';
 import { useIsFullscreen } from '@/hooks/useIsFullscreen';
 import { colors } from '@/styles/colors';
 
-import { useHomePages } from '../home';
+import { useHomePages } from '../pages/home/useHomePages';
 import { SearchButton } from './SearchButton';
 import { useSideMenu } from './SideMenu';
 import { TitleBar } from './TitleBar';

@@ -3,7 +3,6 @@ import {
   getPageBuilder,
   RoutePage,
   useFallbackToIndex,
-  usePages,
 } from '@/services/routes/page';
 
 // @ts-ignore
@@ -21,13 +20,6 @@ const pages: RoutePage[] = [
 
 const parent = '/home/';
 const index = pages[0].key;
-
-export const useHomePages = () => {
-  return usePages({
-    parent,
-    index,
-  });
-};
 
 export const useHomeIndexFallback = () => {
   return useFallbackToIndex(pages, { parent, index });

@@ -8,6 +8,7 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { useXConsumer } from 'xsta';
 
+import { PageBuilder } from '@/app';
 import { Box } from '@/components/Box';
 import { Column, Expand, Row } from '@/components/Flex';
 import { Loading } from '@/components/Loading';
@@ -18,7 +19,6 @@ import { useInit } from '@/hooks/useInit';
 import { Size, useMeasure } from '@/hooks/useMeasure';
 import { useRebuild, useRebuildRef } from '@/hooks/useRebuild';
 import { useScreen } from '@/hooks/useScreen';
-import { PageBuilder } from '@/pages/app';
 import { ipfs } from '@/services/ipfs';
 import { addSearchParams } from '@/services/routes/location';
 import { usePage } from '@/services/routes/page';
@@ -29,8 +29,8 @@ import { isEqual } from '@/utils/diff';
 import { FeiyuMovie } from '@/utils/feiyu';
 import { isEmpty, isNotEmpty } from '@/utils/is';
 
-import { useHomePages } from '..';
 import { kCurrentSearchMovies, kPlayPageId, MovieItem } from '../search';
+import { useHomePages } from '../useHomePages';
 import { Player } from './player';
 
 export const isPlayPage = () => router.current === '/home/play';

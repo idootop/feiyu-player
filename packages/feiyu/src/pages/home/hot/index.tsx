@@ -2,6 +2,7 @@ import './style.css';
 
 import { Rate } from '@arco-design/web-react';
 
+import { PageBuilder } from '@/app';
 import { Box } from '@/components/Box';
 import { Column, Row } from '@/components/Flex';
 import { LazyImage } from '@/components/LazyImage/LazyImage';
@@ -9,12 +10,11 @@ import { Loading } from '@/components/Loading';
 import { SearchEmpty } from '@/components/SearchEmpty';
 import { Text } from '@/components/Text';
 import { useInit } from '@/hooks/useInit';
-import { PageBuilder } from '@/pages/app';
 import { colors } from '@/styles/colors';
 import { DoubanHotMovie } from '@/utils/douban';
 import { useSearchHotMovies } from '@/utils/douban/useSearchHotMovies';
 
-import { useHomePages } from '..';
+import { useHomePages } from '../useHomePages';
 
 const Hot = () => {
   const {

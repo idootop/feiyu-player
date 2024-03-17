@@ -29,7 +29,7 @@ import { DoubanSearchDetail } from '@/utils/douban';
 import { useSearchKeywords } from '@/utils/douban/useSearchKeywords';
 import { isEmpty } from '@/utils/is';
 
-import { useHomePages } from '../home';
+import { useHomePages } from '../pages/home/useHomePages';
 
 const kShowSearchModal = 'showSearchModal';
 export const SearchButton = () => {

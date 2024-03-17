@@ -37,7 +37,7 @@ import { colors } from '@/styles/colors';
 import { isEmpty, isNotEmpty } from '@/utils/is';
 import { formateDate } from '@/utils/string';
 
-import { PageBuilder } from '../app';
+import { PageBuilder } from '../../app';
 import {
   AddSubscribeModal,
   CopyModal,

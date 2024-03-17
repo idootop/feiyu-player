@@ -15,7 +15,7 @@ import { cache } from '@/services/cache';
 import { useFallbackToIndex } from '@/services/routes/page';
 import { storage } from '@/services/storage/storage';
 
-import { kRoutePages } from '..';
+import { kRoutePages } from '../pages';
 
 const _initAPP = async (rebuildRef: any) => {
   // 初始化桌面环境
