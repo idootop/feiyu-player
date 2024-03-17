@@ -46,11 +46,6 @@ jobs:
       - name: Setup rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Rust cache
-        uses: swatinem/rust-cache@v2
-        with:
-          workspaces: "./packages/feiyu-desktop/src-tauri -> target"
-
       - name: Install feiyu web dependencies
         run: cd packages/feiyu && pnpm i
 
