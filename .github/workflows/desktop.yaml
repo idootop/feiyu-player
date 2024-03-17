@@ -63,6 +63,7 @@ jobs:
       - name: Build feiyu desktop
         uses: tauri-apps/tauri-action@v0
         env:
+          PKG_CONFIG_PATH: /usr/lib/pkgconfig:/usr/share/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # updater
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
