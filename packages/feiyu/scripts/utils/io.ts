@@ -1,4 +1,5 @@
-import * as fs from 'fs';
+import fs from 'fs';
+import path from 'path';
 
 export const readString = (filePath: string): string => {
   return fs.readFileSync(filePath, 'utf8');
@@ -17,26 +18,36 @@ export const existDir = (dir: string): boolean => {
   }
 };
 
-export const newDir = (dir: string): boolean => {
-  fs.mkdir(
-    dir,
-    {
-      recursive: true,
-    },
-    () => undefined,
-  );
-  return existDir(dir);
+export const newDir = (dirname: string): boolean => {
+  fs.mkdirSync(dirname, { recursive: true });
+  return existDir(dirname);
 };
 
-export const moveFile = (from: string, to: string): Promise<boolean> => {
-  const [_file, ...dirs] = to.split('/').reverse();
-  const dir = dirs.reverse().join('/');
-  if (!existDir(dir)) {
-    // 目标路径不存在，先创建路径
-    newDir(dir);
+export const moveFile = async (from: string, to: string) => {
+  if (!fs.existsSync(from)) {
+    return false;
   }
-  return new Promise((resolve) => {
+  const dirname = path.dirname(to);
+  if (!fs.existsSync(dirname)) {
+    fs.mkdirSync(dirname, { recursive: true });
+  }
+  return new Promise<boolean>((resolve) => {
     fs.rename(from, to, (err) => {
+      resolve(err ? false : true);
+    });
+  });
+};
+
+export const copyFile = async (from: string, to: string) => {
+  if (!fs.existsSync(from)) {
+    return false;
+  }
+  const dirname = path.dirname(to);
+  if (!fs.existsSync(dirname)) {
+    fs.mkdirSync(dirname, { recursive: true });
+  }
+  return new Promise<boolean>((resolve) => {
+    fs.copyFile(from, to, (err: any) => {
       resolve(err ? false : true);
     });
   });

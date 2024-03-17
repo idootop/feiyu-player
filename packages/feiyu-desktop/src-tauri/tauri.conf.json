@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "identifier": "xbox.work.feiyu",
   "build": {
-    "beforeDevCommand": "cp -f src/index.desktop.js src/index.js && cd ../feiyu && pnpm i && pnpm dev",
-    "beforeBuildCommand": "cp -f src/index.desktop.js src/index.js && cd ../feiyu && pnpm i && pnpm build",
+    "beforeDevCommand": "cd ../feiyu && pnpm dev:desktop",
+    "beforeBuildCommand": "cd ../feiyu && pnpm build:desktop",
     "frontendDist": "../feiyu/dist",
     "devUrl": "http://localhost:3000"
   },

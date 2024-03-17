@@ -379,7 +379,7 @@ const ContentFilter = (props: { isMobile: boolean }) => {
       <Row>
         <Row
           margin="20px 0"
-          padding="16px"
+          padding="12px"
           border={`1px solid ${colors.border}`}
           borderRadius="4px"
           marginRight="20px"
@@ -398,7 +398,7 @@ const ContentFilter = (props: { isMobile: boolean }) => {
         </Row>
         <Row
           margin="20px 0"
-          padding="16px"
+          padding="12px"
           border={`1px solid ${colors.border}`}
           borderRadius="4px"
         >
@@ -428,7 +428,7 @@ const ClearCache = (props: { isMobile: boolean }) => {
       </Text>
 
       <Row>
-        <Text fontSize="14px" fontWeight="400" padding="8px 0 16px 0">
+        <Text fontSize="13px" fontWeight="400" padding="8px 0 16px 0">
           如果搜索结果异常或程序运行不正常，你可以尝试清除缓存以解决问题。该操作不会影响你的个人设置和数据。
         </Text>
       </Row>
