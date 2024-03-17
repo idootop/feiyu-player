@@ -11,7 +11,8 @@
   "scripts": {
     "icon": "tauri icon",
     "dev": "tauri dev",
-    "build": "tauri build"
+    "build": "node build.js",
+    "build:feiyu": "cd ../feiyu && pnpm build:desktop"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.0.0-beta.4",
