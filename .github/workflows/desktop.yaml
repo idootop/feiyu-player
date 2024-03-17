@@ -19,8 +19,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [ubuntu-22.04]
-        # platform: [macos-latest, ubuntu-22.04, windows-latest]
+        platform: [ubuntu-latest]
+        # platform: [macos-latest, ubuntu-latest, windows-latest]
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -56,10 +56,10 @@ jobs:
         run: cd packages/feiyu && pnpm build:desktop
 
       - name: Install dependencies (ubuntu only)
-        if: matrix.platform == 'ubuntu-22.04'
+        if: matrix.platform == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libsoup-3.0-dev libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
+          sudo apt-get install -y libsoup-3.0-dev libwebkit2gtk-4.1-dev patchelf javascriptcoregtk-4.1 build-essential curl wget file libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
 
       - name: Build feiyu desktop
         uses: tauri-apps/tauri-action@v0
