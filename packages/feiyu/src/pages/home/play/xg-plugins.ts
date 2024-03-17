@@ -154,25 +154,6 @@ export class FullScreen extends XgFullScreen {
     setPlayerFullScreenCallback(this.setPlayerFullScreen);
   }
 
-  toggleFullScreen = (e) => {
-    if (FeiyuDesktop.isDesktop) {
-      setTimeout(async () => {
-        const oldFullScreen = await FeiyuDesktop.window?.isFullscreen();
-        try {
-          super.toggleFullScreen(e);
-        } catch {
-          //
-        }
-        const newFullScreen = await FeiyuDesktop.window?.isFullscreen();
-        if (newFullScreen === oldFullScreen) {
-          await this.setPlayerFullScreen(!oldFullScreen);
-        }
-      });
-    } else {
-      super.toggleFullScreen(e);
-    }
-  };
-
   async setPlayerFullScreen(fullscreen?: boolean) {
     if (!FeiyuDesktop.isDesktop) {
       return;
@@ -180,24 +161,31 @@ export class FullScreen extends XgFullScreen {
     if (fullscreen == null) {
       fullscreen = !(await FeiyuDesktop.window?.isFullscreen());
     }
-    const player = document.getElementById('player');
-    const header = document.getElementsByClassName('app-header')[0];
-    const drawers = document.getElementsByClassName('arco-layout-sider');
 
     await FeiyuDesktop.window?.setFullscreen(fullscreen!);
+    const player = document.getElementById('player');
+    const classNames = [
+      'app-header',
+      'arco-drawer-wrapper',
+      'arco-layout-sider',
+    ];
 
     if (fullscreen) {
       player?.classList.add('player-fullscreen');
-      header?.classList.add('hide-fullscreen');
-      Array.from(drawers).forEach((drawer) => {
-        drawer.classList.add('hide-fullscreen');
-      });
+      for (const cls of classNames) {
+        const elements = document.getElementsByClassName(cls);
+        Array.from(elements).forEach((e) => {
+          e.classList.add('hide-fullscreen');
+        });
+      }
     } else {
       player?.classList.remove('player-fullscreen');
-      header?.classList.remove('hide-fullscreen');
-      Array.from(drawers).forEach((drawer) => {
-        drawer.classList.remove('hide-fullscreen');
-      });
+      for (const cls of classNames) {
+        const elements = document.getElementsByClassName(cls);
+        Array.from(elements).forEach((e) => {
+          e.classList.remove('hide-fullscreen');
+        });
+      }
     }
   }
 }

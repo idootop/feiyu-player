@@ -123,7 +123,7 @@ const MyMenu = (props?: { isDrawer?: boolean }) => {
 export const SideMenu = () => <MyMenu key="SideMenu" />;
 
 export const SideDrawer = () => {
-  const [showSideDrawer, setShowSideDrawer] = useXState(kShowSideDrawer);
+  const { showSideDrawer, closeSideDrawer } = useSideMenu();
   return (
     <Drawer
       width={kSideWidth}
@@ -133,9 +133,7 @@ export const SideDrawer = () => {
       closable={false}
       visible={showSideDrawer}
       placement="left"
-      onCancel={() => {
-        setShowSideDrawer(false);
-      }}
+      onCancel={closeSideDrawer}
       mountOnEnter
       unmountOnExit
     >
