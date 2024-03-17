@@ -73,3 +73,17 @@ jobs:
           releaseDraft: true
           prerelease: false
           projectPath: "./packages/feiyu-desktop"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: feiyu-${{runner.os}}-${{runner.arch}}
+          path: |
+            packages/player/src-tauri/target/release/bundle/deb/*.deb
+            packages/player/src-tauri/target/release/bundle/appimage/*.AppImage
+            packages/player/src-tauri/target/release/bundle/appimage/*.AppImage.tar.gz
+            packages/player/src-tauri/target/release/bundle/msis/*.exe
+            packages/player/src-tauri/target/release/bundle/msi/*.msi
+            packages/player/src-tauri/target/release/bundle/dmg/*.dmg
+            packages/player/src-tauri/target/release/bundle/macos/*.app
+            packages/player/src-tauri/target/release/bundle/macos/*.app.tar.gz
