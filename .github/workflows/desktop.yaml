@@ -60,30 +60,22 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libsoup-3.0-dev libjavascriptcoregtk-4.1-dev
 
-      - name: Build feiyu desktop
+      - id: tauri
+        name: Build feiyu desktop
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
         with:
+          projectPath: "./packages/feiyu-desktop"
           tagName: "v__VERSION__"
           releaseName: "v__VERSION__"
           releaseBody: ${{ env.RELEASE_MESSAGE }}
           releaseDraft: true
           prerelease: false
-          projectPath: "./packages/feiyu-desktop"
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
         with:
-          name: feiyu-${{runner.os}}-${{runner.arch}}
-          path: |
-            packages/player/src-tauri/target/release/bundle/deb/*.deb
-            packages/player/src-tauri/target/release/bundle/appimage/*.AppImage
-            packages/player/src-tauri/target/release/bundle/appimage/*.AppImage.tar.gz
-            packages/player/src-tauri/target/release/bundle/msis/*.exe
-            packages/player/src-tauri/target/release/bundle/msi/*.msi
-            packages/player/src-tauri/target/release/bundle/dmg/*.dmg
-            packages/player/src-tauri/target/release/bundle/macos/*.app
-            packages/player/src-tauri/target/release/bundle/macos/*.app.tar.gz
+          path: ${{ join(fromJson(steps.tauri.outputs.artifactPaths), fromJson('"\n"')) }}
