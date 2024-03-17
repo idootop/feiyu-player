@@ -35,6 +35,7 @@ jobs:
         with:
           node-version: 20
           cache: "pnpm"
+          cache-dependency-path: '**/pnpm-lock.json'
 
       - name: Setup rust
         uses: dtolnay/rust-toolchain@stable
