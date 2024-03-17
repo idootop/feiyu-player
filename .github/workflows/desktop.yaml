@@ -1,16 +1,13 @@
 name: Build and Release
 on:
   workflow_dispatch:
-  inputs:
-    release_message:
-      description: "Message to show in the update dialog"
-      type: string
-      required: true
-      default: |
-        发现新版本，如果更新失败，请到官网下载最新版本：https://feiyu-player.xbox.work
-  push:
-    tags:
-      - "v*.*.*"
+    inputs:
+      release_message:
+        description: "Message to show in the update dialog"
+        type: string
+        required: true
+        default: |
+          发现新版本，如果更新失败，请到官网下载最新版本：https://feiyu-player.xbox.work
 
 env:
   RELEASE_MESSAGE: ${{ inputs.release_message }}
