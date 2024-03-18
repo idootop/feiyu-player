@@ -41,6 +41,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Rust cache
+        if: matrix.platform != 'windows-latest'
         uses: swatinem/rust-cache@v2
         with:
           workspaces: "./packages/feiyu-desktop/src-tauri -> target"
@@ -76,6 +77,6 @@ jobs:
           prerelease: false
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ join(fromJson(steps.tauri.outputs.artifactPaths), fromJson('"\n"')) }}

@@ -12,13 +12,13 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "飞鱼",
+        "title": "",
+        "titleBarStyle": "Overlay",
         "width": 950,
         "height": 650,
         "minWidth": 300,
         "minHeight": 600,
         "center": true,
-        "hiddenTitle": true,
         "decorations": false
       }
     ],
