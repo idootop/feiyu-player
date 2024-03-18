@@ -9,7 +9,12 @@ async function main() {
   env.BACKGROUND_FILE = bgPath;
   env.BACKGROUND_FILE_NAME = path.basename(env.BACKGROUND_FILE);
   env.BACKGROUND_CLAUSE = `set background picture of opts to file ".background:${env.BACKGROUND_FILE_NAME}"`;
-  runShell("pnpm tauri build");
+  const args = process.argv.slice(2);
+  let command = "pnpm tauri build";
+  if (args.length > 0) {
+    command = `${command} ${args.join(" ")}`;
+  }
+  runShell(command);
 }
 
 main();

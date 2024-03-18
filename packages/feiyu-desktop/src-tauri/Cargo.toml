@@ -3,6 +3,8 @@ name = "feiyu-desktop"
 version = "1.0.0"
 description = "一个漂亮得不像实力派的在线视频播放器 ✨"
 authors = ["Del.Wang"]
+license = "GPL-3.0-only"
+repository = "https://github.com/idootop/feiyu-player"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
