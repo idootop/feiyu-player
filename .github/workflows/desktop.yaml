@@ -309,10 +309,10 @@ jobs:
         with:
           allowUpdates: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          generate_release_notes: true
+          generateReleaseNotes: true
           # body: ${{ inputs.release_message }}
           name: Release v${{ needs.build.outputs.version }}
-          tag_name: v${{ needs.build.outputs.version }}
+          tag: v${{ needs.build.outputs.version }}
           draft: true
           prerelease: false
           artifacts: dist/*
