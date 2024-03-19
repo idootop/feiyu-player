@@ -294,17 +294,25 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: 获取应用版本号
-        id: app
-        run: |
-          echo "version=$(node -p "require('./packages/feiyu-desktop/src-tauri/tauri.conf.json').version")" >> $GITHUB_OUTPUT
       - name: 下载构建产物
         uses: actions/download-artifact@v4
         with:
           pattern: app_*
-          path: dist
+          path: temp
           merge-multiple: true
-      - name: 创建发布版本
+      - name: 整理构建产物
+        run: |
+          shopt -s globstar
+          mkdir -p dist
+          for file in temp/**
+          do
+            if [ -d "$file" ]
+            then
+              continue
+            fi
+            mv "$file" dist/
+          done
+      - name: 发布飞鱼 v${{ needs.build.outputs.version }}
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
