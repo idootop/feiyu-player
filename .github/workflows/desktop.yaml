@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: 初始化 PNPM
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         with:
           version: 8
       - name: 初始化 Node 环境和缓存
@@ -73,7 +73,7 @@ jobs:
           name: dist
           path: packages/feiyu/dist
       - name: 初始化 PNPM
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         with:
           version: 8
       - name: 初始化 Node 环境和缓存
@@ -144,7 +144,7 @@ jobs:
           name: dist
           path: packages/feiyu/dist
       - name: 初始化 PNPM
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         with:
           version: 8
       - name: 初始化 Node 环境和缓存
@@ -230,7 +230,7 @@ jobs:
           name: dist
           path: packages/feiyu/dist
       - name: 初始化 PNPM
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         with:
           version: 8
       - name: 初始化 Node 环境和缓存
