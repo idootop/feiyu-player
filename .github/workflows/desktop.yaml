@@ -32,7 +32,7 @@ jobs:
         run: |
           cd packages/feiyu && pnpm build:desktop
           echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
-          cd ${{ GITHUB_WORKSPACE }}
+          cd ${{ github.workspace }}
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
@@ -96,7 +96,7 @@ jobs:
         run: |
           cd packages/feiyu-desktop
           pnpm i && pnpm preview --target ${{ matrix.target }}
-          cd ${{ GITHUB_WORKSPACE }}
+          cd ${{ github.workspace }}
         env:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
@@ -105,7 +105,7 @@ jobs:
           cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/dmg
           app_name = feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.dmg
           for f in *.dmg; do mv "$f" $app_name; done
-          cd ${{ GITHUB_WORKSPACE }}
+          cd ${{ github.workspace }}
       - name: 上传安装包
         uses: actions/upload-artifact@v4
         with:
@@ -173,7 +173,7 @@ jobs:
         run: |
           cd packages/feiyu-desktop
           pnpm i && pnpm preview --target ${{ matrix.target }} ${{ env.TAURI_ARGS }}
-          cd ${{ GITHUB_WORKSPACE }}
+          cd ${{ github.workspace }}
         env:
           TAURI_ARGS: ${{ matrix.arch == 'aarch64' && '--bundles nsis' || '' }}
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
@@ -184,14 +184,14 @@ jobs:
           cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/msi
           $app_name = "feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.msi"
           Get-ChildItem -Path ./ -Filter *.msi | Rename-Item -NewName $app_name
-          cd ${{ GITHUB_WORKSPACE }}
+          cd ${{ github.workspace }}
         shell: pwsh
       - name: 重命名安装包 (.exe)
         run: |
           cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/nsis
           $app_name = "feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.exe"
           Get-ChildItem -Path ./ -Filter *.exe | Rename-Item -NewName $app_name
-          cd ${{ GITHUB_WORKSPACE }}
+          cd ${{ github.workspace }}
         shell: pwsh
       - name: 上传安装包
         uses: actions/upload-artifact@v4
@@ -270,7 +270,7 @@ jobs:
         run: |
           cd packages/feiyu-desktop
           pnpm i && pnpm preview --target ${{ matrix.target }}
-          cd ${{ GITHUB_WORKSPACE }}
+          cd ${{ github.workspace }}
         env:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
@@ -280,17 +280,17 @@ jobs:
           cd ./packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/deb
           app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.deb
           for f in *.deb; do mv "$f" "$app_name"; done
-          cd ${{ GITHUB_WORKSPACE }}
+          cd ${{ github.workspace }}
           # .rpm
           cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/rpm
           app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.rpm
           for f in *.rpm; do mv "$f" "$app_name"; done
-          cd ${{ GITHUB_WORKSPACE }}
+          cd ${{ github.workspace }}
           # .AppImage
           cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/appimage
           app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.AppImage
           for f in *.AppImage; do mv "$f" "$app_name"; done
-          cd ${{ GITHUB_WORKSPACE }}
+          cd ${{ github.workspace }}
       - name: 上传安装包
         uses: actions/upload-artifact@v4
         with:
