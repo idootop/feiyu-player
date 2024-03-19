@@ -51,19 +51,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - build: macos
+          - target: aarch64-apple-darwin
+            build: macos
             os: macos-latest
             arch: aarch64
-            target: aarch64-apple-darwin
-            args:
-          - build: macos
+          - target: x86_64-apple-darwin
+            build: macos
             os: macos-latest
             arch: x86_64
-            target: x86_64-apple-darwin
-          - build: macos
+          - target: universal-apple-darwin
+            build: macos
             os: macos-latest
             arch: universal
-            target: universal-apple-darwin
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -128,18 +127,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - build: windows
+          - target: x86_64-pc-windows-msvc
+            build: windows
             os: windows-latest
             arch: x86_64
-            target: x86_64-pc-windows-msvc
-          - build: windows
+          - target: aarch64-pc-windows-msvc
+            build: windows
             os: windows-latest
             arch: aarch64
-            target: aarch64-pc-windows-msvc
-          - build: windows
+          - target: i686-pc-windows-msvc
+            build: windows
             os: windows-latest
             arch: i686
-            target: i686-pc-windows-msvc
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -217,22 +216,22 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - build: linux
+          - target: x86_64-unknown-linux-gnu
+            build: linux
             os: ubuntu-latest
             arch: x86_64
-            target: x86_64-unknown-linux-gnu
-          - build: linux
+          - target: aarch64-unknown-linux-gnu
+            build: linux
             os: ubuntu-latest
             arch: aarch64
-            target: aarch64-unknown-linux-gnu
-          - build: linux
+          - target: i686-unknown-linux-gnu
+            build: linux
             os: ubuntu-latest
             arch: i686
-            target: i686-unknown-linux-gnu
-          - build: linux
+          - target: armv7-unknown-linux-gnueabihf
+            build: linux
             os: ubuntu-latest
             arch: armv7
-            target: armv7-unknown-linux-gnueabihf
 
     runs-on: ${{ matrix.os }}
     steps:
