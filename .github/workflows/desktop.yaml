@@ -289,7 +289,7 @@ jobs:
 
   release:
     name: Release
-    needs: [build-for-macos, build-for-windows, build-for-linux]
+    needs: [build, build-for-macos, build-for-windows, build-for-linux]
     runs-on: ubuntu-latest
 
     steps:
@@ -309,9 +309,8 @@ jobs:
         with:
           allowUpdates: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          generateReleaseNotes: true
-          # body: ${{ inputs.release_message }}
-          name: Release v${{ needs.build.outputs.version }}
+          body: ${{ inputs.release_message }}
+          name: 飞鱼 v${{ needs.build.outputs.version }}
           tag: v${{ needs.build.outputs.version }}
           draft: true
           prerelease: false
