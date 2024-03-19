@@ -36,16 +36,38 @@ jobs:
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
-          overwrite: true
           name: dist
           path: packages/feiyu/dist
           if-no-files-found: error
     outputs:
       version: ${{ steps.app.outputs.version }}
 
+  release:
+    name: Create release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: 获取应用版本号
+        id: app
+        run: |
+          echo "version=$(node -p "require('./packages/feiyu-desktop/src-tauri/tauri.conf.json').version")" >> $GITHUB_OUTPUT
+      - name: 创建版本
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          generate_release_notes: true
+          # body: ${{ inputs.release_message }}
+          tag_name: v${{ steps.app.outputs.version }}
+          name: 飞鱼 v${{ steps.app.outputs.version }}
+          draft: true
+          prerelease: false
+
   build-for-macos:
     name: macOS
-    needs: build
+    needs: release
     permissions:
       contents: write
     strategy:
@@ -109,11 +131,11 @@ jobs:
       - name: 上传安装包
         uses: actions/upload-artifact@v4
         with:
-          overwrite: true
+          name: ${{ matrix.build }}
           path: |
             packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/dmg/*.dmg
           if-no-files-found: error
-      - name: 发布版本
+      - name: 上传产物到 release
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
@@ -122,7 +144,7 @@ jobs:
 
   build-for-windows:
     name: Windows
-    needs: build
+    needs: release
     permissions:
       contents: write
     strategy:
@@ -197,11 +219,11 @@ jobs:
       - name: 上传安装包
         uses: actions/upload-artifact@v4
         with:
-          overwrite: true
+          name: ${{ matrix.build }}
           path: |
             packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/msi/*.msi
             packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/nsis/*.exe
-      - name: 发布版本
+      - name: 上传产物到 release
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
@@ -212,7 +234,7 @@ jobs:
 
   build-for-linux:
     name: Linux
-    needs: build
+    needs: release
     permissions:
       contents: write
     strategy:
@@ -296,12 +318,12 @@ jobs:
       - name: 上传安装包
         uses: actions/upload-artifact@v4
         with:
-          overwrite: true
+          name: ${{ matrix.build }}
           path: |
             packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/deb/*.deb
             packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/rpm/*.rpm
             packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/appimage/*.AppImage
-      - name: 发布版本
+      - name: 上传产物到 release
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
@@ -310,26 +332,3 @@ jobs:
             packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/deb/*.deb
             packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/rpm/*.rpm
             packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/appimage/*.AppImage
-
-  release:
-    name: Release
-    needs: [build-for-macos, build-for-windows, build-for-linux]
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: 获取应用版本号
-        id: app
-        run: |
-          echo "version=$(node -p "require('./packages/feiyu-desktop/src-tauri/tauri.conf.json').version")" >> $GITHUB_OUTPUT
-      - name: 创建发布版本
-        uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-          generate_release_notes: true
-          # body: ${{ inputs.release_message }}
-          name: Release v${{ needs.build.outputs.version }}
-          tag_name: v${{ needs.build.outputs.version }}
-          draft: true
-          prerelease: false
