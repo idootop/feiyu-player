@@ -183,162 +183,8 @@ jobs:
   #           packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/msi/*.msi
   #           packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/nsis/*.exe
 
-  # build-for-linux:
-  #   name: Linux
-  #   needs: build
-  #   permissions:
-  #     contents: write
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       include:
-  #         - target: x86_64-unknown-linux-gnu
-  #           build: linux
-  #           os: ubuntu-latest
-  #           arch: x86_64
-
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: 下载构建产物
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: dist
-  #         path: packages/feiyu/dist
-  #     - name: 初始化 Rust
-  #       uses: dtolnay/rust-toolchain@stable
-  #       with:
-  #         toolchain: stable
-  #         targets: ${{ matrix.target }}
-  #     - name: 初始化 Rust 缓存
-  #       uses: swatinem/rust-cache@v2
-  #       with:
-  #         workspaces: "packages/feiyu-desktop/src-tauri/${{ matrix.target }} -> target"
-  #     - name: 初始化 Linux 构建环境
-  #       run: |
-  #         sudo apt-get update
-  #         sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libsoup-3.0-dev libjavascriptcoregtk-4.1-dev
-  #     - name: 构建飞鱼 APP
-  #       id: app
-  #       run: |
-  #         cd packages/feiyu-desktop
-  #         cargo install tauri-cli --version "^2.0.0-beta"
-  #         cargo tauri build --target ${{ matrix.target }}
-  #         cd ${{ github.workspace }}
-  #       env:
-  #         TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
-  #         TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
-  #     - name: 重命名安装包
-  #       run: |
-  #         # .deb
-  #         cd ./packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/deb
-  #         app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.deb
-  #         for f in *.deb; do mv "$f" "$app_name"; done
-  #         cd ${{ github.workspace }}
-  #         # .rpm
-  #         cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/rpm
-  #         app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.rpm
-  #         for f in *.rpm; do mv "$f" "$app_name"; done
-  #         cd ${{ github.workspace }}
-  #         # .AppImage
-  #         cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/appimage
-  #         app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.AppImage
-  #         for f in *.AppImage; do mv "$f" "$app_name"; done
-  #         cd ${{ github.workspace }}
-  #     - name: 上传构建产物
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: app_${{ matrix.build }}_${{ matrix.arch }}
-  #         path: |
-  #           packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/deb/*.deb
-  #           packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/rpm/*.rpm
-  #           packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/appimage/*.AppImage
-
-  # It's fucking slooooooow...
-  # build-for-linux-arm:
-  #   name: Linux ARM
-  #   needs: build
-  #   permissions:
-  #     contents: write
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       include:
-  #         - target: aarch64-unknown-linux-gnu
-  #           build: linux
-  #           os: ubuntu-latest
-  #           arch: aarch64
-  #           cpu: cortex-a53
-  #           base_image: raspios_lite_arm64:latest
-  #         - target: armv7-unknown-linux-gnueabihf
-  #           build: linux
-  #           os: ubuntu-latest
-  #           arch: armv7l
-  #           cpu: cortex-a7
-  #           base_image: raspios_lite:latest
-
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: 下载构建产物
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: dist
-  #         path: packages/feiyu/dist
-  #     - name: 构建 ARM 产物
-  #       uses: pguyot/arm-runner-action@v2
-  #       with:
-  #         base_image: ${{ matrix.base_image }}
-  #         cpu: ${{ matrix.cpu }}
-  #         bind_mount_repository: true
-  #         image_additional_mb: 10240
-  #         commands: |
-  #           # 初始化环境
-  #           apt-get update -y --allow-releaseinfo-change
-  #           apt-get upgrade -y
-  #           apt-get autoremove -y
-  #           apt-get install curl
-  #           # 安装 Rust
-  #           export HOME=/root
-  #           export CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
-  #           curl https://sh.rustup.rs -sSf | sh -s -- -y
-  #           . "$HOME/.cargo/env"
-  #           # 安装依赖
-  #           apt-get install -y libwebkit2gtk-4.0-dev build-essential wget libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
-  #           cargo install tauri-cli --version "^2.0.0-beta"
-  #           # 构建安装包
-  #           cd packages/feiyu-desktop
-  #           export TAURI_PRIVATE_KEY=${{ secrets.TAURI_PRIVATE_KEY }}
-  #           export TAURI_KEY_PASSWORD=${{ secrets.TAURI_KEY_PASSWORD }}
-  #           cargo tauri build --target ${{ matrix.target }}
-  #     - name: 重命名安装包
-  #       run: |
-  #         # .deb
-  #         cd ./packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/deb
-  #         app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.deb
-  #         for f in *.deb; do mv "$f" "$app_name"; done
-  #         cd ${{ github.workspace }}
-  #         # .rpm
-  #         cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/rpm
-  #         app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.rpm
-  #         for f in *.rpm; do mv "$f" "$app_name"; done
-  #         cd ${{ github.workspace }}
-  #         # .AppImage
-  #         cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/appimage
-  #         app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.AppImage
-  #         for f in *.AppImage; do mv "$f" "$app_name"; done
-  #         cd ${{ github.workspace }}
-  #     - name: 上传构建产物
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: app_${{ matrix.build }}_${{ matrix.arch }}
-  #         path: |
-  #           packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/deb/*.deb
-  #           packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/rpm/*.rpm
-  #           packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/appimage/*.AppImage
-
-  build-for-linux-i686:
-    name: Linux i686
+  build-for-linux:
+    name: Linux
     needs: build
     permissions:
       contents: write
@@ -346,10 +192,22 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - target: x86_64-unknown-linux-gnu
+            build: linux
+            os: ubuntu-latest
+            arch: x86_64
           - target: i686-unknown-linux-gnu
             build: linux
             os: ubuntu-latest
             arch: i686
+          - target: aarch64-unknown-linux-gnu
+            build: linux
+            os: ubuntu-latest
+            arch: aarch64
+          - target: armv7-unknown-linux-gnueabihf
+            build: linux
+            os: ubuntu-latest
+            arch: armv7
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -370,28 +228,49 @@ jobs:
           workspaces: "packages/feiyu-desktop/src-tauri/${{ matrix.target }} -> target"
       - name: 初始化 Linux 构建环境
         run: |
-          sudo dpkg --add-architecture i386 
-          sudo apt-get update && sudo apt-get upgrade -y
-
-          sudo apt-get install -y gcc-multilib g++-multilib
-
-          sudo apt-get install -y \
-            libwebkit2gtk-4.0-dev:i386 \
-            libgtk-3-dev:i386 \
-            librsvg2-dev:i386 
-            # patchelf \
-            # libsoup-3.0-dev \
-            # libjavascriptcoregtk-4.1-dev \
-            # libssl-dev:i386
-
+          if [ "${{ matrix.target }}" = "x86_64-unknown-linux-gnu" ]; then
+              sudo apt-get update
+              sudo apt-get install -y libwebkit2gtk-4.1-dev libgtk-3-dev patchelf librsvg2-dev libappindicator3-dev libsoup-3.0-dev libjavascriptcoregtk-4.1-dev
+          elif [ "${{ matrix.target }}" = "i686-unknown-linux-gnu" ]; then
+              dpkg --add-architecture i386
+              apt-get update
+              apt-get install -y libstdc++6:i386 libgdk-pixbuf2.0-dev:i386 libatomic1:i386 gcc-multilib g++-multilib libssl-dev:i386 \
+                  libwebkit2gtk-4.0-dev:i386 libgtk-3-dev:i386 patchelf:i386 librsvg2-dev:i386 libayatana-appindicator3-dev:i386
+              export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig/:$PKG_CONFIG_PATH
+              export PKG_CONFIG_SYSROOT_DIR=/
+          elif [ "${{ matrix.target }}" = "aarch64-unknown-linux-gnu" ]; then
+              dpkg --add-architecture arm64
+              apt-get update
+              apt-get install -y libncurses6:arm64 libtinfo6:arm64 linux-libc-dev:arm64 libncursesw6:arm64 libcups2:arm64
+              apt-get install -y --no-install-recommends g++-aarch64-linux-gnu libc6-dev-arm64-cross libssl-dev:arm64 \
+                  libwebkit2gtk-4.0-dev:arm64 libgtk-3-dev:arm64 patchelf:arm64 librsvg2-dev:arm64 libayatana-appindicator3-dev:arm64
+              export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc
+              export CC_aarch64_unknown_linux_gnu=aarch64-linux-gnu-gcc
+              export CXX_aarch64_unknown_linux_gnu=aarch64-linux-gnu-g++
+              export PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig
+              export PKG_CONFIG_ALLOW_CROSS=1
+          elif [ "${{ matrix.target }}" = "armv7-unknown-linux-gnueabihf" ]; then
+              dpkg --add-architecture armhf
+              apt-get update
+              apt-get install -y libncurses6:armhf libtinfo6:armhf linux-libc-dev:armhf libncursesw6:armhf libcups2:armhf
+              apt-get install -y --no-install-recommends g++-arm-linux-gnueabihf libc6-dev-armhf-cross libssl-dev:armhf \
+                  libwebkit2gtk-4.0-dev:armhf libgtk-3-dev:armhf patchelf:armhf librsvg2-dev:armhf libayatana-appindicator3-dev:armhf
+              export CARGO_TARGET_ARMV7_UNKNOWN_LINUX_GNUEABIHF_LINKER=arm-linux-gnueabihf-gcc
+              export CC_armv7_unknown_linux_gnueabihf=arm-linux-gnueabihf-gcc
+              export CXX_armv7_unknown_linux_gnueabihf=arm-linux-gnueabihf-g++
+              export PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig
+              export PKG_CONFIG_ALLOW_CROSS=1
+          fi
       - name: 构建飞鱼 APP
         id: app
         run: |
           cd packages/feiyu-desktop
-          export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig/
-          export PKG_CONFIG_SYSROOT_DIR=/usr/lib/i386-linux-gnu
           cargo install tauri-cli --version "^2.0.0-beta"
-          cargo tauri build --target ${{ matrix.target }}
+          if [ "${{ matrix.target }}" = "x86_64-unknown-linux-gnu" ]; then
+              cargo tauri build --target ${{ matrix.target }}
+          else
+              cargo tauri build --target ${{ matrix.target }} -b deb,rpm
+          fi
           cd ${{ github.workspace }}
         env:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
@@ -425,12 +304,8 @@ jobs:
   release:
     name: Release
     needs: [
-        build,
-        # build-for-macos,
-        # build-for-windows,
-        # build-for-linux,
-        # build-for-linux-arm,
-        build-for-linux-i686,
+        # build, build-for-macos, build-for-windows,
+        build-for-linux,
       ]
     runs-on: ubuntu-latest
 
