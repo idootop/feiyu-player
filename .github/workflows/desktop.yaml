@@ -370,14 +370,14 @@ jobs:
           workspaces: "packages/feiyu-desktop/src-tauri/${{ matrix.target }} -> target"
       - name: 初始化 Linux 构建环境
         run: |
-          deb [arch=i386] http://archive.ubuntu.com/ubuntu/ jammy main multiverse universe restricted
-          deb [arch=i386] http://archive.ubuntu.com/ubuntu/ jammy-security main multiverse universe restricted
-          deb [arch=i386] http://archive.ubuntu.com/ubuntu/ jammy-updates main multiverse universe restricted
-          deb [arch=i386] http://archive.ubuntu.com/ubuntu/ jammy-backports main multiverse universe restricted
-          deb [arch=i386 ports=binary] http://ports.ubuntu.com/ubuntu-ports/ jammy main multiverse universe restricted
-          deb [arch=i386 ports=binary] http://ports.ubuntu.com/ubuntu-ports/ jammy-security main multiverse universe restricted  
-          deb [arch=i386 ports=binary] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main multiverse universe restricted
-          deb [arch=i386 ports=binary] http://ports.ubuntu.com/ubuntu-ports/ jammy-backports main multiverse universe restricted
+          # deb [arch=i386] http://archive.ubuntu.com/ubuntu/ jammy main multiverse universe restricted
+          # deb [arch=i386] http://archive.ubuntu.com/ubuntu/ jammy-security main multiverse universe restricted
+          # deb [arch=i386] http://archive.ubuntu.com/ubuntu/ jammy-updates main multiverse universe restricted
+          # deb [arch=i386] http://archive.ubuntu.com/ubuntu/ jammy-backports main multiverse universe restricted
+          # deb [arch=i386 ports=binary] http://ports.ubuntu.com/ubuntu-ports/ jammy main multiverse universe restricted
+          # deb [arch=i386 ports=binary] http://ports.ubuntu.com/ubuntu-ports/ jammy-security main multiverse universe restricted  
+          # deb [arch=i386 ports=binary] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main multiverse universe restricted
+          # deb [arch=i386 ports=binary] http://ports.ubuntu.com/ubuntu-ports/ jammy-backports main multiverse universe restricted
 
           sudo dpkg --add-architecture i386 
           sudo apt-get update && sudo apt-get upgrade -y
