@@ -269,14 +269,12 @@ jobs:
             arch: aarch64
             cpu: cortex-a53
             base_image: raspios_lite_arm64:latest
-            cpu_info: raspberrypi_zero2_w_arm64_w
           - target: armv7-unknown-linux-gnueabihf
             build: linux
             os: ubuntu-latest
             arch: armv7l
             cpu: cortex-a7
             base_image: raspios_lite:latest
-            cpu_info: raspberrypi_3b
           # - target: i686-unknown-linux-gnu
           #   build: linux
           #   os: ubuntu-latest
@@ -295,7 +293,6 @@ jobs:
         with:
           base_image: ${{ matrix.base_image }}
           cpu: ${{ matrix.cpu }}
-          cpu_info: ${{ matrix.cpu_info }}
           bind_mount_repository: true
           image_additional_mb: 10240
           commands: |
