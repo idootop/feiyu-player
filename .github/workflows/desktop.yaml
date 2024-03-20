@@ -374,7 +374,6 @@ jobs:
           sudo apt-get update
 
           sudo apt-get install -y gcc-multilib g++-multilib
-          sudo apt-get install gcc-i686-linux-gnu
 
           sudo apt-get install -y \
             libwebkit2gtk-4.0-dev:i386 \
@@ -389,7 +388,6 @@ jobs:
         id: app
         run: |
           cd packages/feiyu-desktop
-          export RUSTFLAGS="-C linker=i686-linux-gnu-gcc"
           export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig/
           export PKG_CONFIG_SYSROOT_DIR=/usr/lib/i386-linux-gnu
           cargo install tauri-cli --version "^2.0.0-beta"
