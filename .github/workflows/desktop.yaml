@@ -259,14 +259,16 @@ jobs:
           elif [ "${{ matrix.target }}" = "i686-unknown-linux-gnu" ]; then
               sudo dpkg --add-architecture i386
               sudo apt-get update
-              sudo apt install -y gcc-multilib g++-multilib libssl-dev:i386 \
+              sudo apt install -y libstdc++6:i386 libgdk-pixbuf2.0-dev:i386 libatomic1:i386 \
+                  gcc-multilib g++-multilib libssl-dev:i386 \
                   libwebkit2gtk-4.0-dev:i386 libgtk-3-dev:i386 librsvg2-dev:i386
               export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig/:$PKG_CONFIG_PATH
               export PKG_CONFIG_SYSROOT_DIR=/
           elif [ "${{ matrix.target }}" = "aarch64-unknown-linux-gnu" ]; then
               sudo dpkg --add-architecture arm64
               sudo apt-get update
-              sudo apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libc6-dev-arm64-cross libssl-dev:arm64 \
+              sudo apt install -y libncurses6:arm64 libtinfo6:arm64 linux-libc-dev:arm64 libncursesw6:arm64 libcups2:arm64 \
+                  gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libc6-dev-arm64-cross libssl-dev:arm64 \
                   libwebkit2gtk-4.0-dev:arm64 libgtk-3-dev:arm64 patchelf:arm64 librsvg2-dev:arm64 libayatana-appindicator3-dev:arm64
               export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc
               export CC_aarch64_unknown_linux_gnu=aarch64-linux-gnu-gcc
@@ -277,7 +279,8 @@ jobs:
           elif [ "${{ matrix.target }}" = "armv7-unknown-linux-gnueabihf" ]; then
               sudo dpkg --add-architecture armhf
               sudo apt-get update
-              sudo apt install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libc6-dev-armhf-cross libssl-dev:armhf \
+              sudo apt install -y libncurses6:armhf libtinfo6:armhf linux-libc-dev:armhf libncursesw6:armhf libcups2:armhf \
+                  gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libc6-dev-armhf-cross libssl-dev:armhf \
                   libwebkit2gtk-4.0-dev:armhf libgtk-3-dev:armhf patchelf:armhf librsvg2-dev:armhf libayatana-appindicator3-dev:armhf
               export CARGO_TARGET_ARMV7_UNKNOWN_LINUX_GNUEABIHF_LINKER=arm-linux-gnueabihf-gcc
               export CC_armv7_unknown_linux_gnueabihf=arm-linux-gnueabihf-gcc
