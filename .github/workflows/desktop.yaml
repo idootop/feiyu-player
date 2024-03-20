@@ -370,32 +370,20 @@ jobs:
           workspaces: "packages/feiyu-desktop/src-tauri/${{ matrix.target }} -> target"
       - name: 初始化 Linux 构建环境
         run: |
-          # deb [arch=i386] http://archive.ubuntu.com/ubuntu/ jammy main multiverse universe restricted
-          # deb [arch=i386] http://archive.ubuntu.com/ubuntu/ jammy-security main multiverse universe restricted
-          # deb [arch=i386] http://archive.ubuntu.com/ubuntu/ jammy-updates main multiverse universe restricted
-          # deb [arch=i386] http://archive.ubuntu.com/ubuntu/ jammy-backports main multiverse universe restricted
-          # deb [arch=i386 ports=binary] http://ports.ubuntu.com/ubuntu-ports/ jammy main multiverse universe restricted
-          # deb [arch=i386 ports=binary] http://ports.ubuntu.com/ubuntu-ports/ jammy-security main multiverse universe restricted  
-          # deb [arch=i386 ports=binary] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main multiverse universe restricted
-          # deb [arch=i386 ports=binary] http://ports.ubuntu.com/ubuntu-ports/ jammy-backports main multiverse universe restricted
-
           sudo dpkg --add-architecture i386 
-          sudo apt-get update && sudo apt-get upgrade -y
+          sudo apt-get update
 
-          sudo apt-get install -y \
-            gcc-multilib \
-            g++-multilib
-
+          sudo apt-get install -y gcc-multilib g++-multilib
           sudo apt-get install gcc-i686-linux-gnu
 
           sudo apt-get install -y \
             libwebkit2gtk-4.0-dev:i386 \
             libgtk-3-dev:i386 \
             librsvg2-dev:i386 \
-            patchelf:i386 \
-            libsoup-3.0-dev:i386 \
-            libjavascriptcoregtk-4.1-dev:i386 \
             libssl-dev:i386
+            # patchelf \
+            # libsoup-3.0-dev \
+            # libjavascriptcoregtk-4.1-dev
 
       - name: 构建飞鱼 APP
         id: app
