@@ -72,16 +72,6 @@ jobs:
         with:
           name: dist
           path: packages/feiyu/dist
-      - name: 初始化 PNPM
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
-      - name: 初始化 Node 环境和缓存
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
-          cache-dependency-path: "**/pnpm-lock.yaml"
       - name: 初始化 Rust
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -94,7 +84,7 @@ jobs:
       - name: 构建飞鱼 APP
         run: |
           cd packages/feiyu-desktop
-          pnpm i && pnpm preview --target ${{ matrix.target }}
+          cargo install tauri-cli && cargo tauri build --target ${{ matrix.target }}
           cd ${{ github.workspace }}
         env:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
@@ -143,16 +133,6 @@ jobs:
         with:
           name: dist
           path: packages/feiyu/dist
-      - name: 初始化 PNPM
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
-      - name: 初始化 Node 环境和缓存
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
-          cache-dependency-path: "**/pnpm-lock.yaml"
       - name: 初始化 Rust
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -166,7 +146,7 @@ jobs:
         id: app
         run: |
           cd packages/feiyu-desktop
-          pnpm i && pnpm preview --target ${{ matrix.target }} ${{ env.TAURI_ARGS }}
+          cargo install tauri-cli && cargo tauri build --target ${{ matrix.target }} ${{ env.TAURI_ARGS }}
           cd ${{ github.workspace }}
         env:
           TAURI_ARGS: ${{ matrix.arch == 'aarch64' && '--bundles nsis' || '' }}
@@ -229,16 +209,6 @@ jobs:
         with:
           name: dist
           path: packages/feiyu/dist
-      - name: 初始化 PNPM
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
-      - name: 初始化 Node 环境和缓存
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
-          cache-dependency-path: "**/pnpm-lock.yaml"
       - name: 初始化 Rust
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -256,7 +226,7 @@ jobs:
         id: app
         run: |
           cd packages/feiyu-desktop
-          pnpm i && pnpm preview --target ${{ matrix.target }}
+          cargo install tauri-cli && cargo tauri build --target ${{ matrix.target }}
           cd ${{ github.workspace }}
         env:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
