@@ -29,14 +29,6 @@
   "bundle": {
     "active": true,
     "targets": "all",
-    "windows": {
-      "certificateThumbprint": null,
-      "digestAlgorithm": "sha256",
-      "timestampUrl": "",
-      "wix": {
-        "language": "zh-CN"
-      }
-    },
     "copyright": "Copyright © 2023 Del.Wang",
     "shortDescription": "一个漂亮得不像实力派的在线视频播放器 ✨",
     "longDescription": "让每个人都能通过电影的力量，获得对生活的新体验和新认知，怀着永不熄灭的热忱，勇敢地去追求、去探索、去发现生命的意义和价值。",
@@ -53,9 +45,23 @@
       "providerShortName": null,
       "signingIdentity": null
     },
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": "",
+      "webviewInstallMode": {
+        "type": "embedBootstrapper"
+      },
+      "wix": {
+        "language": "zh-CN"
+      }
+    },
     "linux": {
       "deb": {
         "depends": []
+      },
+      "appimage": {
+        "bundleMediaFramework": true
       }
     }
   }
