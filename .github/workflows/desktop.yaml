@@ -84,7 +84,14 @@ jobs:
       - name: 构建飞鱼 APP
         run: |
           cd packages/feiyu-desktop
-          cargo install tauri-cli && cargo tauri build --target ${{ matrix.target }}
+          # 获取背景图片路径
+          bg_path=$(pwd)/background.jpg
+          # 设置环境变量
+          export BACKGROUND_FILE=$bg_path
+          export BACKGROUND_FILE_NAME=$(basename $BACKGROUND_FILE)
+          export BACKGROUND_CLAUSE="set background picture of opts to file \".background:${BACKGROUND_FILE_NAME}\""
+          cargo install tauri-cli --version "^2.0.0-beta"
+          cargo tauri build --target ${{ matrix.target }}
           cd ${{ github.workspace }}
         env:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
@@ -146,7 +153,8 @@ jobs:
         id: app
         run: |
           cd packages/feiyu-desktop
-          cargo install tauri-cli && cargo tauri build --target ${{ matrix.target }} ${{ env.TAURI_ARGS }}
+          cargo install tauri-cli --version "^2.0.0-beta"
+          cargo tauri build --target ${{ matrix.target }} ${{ env.TAURI_ARGS }}
           cd ${{ github.workspace }}
         env:
           TAURI_ARGS: ${{ matrix.arch == 'aarch64' && '--bundles nsis' || '' }}
@@ -226,7 +234,8 @@ jobs:
         id: app
         run: |
           cd packages/feiyu-desktop
-          cargo install tauri-cli && cargo tauri build --target ${{ matrix.target }}
+          cargo install tauri-cli --version "^2.0.0-beta"
+          cargo tauri build --target ${{ matrix.target }}
           cd ${{ github.workspace }}
         env:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
