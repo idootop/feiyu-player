@@ -229,18 +229,29 @@ jobs:
       - name: 初始化 apt sources.list
         if: matrix.arch != 'x86_64'
         run: |
-          sudo cat /etc/apt/sources.list
           cat << EOF | sudo tee /etc/apt/sources.list
           # x86 Support
-          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
-          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
+          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy main restricted
+          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-updates main restricted
+          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy universe
+          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-updates universe
+          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy multiverse
+          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-updates multiverse
           deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-backports main restricted universe multiverse
-          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-security main restricted universe multiverse
+          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-security main restricted
+          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-security universe
+          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-security multiverse
           # ARM Support
-          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy main restricted universe multiverse
-          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted universe multiverse
-          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted
-          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted universe multiverse
+          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy main restricted
+          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted
+          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy universe
+          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-updates universe
+          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy multiverse
+          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-updates multiverse
+          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse
+          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted
+          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-security universe
+          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-security multiverse
           EOF
       - name: 初始化 Linux 构建环境
         run: |
