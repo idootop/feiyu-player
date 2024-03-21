@@ -303,10 +303,12 @@ jobs:
           for f in *.rpm; do mv "$f" "$app_name"; done
           cd ${{ github.workspace }}
           # .AppImage
-          cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/appimage
-          app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.AppImage
-          for f in *.AppImage; do mv "$f" "$app_name"; done
-          cd ${{ github.workspace }}
+          if [ "${{ matrix.target }}" = "x86_64-unknown-linux-gnu" ]; then
+              cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/appimage
+              app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.AppImage
+              for f in *.AppImage; do mv "$f" "$app_name"; done
+              cd ${{ github.workspace }}
+          fi
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
@@ -314,7 +316,7 @@ jobs:
           path: |
             packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/deb/*.deb
             packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/rpm/*.rpm
-            packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/appimage/*.AppImage
+            packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/*/*.AppImage
 
   release:
     name: Release
