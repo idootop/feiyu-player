@@ -10,7 +10,6 @@ fn main() {
         .invoke_handler(tauri::generate_handler![cancel_cors_request])
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_http::init())
-        .plugin(tauri_plugin_shell::init())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
