@@ -229,6 +229,7 @@ jobs:
       - name: 初始化 apt sources.list
         if: matrix.arch != 'x86_64'
         run: |
+          sudo cat /etc/apt/sources.list
           cat << EOF | sudo tee /etc/apt/sources.list
           # x86 Support
           deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
@@ -248,16 +249,18 @@ jobs:
               sudo apt install -y libwebkit2gtk-4.1-dev libgtk-3-dev patchelf librsvg2-dev libappindicator3-dev libsoup-3.0-dev libjavascriptcoregtk-4.1-dev
           elif [ "${{ matrix.target }}" = "i686-unknown-linux-gnu" ]; then
               sudo dpkg --add-architecture i386
-              sudo apt-get update && sudo apt-get upgrade -y
-              sudo apt install -y gcc-multilib g++-multilib lib32stdc++6 libc6-dev-i386 pkg-config-i686-linux-gnu libssl-dev:i386
+              sudo apt update
+              sudo apt install -y pkg-config-i686-linux-gnu
+              sudo apt install -y gcc-multilib g++-multilib lib32stdc++6 libc6-dev-i386 libssl-dev:i386
               sudo apt install -y libwebkit2gtk-4.0-dev:i386 libgtk-3-dev:i386 librsvg2-dev:i386
               export PKG_CONFIG_PATH=/usr/lib/i686-linux-gnu/pkgconfig
               export PKG_CONFIG_SYSROOT_DIR=/usr/i686-linux-gnu/
               export PKG_CONFIG_ALLOW_CROSS=1
           elif [ "${{ matrix.target }}" = "aarch64-unknown-linux-gnu" ]; then
               sudo dpkg --add-architecture arm64
-              sudo apt-get update && sudo apt-get upgrade -y
-              sudo apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libc6-dev-arm64-cross pkg-config-aarch64-linux-gnu libssl-dev:arm64 
+              sudo apt update
+              sudo apt install -y pkg-config-aarch64-linux-gnu
+              sudo apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libc6-dev-arm64-cross libssl-dev:arm64 
               sudo apt install -y libwebkit2gtk-4.0-dev:arm64 libgtk-3-dev:arm64 patchelf:arm64 librsvg2-dev:arm64 libayatana-appindicator3-dev:arm64
               export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc
               export CC_aarch64_unknown_linux_gnu=aarch64-linux-gnu-gcc
@@ -267,8 +270,9 @@ jobs:
               export PKG_CONFIG_ALLOW_CROSS=1
           elif [ "${{ matrix.target }}" = "armv7-unknown-linux-gnueabihf" ]; then
               sudo dpkg --add-architecture armhf
-              sudo apt-get update && sudo apt-get upgrade -y
-              sudo apt install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libc6-dev-armhf-cross pkg-config-arm-linux-gnueabihf libssl-dev:armhf
+              sudo apt update
+              sudo apt install -y pkg-config-arm-linux-gnueabihf
+              sudo apt install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libc6-dev-armhf-cross libssl-dev:armhf
               sudo apt install -y libwebkit2gtk-4.0-dev:armhf libgtk-3-dev:armhf patchelf:armhf librsvg2-dev:armhf libayatana-appindicator3-dev:armhf
               export CARGO_TARGET_ARMV7_UNKNOWN_LINUX_GNUEABIHF_LINKER=arm-linux-gnueabihf-gcc
               export CC_armv7_unknown_linux_gnueabihf=arm-linux-gnueabihf-gcc
