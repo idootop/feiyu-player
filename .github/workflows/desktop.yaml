@@ -249,7 +249,7 @@ jobs:
           elif [ "${{ matrix.target }}" = "i686-unknown-linux-gnu" ]; then
               sudo dpkg --add-architecture i386
               sudo apt update
-              sudo apt install -y gcc-multilib g++-multilib lib32stdc++6 libc6-dev-i386 i686-linux-gnu-gcc libssl-dev:i386
+              sudo apt install -y gcc-multilib g++-multilib lib32stdc++6 libc6-dev-i386 libssl-dev:i386
               sudo apt install -y libwebkit2gtk-4.1-dev:i386 libgtk-3-dev:i386 librsvg2-dev:i386 libsoup-3.0-dev:i386 libjavascriptcoregtk-4.1-dev:i386
               echo "PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig/:$PKG_CONFIG_PATH" >> $GITHUB_OUTPUT
               echo "PKG_CONFIG_SYSROOT_DIR=/usr/i386-linux-gnu/:$PKG_CONFIG_SYSROOT_DIR" >> $GITHUB_OUTPUT

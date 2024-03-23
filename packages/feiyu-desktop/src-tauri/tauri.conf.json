@@ -58,7 +58,7 @@
     },
     "linux": {
       "deb": {
-        "depends": []
+        "depends": ["libxdo-dev"]
       },
       "appimage": {
         "bundleMediaFramework": true
