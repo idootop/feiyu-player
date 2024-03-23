@@ -20,6 +20,3 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
 tauri-plugin-cors-fetch = { git = "https://github.com/idootop/tauri-plugin-cors-fetch", rev = "336110e5b6bf9f301a81622c36d2ec1d67637a29" }
-
-[features]
-custom-protocol = ["tauri/custom-protocol"]
