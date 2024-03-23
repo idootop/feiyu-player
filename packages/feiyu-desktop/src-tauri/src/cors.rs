@@ -23,9 +23,9 @@ static HTTP_CLIENT: Lazy<reqwest::Client> = Lazy::new(|| {
 });
 
 #[command]
-pub fn cancel_cors_request(id: u64) {
+fn cancel_cors_request(id: u64) {
     if let Some(tx) = REQUEST_POOL.lock().unwrap().remove(&id) {
-        tx.send(()).ok(); 
+        tx.send(()).ok();
         println!("❌ Request {}: Canceled", id);
     } else {
         println!("❌ Request {}: Not found", id);
@@ -47,7 +47,8 @@ pub fn register_cors_protocol<R: tauri::Runtime>(builder: tauri::Builder<R>) -> 
                     responder.respond(resp);
                 }
             });
-        });
+        })
+        .invoke_handler(tauri::generate_handler![cancel_cors_request]);
 }
 
 async fn handle_request(mut request: Request<Vec<u8>>) -> Option<Response<Vec<u8>>> {
