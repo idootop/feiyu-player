@@ -13,7 +13,7 @@ edition = "2021"
 tauri-build = { version = "2.0.0-beta.10", features = [] }
 
 [dependencies]
-tauri = { version = "2.0.0-beta.13", features = [] }
+tauri = { version = "2.0.0-beta.13", features = ["macos-private-api"] }
 tauri-plugin-os = "2.0.0-beta.3"
 tauri-plugin-http = "2.0.0-beta.3"
 serde = { version = "1", features = ["derive"] }

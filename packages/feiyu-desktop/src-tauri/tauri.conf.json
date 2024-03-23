@@ -10,16 +10,20 @@
   },
   "app": {
     "withGlobalTauri": true,
+    "macOSPrivateApi": true,
     "windows": [
       {
-        "title": "",
-        "titleBarStyle": "Overlay",
+        "title": "飞鱼",
         "width": 950,
         "height": 650,
         "minWidth": 300,
         "minHeight": 600,
+        "shadow": true,
         "center": true,
-        "decorations": false
+        "decorations": false,
+        "transparent": true,
+        "hiddenTitle": true,
+        "titleBarStyle": "Overlay"
       }
     ],
     "security": {
