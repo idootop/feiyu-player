@@ -1,3 +1,11 @@
+.arco-modal-wrapper {
+  scrollbar-width: none !important;
+}
+
+.arco-modal-wrapper::-webkit-scrollbar {
+  display: none !important;
+}
+
 .hide-scrollbar {
   scrollbar-width: none !important;
 }
