@@ -788,14 +788,13 @@ dependencies = [
 name = "feiyu-desktop"
 version = "1.0.0"
 dependencies = [
- "once_cell",
  "serde",
  "serde_json",
  "tauri",
  "tauri-build",
+ "tauri-plugin-cors-fetch",
  "tauri-plugin-http",
  "tauri-plugin-os",
- "tokio",
 ]
 
 [[package]]
@@ -3191,6 +3190,18 @@ dependencies = [
  "tauri-utils",
  "toml 0.8.2",
  "walkdir",
+]
+
+[[package]]
+name = "tauri-plugin-cors-fetch"
+version = "1.0.0"
+source = "git+https://github.com/idootop/tauri-plugin-cors-fetch?rev=336110e5b6bf9f301a81622c36d2ec1d67637a29#336110e5b6bf9f301a81622c36d2ec1d67637a29"
+dependencies = [
+ "once_cell",
+ "tauri",
+ "tauri-plugin",
+ "tauri-plugin-http",
+ "tokio",
 ]
 
 [[package]]

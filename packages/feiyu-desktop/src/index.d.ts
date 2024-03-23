@@ -7,7 +7,6 @@ declare class _FeiyuDesktop {
   isWindows: boolean;
   isLinux: boolean;
   init: () => Promise<void>;
-  setCORS: (enable: boolean) => void;
   invoke?: typeof invoke;
   window?: WebviewWindow;
 }

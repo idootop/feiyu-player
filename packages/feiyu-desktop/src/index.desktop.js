@@ -1,7 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrent } from "@tauri-apps/api/webviewWindow";
 import { type as osType } from "@tauri-apps/plugin-os";
-import { CORSRequestInterceptor } from "./cors";
 
 class _FeiyuDesktop {
   isDesktop = true;
@@ -18,11 +17,6 @@ class _FeiyuDesktop {
       return;
     }
     this._initWindowsBorder();
-    CORSRequestInterceptor.init(
-      (() => {
-        return this._enableCORS;
-      }).bind(this)
-    );
     this.invoke = invoke;
     this.window = getCurrent();
     const type = await osType();
@@ -30,16 +24,6 @@ class _FeiyuDesktop {
     this.isWindows = type === "Windows_NT";
     this.isLinux = type === "Linux";
     this._initialized = true;
-  }
-
-  _enableCORS = true;
-  setCORS(enable) {
-    this._enableCORS = enable;
-    if (enable) {
-      console.log("✅ CORS Interceptor has been enabled");
-    } else {
-      console.log("⛔️ CORS Interceptor has been disabled");
-    }
   }
 
   _initWindowsBorder() {

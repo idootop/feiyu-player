@@ -4,7 +4,6 @@ class _FeiyuDesktop {
   isWindows = false;
   isLinux = false;
   init() {}
-  setCORS() {}
 }
 
 export const FeiyuDesktop = new _FeiyuDesktop();

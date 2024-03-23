@@ -17,6 +17,7 @@
     "window:allow-start-dragging",
     "window:allow-is-fullscreen",
     "window:allow-set-fullscreen",
-    "os:allow-os-type"
+    "os:allow-os-type",
+    "cors-fetch:allow-cancel-cors-request"
   ]
 }

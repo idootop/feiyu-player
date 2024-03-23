@@ -340,6 +340,26 @@
           ]
         },
         {
+          "type": "string",
+          "enum": [
+            "cors-fetch:default"
+          ]
+        },
+        {
+          "description": "cors-fetch:allow-cancel-cors-request -> Enables the cancel_cors_request command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "cors-fetch:allow-cancel-cors-request"
+          ]
+        },
+        {
+          "description": "cors-fetch:deny-cancel-cors-request -> Denies the cancel_cors_request command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "cors-fetch:deny-cancel-cors-request"
+          ]
+        },
+        {
           "description": "event:default -> Default permissions for the plugin.",
           "type": "string",
           "enum": [
