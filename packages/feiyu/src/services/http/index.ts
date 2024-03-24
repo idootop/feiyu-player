@@ -76,7 +76,7 @@ const get = async (
       },
       signal,
     }).catch((e) => {
-      if (!e.message?.includes('aborted')) {
+      if (e.name !== 'AbortError') {
         console.error('❌ 网络异常：', e);
       }
       return undefined;

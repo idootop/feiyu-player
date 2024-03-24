@@ -340,6 +340,7 @@
           ]
         },
         {
+          "description": "cors-fetch:default -> Allows all fetch operations",
           "type": "string",
           "enum": [
             "cors-fetch:default"
@@ -353,10 +354,24 @@
           ]
         },
         {
+          "description": "cors-fetch:allow-cors-request -> Enables the cors_request command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "cors-fetch:allow-cors-request"
+          ]
+        },
+        {
           "description": "cors-fetch:deny-cancel-cors-request -> Denies the cancel_cors_request command without any pre-configured scope.",
           "type": "string",
           "enum": [
             "cors-fetch:deny-cancel-cors-request"
+          ]
+        },
+        {
+          "description": "cors-fetch:deny-cors-request -> Denies the cors_request command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "cors-fetch:deny-cors-request"
           ]
         },
         {
