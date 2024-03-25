@@ -1,10 +1,6 @@
-import { FeiyuDesktop } from 'feiyu-desktop';
 import { Events, Plugin, Util } from 'xgplayer';
-import XgFullScreen from 'xgplayer/es/plugins/fullscreen';
 import XgPlayNext from 'xgplayer/es/plugins/playNext';
 import XgReplay from 'xgplayer/es/plugins/replay';
-
-import { setPlayerFullScreenCallback } from '@/hooks/useIsFullscreen';
 
 export class Loading extends Plugin {
   static get pluginName() {
@@ -132,60 +128,4 @@ export class PlayNext extends XgPlayNext {
     e.stopPropagation();
     player.emit(Events.PLAYNEXT);
   };
-}
-
-export class FullScreen extends XgFullScreen {
-  static get pluginName() {
-    return 'fullscreen';
-  }
-
-  afterCreate() {
-    super.afterCreate();
-    this.on(Events.USER_ACTION, ({ action }) => {
-      if (action === 'switch_fullscreen') {
-        this.setPlayerFullScreen();
-      }
-    });
-    this.on(Events.SHORTCUT, ({ key }) => {
-      if (key === 'esc') {
-        this.setPlayerFullScreen(false);
-      }
-    });
-    setPlayerFullScreenCallback(this.setPlayerFullScreen);
-  }
-
-  async setPlayerFullScreen(fullscreen?: boolean) {
-    if (!FeiyuDesktop.isDesktop) {
-      return;
-    }
-    if (fullscreen == null) {
-      fullscreen = !(await FeiyuDesktop.window?.isFullscreen());
-    }
-
-    await FeiyuDesktop.window?.setFullscreen(fullscreen!);
-    const player = document.getElementById('player');
-    const classNames = [
-      'app-header',
-      'arco-drawer-wrapper',
-      'arco-layout-sider',
-    ];
-
-    if (fullscreen) {
-      player?.classList.add('player-fullscreen');
-      for (const cls of classNames) {
-        const elements = document.getElementsByClassName(cls);
-        Array.from(elements).forEach((e) => {
-          e.classList.add('hide-fullscreen');
-        });
-      }
-    } else {
-      player?.classList.remove('player-fullscreen');
-      for (const cls of classNames) {
-        const elements = document.getElementsByClassName(cls);
-        Array.from(elements).forEach((e) => {
-          e.classList.remove('hide-fullscreen');
-        });
-      }
-    }
-  }
 }

@@ -3,6 +3,7 @@ import ZH from 'xgplayer/es/lang/zh-cn';
 import Thumbnail from 'xgplayer/es/plugins/common/thumbnail';
 import Enter from 'xgplayer/es/plugins/enter';
 import Error from 'xgplayer/es/plugins/error';
+import Fullscreen from 'xgplayer/es/plugins/fullscreen';
 import GapJump from 'xgplayer/es/plugins/gapJump';
 import Keyboard from 'xgplayer/es/plugins/keyboard';
 import Mobile from 'xgplayer/es/plugins/mobile';
@@ -21,7 +22,7 @@ import Volume from 'xgplayer/es/plugins/volume';
 import WaitingTimeoutJump from 'xgplayer/es/plugins/waitingTimeoutJump';
 import sniffer from 'xgplayer/es/utils/sniffer';
 
-import { FullScreen, Loading, PlayNext, Replay } from './xg-plugins';
+import { Loading, PlayNext, Replay } from './xg-plugins';
 
 // @ts-ignore
 ZH.TEXT.FULLSCREEN_TIPS = '全屏';
@@ -47,7 +48,7 @@ export class XgPreset {
     const contolsIcons = [
       ...vodPlugins,
       PlayIcon,
-      FullScreen,
+      Fullscreen,
       PlayNext,
       Volume,
       PIPIcon,

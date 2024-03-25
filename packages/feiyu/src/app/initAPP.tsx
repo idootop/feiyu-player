@@ -8,7 +8,6 @@ import { Dialog } from '@/components/Dialog';
 import { Text } from '@/components/Text';
 import { appConfig } from '@/data/config';
 import { useInit } from '@/hooks/useInit';
-import { useInitDesktopFullscreen } from '@/hooks/useIsFullscreen';
 import { usePWA } from '@/hooks/usePWA';
 import { useRebuildRef } from '@/hooks/useRebuild';
 import { cache } from '@/services/cache';
@@ -44,9 +43,6 @@ export const useInitAPP = () => {
 
   // APP 升级弹窗
   useUpdateAPP();
-
-  // Desktop fullscreen 监听
-  useInitDesktopFullscreen();
 };
 
 const useUpdateAPP = () => {

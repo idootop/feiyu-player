@@ -2,7 +2,6 @@ import { Message } from '@arco-design/web-react';
 
 import { Expand, Row } from '@/components/Flex';
 import { SwitchDark } from '@/components/SwitchDark';
-import { useIsFullscreen } from '@/hooks/useIsFullscreen';
 import { colors } from '@/styles/colors';
 
 import { useHomePages } from '../pages/home/useHomePages';
@@ -15,7 +14,6 @@ export const kHeaderHeight = '60px';
 export const MyHeader = () => {
   const { jumpToIndex, isIndexPage } = useHomePages();
   const { hideSideMenu, openSideDrawer } = useSideMenu();
-  const { showTitleBar } = useIsFullscreen();
 
   return (
     <div
@@ -40,7 +38,7 @@ export const MyHeader = () => {
         }}
       >
         <Row
-          marginTop={showTitleBar ? '14px' : undefined}
+          marginTop="14px"
           cursor="pointer"
           onClick={() => {
             if (hideSideMenu) {

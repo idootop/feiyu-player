@@ -3,8 +3,6 @@ import './styles.css';
 import { Tooltip } from '@arco-design/web-react';
 import { FeiyuDesktop } from 'feiyu-desktop';
 
-import { useIsFullscreen } from '@/hooks/useIsFullscreen';
-
 const TitleButton = (props: {
   color: string;
   onClick: VoidFunction;
@@ -36,8 +34,7 @@ const TitleButton = (props: {
 };
 
 export const TitleBar = () => {
-  const { showTitleBar } = useIsFullscreen();
-  return showTitleBar ? (
+  return (
     <div data-tauri-drag-region className={'titlebar app-header'}>
       <TitleButton
         color="#fe5f57"
@@ -62,5 +59,5 @@ export const TitleBar = () => {
         }}
       />
     </div>
-  ) : undefined;
+  );
 };
