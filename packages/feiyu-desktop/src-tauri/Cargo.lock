@@ -3329,9 +3329,9 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-cors-fetch"
-version = "2.0.0"
+version = "2.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c24536b4c331f290d0f525624f7dacc6d2aba2cdf97a4ff4b3e7ea21e1b27596"
+checksum = "5216989e3f79e261cc9f5dbed6257ddaace94722624f52b64eea3332cd5b4eaf"
 dependencies = [
  "http",
  "once_cell",

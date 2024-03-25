@@ -10,7 +10,9 @@
 - ~导入导出~
 - ~Docker~
 - ~PC 客户端（Tauri~
-- 自动构建（Github action）
+- ~自动构建（Github action）~
+- Windows 视频全屏
+- 桌面端版本自动更新
 - 片源管理
 - 记忆播放位置
 - 历史记录
