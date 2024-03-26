@@ -16,13 +16,14 @@ class _FeiyuDesktop {
     if (this._initialized) {
       return;
     }
-    this._initWindowsBorder();
     this.invoke = invoke;
     this.window = getCurrent();
     const type = await osType();
-    this.isMac = type === "Darwin";
-    this.isWindows = type === "Windows_NT";
-    this.isLinux = type === "Linux";
+    this.isMac = type === "macos";
+    this.isWindows = type === "windows";
+    this.isLinux = type === "linux";
+    this._initFullScreen();
+    this._initWindowsBorder();
     this._initialized = true;
   }
 
@@ -44,6 +45,15 @@ class _FeiyuDesktop {
     appBorderElement.style.borderRadius = "12px";
     appBorderElement.style.width = "100vw";
     appBorderElement.style.height = "100vh";
+  }
+
+  _initFullScreen() {
+    if (this.isWindows) {
+      document.addEventListener("fullscreenchange", async () => {
+        const fullscreen = document.fullscreenElement != null;
+        await this.window?.setFullscreen(fullscreen);
+      });
+    }
   }
 }
 
