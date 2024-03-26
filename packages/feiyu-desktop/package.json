@@ -11,8 +11,7 @@
   "scripts": {
     "icon": "tauri icon",
     "dev": "tauri dev",
-    "preview": "node build.js",
-    "build": "pnpm build:feiyu && node build.js",
+    "build": "pnpm build:feiyu && pnpm tauri build",
     "build:feiyu": "cd ../feiyu && pnpm build:desktop"
   },
   "dependencies": {
