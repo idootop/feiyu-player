@@ -1,3 +1,4 @@
+import { FeiyuDesktop } from 'feiyu-desktop';
 import fetch from 'isomorphic-unfetch';
 
 import { appConfig } from '@/data/config';
@@ -148,6 +149,10 @@ const post = async (url: string, data?: any, config?: HttpConfig) => {
 };
 
 const getCurrentProxy = async () => {
+  if (FeiyuDesktop.isDesktop) {
+    // 桌面端支持 CORS，无需 proxy
+    return undefined;
+  }
   const proxy = (await appConfig.get()).proxy;
   if (!proxy || proxy === 'https://example.vercel.app/api/proxy') {
     // 尚未设置 proxy
@@ -157,6 +162,10 @@ const getCurrentProxy = async () => {
 };
 
 export const isValidProxy = async () => {
+  if (FeiyuDesktop.isDesktop) {
+    // 桌面端支持 CORS，无需 proxy
+    return true;
+  }
   const proxy = await getCurrentProxy();
   return proxy ? isNotEmpty(await http.get(proxy)) : false;
 };
