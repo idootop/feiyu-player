@@ -97,7 +97,7 @@ const SubscribeHeader = (props: { isMobile: boolean }) => {
   );
   return (
     <Row width="100%" className="subscribe-title">
-      <Text fontSize="16px" fontWeight="500">
+      <Text fontSize="16px" fontWeight="bold">
         订阅管理
       </Text>
       <Expand />
@@ -175,7 +175,7 @@ const TableHeader = (props: { isMobile: boolean }) => {
       width="100%"
       background={colors.card}
       fontSize="14px"
-      fontWeight="500"
+      fontWeight="bold"
     >
       <Radio
         checked
@@ -373,7 +373,7 @@ const ContentFilter = (props: { isMobile: boolean }) => {
   const { adultContent, movieCommentaries } = data ?? {};
   return (
     <Column width="100%" className="subscribe-title" alignItems="start">
-      <Text fontSize="16px" fontWeight="500">
+      <Text fontSize="16px" fontWeight="bold">
         搜索结果屏蔽以下内容
       </Text>
       <Row>
@@ -384,7 +384,7 @@ const ContentFilter = (props: { isMobile: boolean }) => {
           borderRadius="4px"
           marginRight="20px"
         >
-          <Text fontSize="14px" fontWeight="500" marginRight="20px">
+          <Text fontSize="14px" fontWeight="bold" marginRight="20px">
             电影解说
           </Text>
           <Switch
@@ -402,7 +402,7 @@ const ContentFilter = (props: { isMobile: boolean }) => {
           border={`1px solid ${colors.border}`}
           borderRadius="4px"
         >
-          <Text fontSize="14px" fontWeight="500" marginRight="20px">
+          <Text fontSize="14px" fontWeight="bold" marginRight="20px">
             伦理片
           </Text>
           <Switch
@@ -423,7 +423,7 @@ const ClearCache = (props: { isMobile: boolean }) => {
   const { isMobile: _ } = props;
   return (
     <Column width="100%" className="subscribe-title" alignItems="start">
-      <Text fontSize="16px" fontWeight="500">
+      <Text fontSize="16px" fontWeight="bo l d">
         清除缓存
       </Text>
 

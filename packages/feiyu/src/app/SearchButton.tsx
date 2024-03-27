@@ -70,19 +70,16 @@ export const SearchButton = () => {
           </Button>
         </Expand>
       ) : (
-        <div
+        <Row
           className="ac-navbar-search-input"
           onClick={openSearchModalRef.current}
         >
-          <div className="ac-navbar-search-input-left">
-            <IconSearch style={{ color: colors.text, verticalAlign: '-1px' }} />
-            <span className="ac-navbar-search-input-placeholder">搜索</span>
-          </div>
-          <Row>
-            <InputKey>⌘</InputKey>
-            <InputKey>K</InputKey>
-          </Row>
-        </div>
+          <IconSearch style={{ color: colors.text }} />
+          <span className="ac-navbar-search-input-placeholder">搜索</span>
+          <Expand />
+          <InputKey>⌘</InputKey>
+          <InputKey>K</InputKey>
+        </Row>
       )}
     </>
   );
