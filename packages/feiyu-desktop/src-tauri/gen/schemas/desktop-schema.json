@@ -142,116 +142,137 @@
                 "identifier": {
                   "oneOf": [
                     {
-                      "description": "http:default -> Allows all fetch operations",
                       "type": "string",
                       "enum": [
-                        "http:default"
+                        "shell:default"
                       ]
                     },
                     {
-                      "description": "http:allow-fetch -> Enables the fetch command without any pre-configured scope.",
+                      "description": "shell:allow-execute -> Enables the execute command without any pre-configured scope.",
                       "type": "string",
                       "enum": [
-                        "http:allow-fetch"
+                        "shell:allow-execute"
                       ]
                     },
                     {
-                      "description": "http:allow-fetch-cancel -> Enables the fetch_cancel command without any pre-configured scope.",
+                      "description": "shell:allow-kill -> Enables the kill command without any pre-configured scope.",
                       "type": "string",
                       "enum": [
-                        "http:allow-fetch-cancel"
+                        "shell:allow-kill"
                       ]
                     },
                     {
-                      "description": "http:allow-fetch-read-body -> Enables the fetch_read_body command without any pre-configured scope.",
+                      "description": "shell:allow-open -> Enables the open command without any pre-configured scope.",
                       "type": "string",
                       "enum": [
-                        "http:allow-fetch-read-body"
+                        "shell:allow-open"
                       ]
                     },
                     {
-                      "description": "http:allow-fetch-send -> Enables the fetch_send command without any pre-configured scope.",
+                      "description": "shell:allow-stdin-write -> Enables the stdin_write command without any pre-configured scope.",
                       "type": "string",
                       "enum": [
-                        "http:allow-fetch-send"
+                        "shell:allow-stdin-write"
                       ]
                     },
                     {
-                      "description": "http:deny-fetch -> Denies the fetch command without any pre-configured scope.",
+                      "description": "shell:deny-execute -> Denies the execute command without any pre-configured scope.",
                       "type": "string",
                       "enum": [
-                        "http:deny-fetch"
+                        "shell:deny-execute"
                       ]
                     },
                     {
-                      "description": "http:deny-fetch-cancel -> Denies the fetch_cancel command without any pre-configured scope.",
+                      "description": "shell:deny-kill -> Denies the kill command without any pre-configured scope.",
                       "type": "string",
                       "enum": [
-                        "http:deny-fetch-cancel"
+                        "shell:deny-kill"
                       ]
                     },
                     {
-                      "description": "http:deny-fetch-read-body -> Denies the fetch_read_body command without any pre-configured scope.",
+                      "description": "shell:deny-open -> Denies the open command without any pre-configured scope.",
                       "type": "string",
                       "enum": [
-                        "http:deny-fetch-read-body"
+                        "shell:deny-open"
                       ]
                     },
                     {
-                      "description": "http:deny-fetch-send -> Denies the fetch_send command without any pre-configured scope.",
+                      "description": "shell:deny-stdin-write -> Denies the stdin_write command without any pre-configured scope.",
                       "type": "string",
                       "enum": [
-                        "http:deny-fetch-send"
+                        "shell:deny-stdin-write"
                       ]
                     }
                   ]
                 },
                 "allow": {
                   "items": {
-                    "title": "ScopeEntry",
-                    "description": "HTTP scope entry object definition.",
-                    "anyOf": [
-                      {
-                        "description": "A URL that can be accessed by the webview when using the HTTP APIs. Wildcards can be used following the URL pattern standard.\n\nSee [the URL Pattern spec](https://urlpattern.spec.whatwg.org/) for more information.\n\nExamples:\n\n- \"https://*\" : allows all HTTPS origin on port 443\n\n- \"https://*:*\" : allows all HTTPS origin on any port\n\n- \"https://*.github.com/tauri-apps/tauri\": allows any subdomain of \"github.com\" with the \"tauri-apps/api\" path\n\n- \"https://myapi.service.com/users/*\": allows access to any URLs that begins with \"https://myapi.service.com/users/\"",
+                    "title": "Entry",
+                    "description": "A command allowed to be executed by the webview API.",
+                    "type": "object",
+                    "required": [
+                      "args",
+                      "cmd",
+                      "name",
+                      "sidecar"
+                    ],
+                    "properties": {
+                      "args": {
+                        "description": "The allowed arguments for the command execution.",
+                        "allOf": [
+                          {
+                            "$ref": "#/definitions/ShellAllowedArgs"
+                          }
+                        ]
+                      },
+                      "cmd": {
+                        "description": "The command name. It can start with a variable that resolves to a system base directory. The variables are: `$AUDIO`, `$CACHE`, `$CONFIG`, `$DATA`, `$LOCALDATA`, `$DESKTOP`, `$DOCUMENT`, `$DOWNLOAD`, `$EXE`, `$FONT`, `$HOME`, `$PICTURE`, `$PUBLIC`, `$RUNTIME`, `$TEMPLATE`, `$VIDEO`, `$RESOURCE`, `$APP`, `$LOG`, `$TEMP`, `$APPCONFIG`, `$APPDATA`, `$APPLOCALDATA`, `$APPCACHE`, `$APPLOG`.",
                         "type": "string"
                       },
-                      {
-                        "type": "object",
-                        "required": [
-                          "url"
-                        ],
-                        "properties": {
-                          "url": {
-                            "description": "A URL that can be accessed by the webview when using the HTTP APIs. Wildcards can be used following the URL pattern standard.\n\nSee [the URL Pattern spec](https://urlpattern.spec.whatwg.org/) for more information.\n\nExamples:\n\n- \"https://*\" : allows all HTTPS origin on port 443\n\n- \"https://*:*\" : allows all HTTPS origin on any port\n\n- \"https://*.github.com/tauri-apps/tauri\": allows any subdomain of \"github.com\" with the \"tauri-apps/api\" path\n\n- \"https://myapi.service.com/users/*\": allows access to any URLs that begins with \"https://myapi.service.com/users/\"",
-                            "type": "string"
-                          }
-                        }
+                      "name": {
+                        "description": "The name for this allowed shell command configuration.\n\nThis name will be used inside of the webview API to call this command along with any specified arguments.",
+                        "type": "string"
+                      },
+                      "sidecar": {
+                        "description": "If this command is a sidecar command.",
+                        "type": "boolean"
                       }
-                    ]
+                    }
                   }
                 },
                 "deny": {
                   "items": {
-                    "title": "ScopeEntry",
-                    "description": "HTTP scope entry object definition.",
-                    "anyOf": [
-                      {
-                        "description": "A URL that can be accessed by the webview when using the HTTP APIs. Wildcards can be used following the URL pattern standard.\n\nSee [the URL Pattern spec](https://urlpattern.spec.whatwg.org/) for more information.\n\nExamples:\n\n- \"https://*\" : allows all HTTPS origin on port 443\n\n- \"https://*:*\" : allows all HTTPS origin on any port\n\n- \"https://*.github.com/tauri-apps/tauri\": allows any subdomain of \"github.com\" with the \"tauri-apps/api\" path\n\n- \"https://myapi.service.com/users/*\": allows access to any URLs that begins with \"https://myapi.service.com/users/\"",
+                    "title": "Entry",
+                    "description": "A command allowed to be executed by the webview API.",
+                    "type": "object",
+                    "required": [
+                      "args",
+                      "cmd",
+                      "name",
+                      "sidecar"
+                    ],
+                    "properties": {
+                      "args": {
+                        "description": "The allowed arguments for the command execution.",
+                        "allOf": [
+                          {
+                            "$ref": "#/definitions/ShellAllowedArgs"
+                          }
+                        ]
+                      },
+                      "cmd": {
+                        "description": "The command name. It can start with a variable that resolves to a system base directory. The variables are: `$AUDIO`, `$CACHE`, `$CONFIG`, `$DATA`, `$LOCALDATA`, `$DESKTOP`, `$DOCUMENT`, `$DOWNLOAD`, `$EXE`, `$FONT`, `$HOME`, `$PICTURE`, `$PUBLIC`, `$RUNTIME`, `$TEMPLATE`, `$VIDEO`, `$RESOURCE`, `$APP`, `$LOG`, `$TEMP`, `$APPCONFIG`, `$APPDATA`, `$APPLOCALDATA`, `$APPCACHE`, `$APPLOG`.",
                         "type": "string"
                       },
-                      {
-                        "type": "object",
-                        "required": [
-                          "url"
-                        ],
-                        "properties": {
-                          "url": {
-                            "description": "A URL that can be accessed by the webview when using the HTTP APIs. Wildcards can be used following the URL pattern standard.\n\nSee [the URL Pattern spec](https://urlpattern.spec.whatwg.org/) for more information.\n\nExamples:\n\n- \"https://*\" : allows all HTTPS origin on port 443\n\n- \"https://*:*\" : allows all HTTPS origin on any port\n\n- \"https://*.github.com/tauri-apps/tauri\": allows any subdomain of \"github.com\" with the \"tauri-apps/api\" path\n\n- \"https://myapi.service.com/users/*\": allows access to any URLs that begins with \"https://myapi.service.com/users/\"",
-                            "type": "string"
-                          }
-                        }
+                      "name": {
+                        "description": "The name for this allowed shell command configuration.\n\nThis name will be used inside of the webview API to call this command along with any specified arguments.",
+                        "type": "string"
+                      },
+                      "sidecar": {
+                        "description": "If this command is a sidecar command.",
+                        "type": "boolean"
                       }
-                    ]
+                    }
                   }
                 }
               }
@@ -435,69 +456,6 @@
           "type": "string",
           "enum": [
             "event:deny-unlisten"
-          ]
-        },
-        {
-          "description": "http:default -> Allows all fetch operations",
-          "type": "string",
-          "enum": [
-            "http:default"
-          ]
-        },
-        {
-          "description": "http:allow-fetch -> Enables the fetch command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "http:allow-fetch"
-          ]
-        },
-        {
-          "description": "http:allow-fetch-cancel -> Enables the fetch_cancel command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "http:allow-fetch-cancel"
-          ]
-        },
-        {
-          "description": "http:allow-fetch-read-body -> Enables the fetch_read_body command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "http:allow-fetch-read-body"
-          ]
-        },
-        {
-          "description": "http:allow-fetch-send -> Enables the fetch_send command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "http:allow-fetch-send"
-          ]
-        },
-        {
-          "description": "http:deny-fetch -> Denies the fetch command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "http:deny-fetch"
-          ]
-        },
-        {
-          "description": "http:deny-fetch-cancel -> Denies the fetch_cancel command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "http:deny-fetch-cancel"
-          ]
-        },
-        {
-          "description": "http:deny-fetch-read-body -> Denies the fetch_read_body command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "http:deny-fetch-read-body"
-          ]
-        },
-        {
-          "description": "http:deny-fetch-send -> Denies the fetch_send command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "http:deny-fetch-send"
           ]
         },
         {
@@ -1148,6 +1106,68 @@
           "type": "string",
           "enum": [
             "resources:deny-close"
+          ]
+        },
+        {
+          "type": "string",
+          "enum": [
+            "shell:default"
+          ]
+        },
+        {
+          "description": "shell:allow-execute -> Enables the execute command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "shell:allow-execute"
+          ]
+        },
+        {
+          "description": "shell:allow-kill -> Enables the kill command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "shell:allow-kill"
+          ]
+        },
+        {
+          "description": "shell:allow-open -> Enables the open command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "shell:allow-open"
+          ]
+        },
+        {
+          "description": "shell:allow-stdin-write -> Enables the stdin_write command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "shell:allow-stdin-write"
+          ]
+        },
+        {
+          "description": "shell:deny-execute -> Denies the execute command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "shell:deny-execute"
+          ]
+        },
+        {
+          "description": "shell:deny-kill -> Denies the kill command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "shell:deny-kill"
+          ]
+        },
+        {
+          "description": "shell:deny-open -> Denies the open command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "shell:deny-open"
+          ]
+        },
+        {
+          "description": "shell:deny-stdin-write -> Denies the stdin_write command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "shell:deny-stdin-write"
           ]
         },
         {
@@ -2412,6 +2432,45 @@
           "enum": [
             "iOS"
           ]
+        }
+      ]
+    },
+    "ShellAllowedArg": {
+      "description": "A command argument allowed to be executed by the webview API.",
+      "anyOf": [
+        {
+          "description": "A non-configurable argument that is passed to the command in the order it was specified.",
+          "type": "string"
+        },
+        {
+          "description": "A variable that is set while calling the command from the webview API.",
+          "type": "object",
+          "required": [
+            "validator"
+          ],
+          "properties": {
+            "validator": {
+              "description": "[regex] validator to require passed values to conform to an expected input.\n\nThis will require the argument value passed to this variable to match the `validator` regex before it will be executed.\n\n[regex]: https://docs.rs/regex/latest/regex/#syntax",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ShellAllowedArgs": {
+      "description": "A set of command arguments allowed to be executed by the webview API.\n\nA value of `true` will allow any arguments to be passed to the command. `false` will disable all arguments. A list of [`ShellAllowedArg`] will set those arguments as the only valid arguments to be passed to the attached command configuration.",
+      "anyOf": [
+        {
+          "description": "Use a simple boolean to allow all or disable all arguments to this command configuration.",
+          "type": "boolean"
+        },
+        {
+          "description": "A specific set of [`ShellAllowedArg`] that are valid to call for the command configuration.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ShellAllowedArg"
+          }
         }
       ]
     }

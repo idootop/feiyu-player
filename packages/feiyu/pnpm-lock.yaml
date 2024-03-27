@@ -1903,6 +1903,12 @@ packages:
       '@tauri-apps/api': 2.0.0-beta.4
     dev: false
 
+  /@tauri-apps/plugin-shell@2.0.0-beta.2:
+    resolution: {integrity: sha512-9rWsfN7Wt+EuWmpmNnK8bCs+04fzhEYrHtWyLIAYxb9diFdcJrEoctCP9YM2v+Uf8/y8qFC7VCbZ/9VQHANymQ==}
+    dependencies:
+      '@tauri-apps/api': 2.0.0-beta.4
+    dev: false
+
   /@tsconfig/node10@1.0.9:
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
     dev: true
@@ -5992,4 +5998,5 @@ packages:
     dependencies:
       '@tauri-apps/api': 2.0.0-beta.5
       '@tauri-apps/plugin-os': 2.0.0-beta.2
+      '@tauri-apps/plugin-shell': 2.0.0-beta.2
     dev: false

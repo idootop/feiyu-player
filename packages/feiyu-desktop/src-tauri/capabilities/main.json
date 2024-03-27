@@ -11,13 +11,14 @@
     "resources:default",
     "menu:default",
     "tray:default",
+    "shell:allow-open",
+    "os:allow-os-type",
+    "cors-fetch:default",
     "window:allow-close",
     "window:allow-minimize",
     "window:allow-toggle-maximize",
     "window:allow-start-dragging",
     "window:allow-is-fullscreen",
-    "window:allow-set-fullscreen",
-    "os:allow-os-type",
-    "cors-fetch:default"
+    "window:allow-set-fullscreen"
   ]
 }
