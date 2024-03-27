@@ -56,10 +56,11 @@ export const App = () => {
 export const PageBuilder = (props: BoxProps) => {
   return (
     <Box
-      className="hide-scrollbar"
+      className="page normal-scrollbar"
       width="100%"
       height="100vh"
-      padding={`calc(${kHeaderHeight} + 20px) 20px 20px 20px`}
+      padding={`calc(${kHeaderHeight} + 20px) calc(20px - 8px - 4px) 20px 20px`}
+      borderRight='4px solid transparent'
       overflowY="scroll"
       background={colors.bg}
       {...props}
