@@ -150,7 +150,7 @@ jobs:
           cargo tauri build --target ${{ matrix.target }} ${{ env.TAURI_ARGS }}
           cd ${{ github.workspace }}
         env:
-          TAURI_ARGS: ${{ matrix.arch == 'aarch64' && '--bundles nsis' || '' }}
+          TAURI_ARGS: ${{ matrix.arch == 'aarch64' && '--bundles nsis,updater' || '' }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
       - name: 重命名安装包 (.msi)
