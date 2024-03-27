@@ -62,7 +62,10 @@
     },
     "linux": {
       "deb": {
-        "depends": ["libxdo-dev"]
+        "depends": ["libwebkit2gtk-4.1-dev"]
+      },
+      "rpm": {
+        "depends": ["webkit2gtk4.1-devel"]
       },
       "appimage": {
         "bundleMediaFramework": true
