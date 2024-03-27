@@ -18,7 +18,7 @@
         "height": 650,
         "minWidth": 300,
         "minHeight": 600,
-        "shadow": true,
+        "shadow": false,
         "center": true,
         "decorations": false,
         "transparent": true,
@@ -47,17 +47,39 @@
       "entitlements": null,
       "frameworks": [],
       "providerShortName": null,
-      "signingIdentity": null
+      "signingIdentity": null,
+      "dmg": {
+        "background": "images/dmg-background.jpg",
+        "appPosition": {
+          "x": 180,
+          "y": 170
+        },
+        "applicationFolderPosition": {
+          "x": 480,
+          "y": 170
+        },
+        "windowSize": {
+          "height": 400,
+          "width": 660
+        }
+      }
     },
     "windows": {
-      "certificateThumbprint": null,
       "digestAlgorithm": "sha256",
       "timestampUrl": "",
       "webviewInstallMode": {
         "type": "embedBootstrapper"
       },
       "wix": {
-        "language": "zh-CN"
+        "language": ["zh-CN"],
+        "bannerPath": "images/wix_banner.png",
+        "dialogImagePath": "images/wix_dialog.png"
+      },
+      "nsis": {
+        "headerImage": "images/nsis_header.bmp",
+        "sidebarImage": "images/nsis_sidebar.bmp",
+        "installerIcon": "icons/icon.ico",
+        "languages": ["SimpChinese"]
       }
     },
     "linux": {
