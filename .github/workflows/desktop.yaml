@@ -32,7 +32,7 @@ jobs:
         run: |
           cd packages/feiyu && pnpm build:desktop
           VERSION=$(node -p "require('./package.json').version")
-          BUILD_VERSION='-c "{\"version\":\"$VERSION\"}"'
+          BUILD_VERSION="-c \"{\\\"version\\\":\\\"$VERSION\\\"}\""
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "build-version=$BUILD_VERSION" >> $GITHUB_OUTPUT
           cd ${{ github.workspace }}
