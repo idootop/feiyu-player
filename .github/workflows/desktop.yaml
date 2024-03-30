@@ -32,9 +32,11 @@ jobs:
         run: |
           cd packages/feiyu && pnpm build:desktop
           VERSION=$(node -p "require('./package.json').version")
-          BUILD_VERSION="-c \"{\\\"version\\\":\\\"$VERSION\\\"}\""
+          BUILD_VERSION="-c '{\\\"version\\\":\\\"$VERSION\\\"}'"
+          BUILD_VERSION_WINDOWS="-c '{\"version\":\"$VERSION\"}'"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "build-version=$BUILD_VERSION" >> $GITHUB_OUTPUT
+          echo "build-version-windows=$BUILD_VERSION_WINDOWS" >> $GITHUB_OUTPUT
           cd ${{ github.workspace }}
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
@@ -45,6 +47,7 @@ jobs:
     outputs:
       version: ${{ steps.app.outputs.version }}
       build-version: ${{ steps.app.outputs.build-version }}
+      build-version-windows: ${{ steps.app.outputs.build-version-windows }}
 
   build-for-macos:
     name: macOS
@@ -170,7 +173,7 @@ jobs:
         run: |
           cd packages/feiyu-desktop
           pnpm install
-          pnpm tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }} ${{ env.TAURI_ARGS }}
+          pnpm tauri build ${{ needs.build.outputs.build-version-windows }} -t ${{ matrix.target }} ${{ env.TAURI_ARGS }}
           cd ${{ github.workspace }}
         env:
           TAURI_ARGS: ${{ matrix.arch == 'aarch64' && '--bundles nsis,updater' || '' }}
