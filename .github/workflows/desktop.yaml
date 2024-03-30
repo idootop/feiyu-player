@@ -93,7 +93,8 @@ jobs:
         run: |
           cd packages/feiyu-desktop
           pnpm install
-          pnpm tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }}
+          cargo install tauri-cli --version "^2.0.0-beta"
+          cargo tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }}
           cd ${{ github.workspace }}
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
@@ -165,7 +166,8 @@ jobs:
         run: |
           cd packages/feiyu-desktop
           pnpm install
-          pnpm tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }} ${{ env.TAURI_ARGS }}
+          cargo install tauri-cli --version "^2.0.0-beta"
+          cargo tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }} ${{ env.TAURI_ARGS }}
           cd ${{ github.workspace }}
         env:
           TAURI_ARGS: ${{ matrix.arch == 'aarch64' && '--bundles nsis,updater' || '' }}
@@ -288,12 +290,13 @@ jobs:
         run: |
           cd packages/feiyu-desktop
           pnpm install
+          cargo install tauri-cli --version "^2.0.0-beta"
           case "${{ matrix.target }}" in
             x86_64-unknown-linux-gnu|i686-unknown-linux-gnu)
-              pnpm tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }}
+              cargo tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }}
               ;;
             *)
-              pnpm tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }} -b deb,rpm
+              cargo tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }} -b deb,rpm
               ;;
           esac
           cd ${{ github.workspace }}
