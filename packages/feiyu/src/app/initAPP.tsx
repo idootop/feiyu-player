@@ -7,6 +7,7 @@ import { Box } from '@/components/Box';
 import { Dialog } from '@/components/Dialog';
 import { Text } from '@/components/Text';
 import { appConfig } from '@/data/config';
+import { useDesktopUpdater } from '@/hooks/useDesktopUpdater';
 import { useInit } from '@/hooks/useInit';
 import { usePWA } from '@/hooks/usePWA';
 import { useRebuildRef } from '@/hooks/useRebuild';
@@ -46,7 +47,13 @@ export const useInitAPP = () => {
 };
 
 const useUpdateAPP = () => {
-  const { needUpdate, update } = usePWA();
+  let { needUpdate, update } = usePWA();
+  const { needUpdate: needUpdateDesktop, update: updateDesktop } =
+    useDesktopUpdater();
+  if (needUpdateDesktop) {
+    needUpdate = needUpdateDesktop;
+    update = updateDesktop;
+  }
   useEffect(() => {
     if (needUpdate) {
       const id = 'needUpdate';

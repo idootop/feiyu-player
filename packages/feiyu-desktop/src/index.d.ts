@@ -1,5 +1,15 @@
 import { invoke } from "@tauri-apps/api/core";
+import { Update } from "@tauri-apps/plugin-updater";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
+
+declare class Updater {
+  checking: boolean;
+  update?: Update;
+  needUpdate: () => Promise<boolean>;
+  relaunch: () => Promise<void>;
+  check: () => Promise<Update | undefined>;
+  download: () => Promise<boolean>;
+}
 
 declare class _FeiyuDesktop {
   isDesktop: boolean;
@@ -9,6 +19,7 @@ declare class _FeiyuDesktop {
   init: () => Promise<void>;
   invoke?: typeof invoke;
   window?: WebviewWindow;
+  updater?: Updater;
 }
 declare const FeiyuDesktop: _FeiyuDesktop;
 export { FeiyuDesktop };

@@ -162,10 +162,6 @@ const getCurrentProxy = async () => {
 };
 
 export const isValidProxy = async () => {
-  if (FeiyuDesktop.isDesktop) {
-    // 桌面端支持 CORS，无需 proxy
-    return true;
-  }
   const proxy = await getCurrentProxy();
   return proxy ? isNotEmpty(await http.get(proxy)) : false;
 };

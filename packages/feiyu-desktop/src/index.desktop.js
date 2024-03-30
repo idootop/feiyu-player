@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrent } from "@tauri-apps/api/webviewWindow";
 import { type as osType } from "@tauri-apps/plugin-os";
+import { updater } from "./updater";
 
 class _FeiyuDesktop {
   isDesktop = true;
@@ -10,6 +11,7 @@ class _FeiyuDesktop {
 
   invoke = null;
   window = null;
+  updater = updater;
 
   _initialized = false;
   async init() {
