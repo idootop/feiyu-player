@@ -36,7 +36,7 @@
       "dialog": false,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQ3MDIyQ0IxQTBDRjZBNUEKUldSYWFzK2dzU3dDMTY0MjJtVFA2ZnVLK0NZWUl6MlV0ejdJSCtzMHQvV3RtcG1LZDJYcGFjdUoK",
       "endpoints": [
-        "https://github.com/idootop/feiyu-player/releases/download/updater/update.json"
+        "https://github.com/idootop/feiyu-player/releases/download/updater/latest.json"
       ]
     }
   },

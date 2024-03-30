@@ -1,30 +1,7 @@
 #!/usr/bin/env node
 
-import fs from "fs-extra";
 import path from "path";
-
-const getFiles = (dir) => {
-  return new Promise((resolve) => {
-    fs.readdir(dir, (err, files) => {
-      resolve(err ? [] : files);
-    });
-  });
-};
-
-const copyFile = (from, to) => {
-  if (!fs.existsSync(from)) {
-    return false;
-  }
-  const dirname = path.dirname(to);
-  if (!fs.existsSync(dirname)) {
-    fs.mkdirSync(dirname, { recursive: true });
-  }
-  return new Promise((resolve) => {
-    fs.copy(from, to, (err) => {
-      resolve(err ? false : true);
-    });
-  });
-};
+import { copyFile, getFiles } from "./io.js";
 
 async function main() {
   const args = process.argv.slice(2);
