@@ -1,13 +1,6 @@
 name: Build and Release
 on:
   workflow_dispatch:
-    inputs:
-      release_message:
-        description: "版本更新说明"
-        type: string
-        required: true
-        default: |
-          发现新版本✨ 如果更新失败，请到官网下载最新版本：https://feiyu-player.xbox.work
 
 jobs:
   build:
@@ -31,7 +24,10 @@ jobs:
         id: app
         run: |
           cd packages/feiyu && pnpm build:desktop
-          echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+          VERSION=$(node -p "require('./package.json').version")
+          BUILD_VERSION="-c '{\"version\":\"$VERSION\"}'"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "build-version=$BUILD_VERSION" >> $GITHUB_OUTPUT
           cd ${{ github.workspace }}
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
@@ -41,6 +37,7 @@ jobs:
           if-no-files-found: error
     outputs:
       version: ${{ steps.app.outputs.version }}
+      build-version: ${{ steps.app.outputs.build-version }}
 
   build-for-macos:
     name: macOS
@@ -51,18 +48,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - target: aarch64-apple-darwin
-            build: macos
-            os: macos-latest
-            arch: aarch64
-          - target: x86_64-apple-darwin
-            build: macos
-            os: macos-latest
-            arch: x86_64
           - target: universal-apple-darwin
             build: macos
             os: macos-latest
             arch: universal
+          # - target: aarch64-apple-darwin
+          #   build: macos
+          #   os: macos-latest
+          #   arch: aarch64
+          # - target: x86_64-apple-darwin
+          #   build: macos
+          #   os: macos-latest
+          #   arch: x86_64
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -85,7 +82,7 @@ jobs:
         run: |
           cd packages/feiyu-desktop
           cargo install tauri-cli --version "^2.0.0-beta"
-          cargo tauri build --target ${{ matrix.target }}
+          cargo tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }}
           cd ${{ github.workspace }}
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
@@ -117,14 +114,14 @@ jobs:
             build: windows
             os: windows-latest
             arch: x86_64
-          - target: aarch64-pc-windows-msvc
-            build: windows
-            os: windows-latest
-            arch: aarch64
-          - target: i686-pc-windows-msvc
-            build: windows
-            os: windows-latest
-            arch: i686
+          # - target: aarch64-pc-windows-msvc
+          #   build: windows
+          #   os: windows-latest
+          #   arch: aarch64
+          # - target: i686-pc-windows-msvc
+          #   build: windows
+          #   os: windows-latest
+          #   arch: i686
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -147,7 +144,7 @@ jobs:
         run: |
           cd packages/feiyu-desktop
           cargo install tauri-cli --version "^2.0.0-beta"
-          cargo tauri build --target ${{ matrix.target }} ${{ env.TAURI_ARGS }}
+          cargo tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }} ${{ env.TAURI_ARGS }}
           cd ${{ github.workspace }}
         env:
           TAURI_ARGS: ${{ matrix.arch == 'aarch64' && '--bundles nsis,updater' || '' }}
@@ -189,10 +186,10 @@ jobs:
             build: linux
             os: ubuntu-latest
             arch: x86_64
-          - target: aarch64-unknown-linux-gnu
-            build: linux
-            os: ubuntu-latest
-            arch: aarch64
+          # - target: aarch64-unknown-linux-gnu
+          #   build: linux
+          #   os: ubuntu-latest
+          #   arch: aarch64
           # - target: armv7-unknown-linux-gnueabihf
           #   build: linux
           #   os: ubuntu-latest
@@ -268,9 +265,9 @@ jobs:
           cd packages/feiyu-desktop
           cargo install tauri-cli --version "^2.0.0-beta"
           if [ "${{ matrix.target }}" = "x86_64-unknown-linux-gnu" ]; then
-              cargo tauri build --target ${{ matrix.target }}
+              cargo tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }}
           else
-              cargo tauri build --target ${{ matrix.target }} -b deb,rpm
+              cargo tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }} -b deb,rpm
           fi
           cd ${{ github.workspace }}
         env:
@@ -341,7 +338,6 @@ jobs:
         with:
           allowUpdates: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          body: ${{ inputs.release_message }}
           name: 飞鱼 v${{ needs.build.outputs.version }}
           tag: v${{ needs.build.outputs.version }}
           draft: true

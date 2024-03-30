@@ -423,7 +423,7 @@ const ClearCache = (props: { isMobile: boolean }) => {
   const { isMobile: _ } = props;
   return (
     <Column width="100%" className="subscribe-title" alignItems="start">
-      <Text fontSize="16px" fontWeight="bo l d">
+      <Text fontSize="16px" fontWeight="bold">
         清除缓存
       </Text>
 
