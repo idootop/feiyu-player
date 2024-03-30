@@ -69,6 +69,17 @@ jobs:
         with:
           name: dist
           path: packages/feiyu/dist
+      - uses: actions/checkout@v4
+      - name: 初始化 PNPM
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: 初始化 Node 环境和缓存
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+          cache-dependency-path: "**/pnpm-lock.yaml"
       - name: 初始化 Rust
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -81,25 +92,24 @@ jobs:
       - name: 构建飞鱼 APP
         run: |
           cd packages/feiyu-desktop
-          cargo install tauri-cli --version "^2.0.0-beta"
-          cargo tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }}
+          pnpm install
+          pnpm tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }}
           cd ${{ github.workspace }}
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-      - name: 重命名安装包
+      - name: 整理构建产物
         run: |
-          cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/dmg
-          app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.dmg
-          for f in *.dmg; do mv "$f" $app_name; done
+          cd packages/feiyu-desktop
+          APP_NAME=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}
+          node dist.js ${{ matrix.target }} $APP_NAME
           cd ${{ github.workspace }}
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
           name: app_${{ matrix.build }}_${{ matrix.arch }}
           path: |
-            packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/dmg/*.dmg
-          if-no-files-found: error
+            packages/feiyu-desktop/dist/feiyu*
 
   build-for-windows:
     name: Windows
@@ -131,6 +141,17 @@ jobs:
         with:
           name: dist
           path: packages/feiyu/dist
+      - uses: actions/checkout@v4
+      - name: 初始化 PNPM
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: 初始化 Node 环境和缓存
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+          cache-dependency-path: "**/pnpm-lock.yaml"
       - name: 初始化 Rust
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -143,35 +164,27 @@ jobs:
       - name: 构建飞鱼 APP
         run: |
           cd packages/feiyu-desktop
-          cargo install tauri-cli --version "^2.0.0-beta"
-          cargo tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }} ${{ env.TAURI_ARGS }}
+          pnpm install
+          pnpm tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }} ${{ env.TAURI_ARGS }}
           cd ${{ github.workspace }}
         env:
           TAURI_ARGS: ${{ matrix.arch == 'aarch64' && '--bundles nsis,updater' || '' }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-      - name: 重命名安装包 (.msi)
-        if: matrix.arch != 'aarch64'
-        run: |
-          cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/msi
-          $app_name = "feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.msi"
-          Get-ChildItem -Path ./ -Filter *.msi | Rename-Item -NewName $app_name
-          cd ${{ github.workspace }}
+      - name: 整理构建产物
         shell: pwsh
-      - name: 重命名安装包 (.exe)
         run: |
-          cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/nsis
-          $app_name = "feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.exe"
-          Get-ChildItem -Path ./ -Filter *.exe | Rename-Item -NewName $app_name
+          cd packages/feiyu-desktop
+          npm install --no-save fs-extra
+          $APP_NAME = "feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}"
+          node dist.js ${{ matrix.target }} $APP_NAME
           cd ${{ github.workspace }}
-        shell: pwsh
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
           name: app_${{ matrix.build }}_${{ matrix.arch }}
           path: |
-            packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/msi/*.msi
-            packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/nsis/*.exe
+            packages/feiyu-desktop/dist/feiyu*
 
   build-for-linux:
     name: Linux
@@ -190,14 +203,14 @@ jobs:
             build: linux
             os: ubuntu-latest
             arch: aarch64
-          - target: armv7-unknown-linux-gnueabihf
-            build: linux
-            os: ubuntu-latest
-            arch: armv7
-          - target: i686-unknown-linux-gnu
-            build: linux
-            os: ubuntu-latest
-            arch: i686
+          # - target: armv7-unknown-linux-gnueabihf
+          #   build: linux
+          #   os: ubuntu-latest
+          #   arch: armv7
+          # - target: i686-unknown-linux-gnu
+          #   build: linux
+          #   os: ubuntu-latest
+          #   arch: i686
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -207,6 +220,17 @@ jobs:
         with:
           name: dist
           path: packages/feiyu/dist
+      - uses: actions/checkout@v4
+      - name: 初始化 PNPM
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: 初始化 Node 环境和缓存
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+          cache-dependency-path: "**/pnpm-lock.yaml"
       - name: 初始化 Rust
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -263,12 +287,15 @@ jobs:
         id: app
         run: |
           cd packages/feiyu-desktop
-          cargo install tauri-cli --version "^2.0.0-beta"
-          if [ "${{ matrix.target }}" = "x86_64-unknown-linux-gnu" ]; then
-              cargo tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }}
-          else
-              cargo tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }} -b deb,rpm
-          fi
+          pnpm install
+          case "${{ matrix.target }}" in
+            x86_64-unknown-linux-gnu|i686-unknown-linux-gnu)
+              pnpm tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }}
+              ;;
+            *)
+              pnpm tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }} -b deb,rpm
+              ;;
+          esac
           cd ${{ github.workspace }}
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
@@ -280,33 +307,19 @@ jobs:
           I686_UNKNOWN_LINUX_GNU_OPENSSL_INCLUDE_DIR: /usr/include/openssl/
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
           CARGO_TARGET_ARMV7_UNKNOWN_LINUX_GNUEABIHF_LINKER: arm-linux-gnueabihf-gcc
-      - name: 重命名安装包
+      - name: 整理构建产物
         run: |
-          # .deb
-          cd ./packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/deb
-          app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.deb
-          for f in *.deb; do mv "$f" "$app_name"; done
+          cd packages/feiyu-desktop
+          npm install --no-save fs-extra
+          APP_NAME=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}
+          node dist.js ${{ matrix.target }} $APP_NAME
           cd ${{ github.workspace }}
-          # .rpm
-          cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/rpm
-          app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.rpm
-          for f in *.rpm; do mv "$f" "$app_name"; done
-          cd ${{ github.workspace }}
-          # .AppImage
-          if [ "${{ matrix.target }}" = "x86_64-unknown-linux-gnu" ]; then
-              cd packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/appimage
-              app_name=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}.AppImage
-              for f in *.AppImage; do mv "$f" "$app_name"; done
-              cd ${{ github.workspace }}
-          fi
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
           name: app_${{ matrix.build }}_${{ matrix.arch }}
           path: |
-            packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/deb/*.deb
-            packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/rpm/*.rpm
-            packages/feiyu-desktop/src-tauri/target/${{ matrix.target }}/release/bundle/*/*.AppImage
+            packages/feiyu-desktop/dist/feiyu*
 
   release:
     name: Release
@@ -319,20 +332,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           pattern: app_*
-          path: temp
+          path: dist
           merge-multiple: true
-      - name: 整理构建产物
-        run: |
-          shopt -s globstar
-          mkdir -p dist
-          for file in temp/**
-          do
-            if [ -d "$file" ]
-            then
-              continue
-            fi
-            mv "$file" dist/
-          done
       - name: 发布飞鱼 v${{ needs.build.outputs.version }}
         uses: ncipollo/release-action@v1
         with:
