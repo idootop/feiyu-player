@@ -24,6 +24,34 @@ export const copyFile = (from, to) => {
   });
 };
 
+export const moveFile = (from, to) => {
+  if (!fs.existsSync(from)) {
+    return false;
+  }
+  const dirname = path.dirname(to);
+  if (!fs.existsSync(dirname)) {
+    fs.mkdirSync(dirname, { recursive: true });
+  }
+  return (
+    new Promise() <
+    boolean >
+    ((resolve) => {
+      fs.rename(from, to, (err) => {
+        resolve(err ? false : true);
+      });
+    })
+  );
+};
+
+export const deleteFile = (filePath) => {
+  try {
+    fs.rmSync(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 export const readString = (filePath) => {
   const dirname = path.dirname(filePath);
   if (!fs.existsSync(dirname)) {

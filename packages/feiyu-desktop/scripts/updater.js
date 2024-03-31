@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import path from "path";
-import { getFiles, readString, writeJSON } from "./io.js";
+import { deleteFile, getFiles, moveFile, readString, writeJSON } from "./io.js";
 
 async function main() {
   const args = process.argv.slice(2);
@@ -22,19 +22,23 @@ async function main() {
     const suffix = targets[target];
     const updater = files.find((e) => e.endsWith(suffix));
     if (updater) {
-      const signature = await readString(
-        path.join(root, "dist", updater + ".sig")
-      );
+      const sig = path.join(root, "dist", updater + ".sig");
+      const signature = await readString(sig);
       if (signature) {
         platforms[target] = {
           signature,
-          url: `https://github.com/idootop/feiyu-player/releases/download/v${version}/${updater}`,
+          url: `https://github.com/idootop/feiyu-player/releases/download/updater/${updater}`,
         };
+        await deleteFile(sig);
+        await moveFile(
+          path.join(root, "dist", updater),
+          path.join(root, "updater", updater)
+        );
         console.log(`✅ ${target}`);
       }
     }
   }
-  await writeJSON(path.join(root, "dist", "latest.json"), {
+  await writeJSON(path.join(root, "updater", "latest.json"), {
     version,
     notes,
     platforms,
