@@ -61,7 +61,7 @@ async function main() {
     if (match) {
       await copyFile(
         path.join(root, "dist", file),
-        path.join(root, "installer", updater)
+        path.join(root, "installer", file)
       );
     }
   }
