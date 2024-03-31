@@ -7,6 +7,7 @@ import { jsonDecode, timestamp } from '@/utils/base';
 import { deepClone } from '@/utils/clone';
 import { isArray, isNotEmpty, isObject, isValidUrl } from '@/utils/is';
 
+import { version } from '../../../package.json';
 import defaultConfig from '../default';
 import { subscribeStorage } from './storage';
 import { Subscribe } from './types';
@@ -32,7 +33,7 @@ export const isValidSubscribe = (subscribe: any) => {
 
 export const kDefaultSubscribeName = '默认订阅';
 export class APPConfig {
-  static version = '1.0.0';
+  static version = version;
 
   updateStore(data: Partial<SubscribesStore>) {
     const old = XSta.get<SubscribesStore>(kSubscribesKey) ?? {};

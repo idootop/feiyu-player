@@ -17,14 +17,14 @@ dependencies:
   '@tauri-apps/plugin-updater':
     specifier: ^2.0.0-beta.2
     version: 2.0.0-beta.2
-  fs-extra:
-    specifier: ^11.2.0
-    version: 11.2.0
 
 devDependencies:
   '@tauri-apps/cli':
     specifier: 2.0.0-beta.11
     version: 2.0.0-beta.11
+  fs-extra:
+    specifier: ^11.2.0
+    version: 11.2.0
 
 packages:
 
@@ -170,11 +170,11 @@ packages:
       graceful-fs: 4.2.11
       jsonfile: 6.1.0
       universalify: 2.0.1
-    dev: false
+    dev: true
 
   /graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
-    dev: false
+    dev: true
 
   /jsonfile@6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
@@ -182,9 +182,9 @@ packages:
       universalify: 2.0.1
     optionalDependencies:
       graceful-fs: 4.2.11
-    dev: false
+    dev: true
 
   /universalify@2.0.1:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
     engines: {node: '>= 10.0.0'}
-    dev: false
+    dev: true
