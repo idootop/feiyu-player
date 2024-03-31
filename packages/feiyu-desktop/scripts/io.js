@@ -32,15 +32,11 @@ export const moveFile = (from, to) => {
   if (!fs.existsSync(dirname)) {
     fs.mkdirSync(dirname, { recursive: true });
   }
-  return (
-    new Promise() <
-    boolean >
-    ((resolve) => {
-      fs.rename(from, to, (err) => {
-        resolve(err ? false : true);
-      });
-    })
-  );
+  return new Promise((resolve) => {
+    fs.rename(from, to, (err) => {
+      resolve(err ? false : true);
+    });
+  });
 };
 
 export const deleteFile = (filePath) => {
