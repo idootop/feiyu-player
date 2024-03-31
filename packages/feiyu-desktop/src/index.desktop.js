@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrent } from "@tauri-apps/api/webviewWindow";
-import { type as osType } from "@tauri-apps/plugin-os";
 import { updater } from "./updater";
+import { getPlatform } from "./platform";
 
 class _FeiyuDesktop {
   isDesktop = true;
@@ -20,10 +20,10 @@ class _FeiyuDesktop {
     }
     this.invoke = invoke;
     this.window = getCurrent();
-    const type = await osType();
-    this.isMac = type === "macos";
-    this.isWindows = type === "windows";
-    this.isLinux = type === "linux";
+    const platform = await getPlatform();
+    this.isMac = platform.isMac;
+    this.isWindows = platform.isWindows;
+    this.isLinux = platform.isLinux;
     this._initFullScreen();
     this._initWindowsBorder();
     this._initialized = true;

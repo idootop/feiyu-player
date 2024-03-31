@@ -4,9 +4,9 @@ import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 
 declare class Updater {
   checking: boolean;
-  update?: Update;
+  updater?: Update;
   needUpdate: () => Promise<boolean>;
-  relaunch: () => Promise<void>;
+  update: () => Promise<void>;
   check: () => Promise<Update | undefined>;
   download: () => Promise<boolean>;
 }

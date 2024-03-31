@@ -1,4 +1,4 @@
-import { Button, Notification } from '@arco-design/web-react';
+import { Button, Message, Notification } from '@arco-design/web-react';
 import { FeiyuDesktop } from 'feiyu-desktop';
 import { useEffect, useState } from 'react';
 import { registerSW } from 'virtual:pwa-register';
@@ -78,6 +78,9 @@ const useUpdateAPP = () => {
               type="primary"
               size="small"
               onClick={() => {
+                if (needUpdateDesktop && FeiyuDesktop.isWindows) {
+                  Message.info('开始下载更新，请稍等...');
+                }
                 update();
                 Notification.remove(id);
               }}

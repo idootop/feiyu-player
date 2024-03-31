@@ -12,6 +12,7 @@
     "menu:default",
     "tray:default",
     "shell:allow-open",
+    "updater:default",
     "process:allow-restart",
     "os:allow-os-type",
     "cors-fetch:default",

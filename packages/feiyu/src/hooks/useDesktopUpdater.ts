@@ -14,7 +14,7 @@ export const useDesktopUpdater = () => {
   return {
     needUpdate,
     async update() {
-      await FeiyuDesktop.updater?.relaunch();
+      await FeiyuDesktop.updater?.update();
     },
   };
 };
