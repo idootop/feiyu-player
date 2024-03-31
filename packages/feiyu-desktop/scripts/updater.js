@@ -54,7 +54,7 @@ async function main() {
   const installers = [
     "macos_universal.dmg",
     "windows_x86_64.exe",
-    "linux_x86_64.AppImage",
+    "linux_x86_64.deb",
   ];
   for (const file of files) {
     const match = installers.find((e) => file.endsWith(e));

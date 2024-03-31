@@ -7,7 +7,7 @@ on:
         type: string
         required: true
         default: |
-          其他版本安装包(如:Arm64)，[请到此处下载](https://github.com/idootop/feiyu-player/releases/tag/installer)。
+          以下为 x64 版本安装包，如需其他版本(x32/Arm64等)，[请到此处下载](https://github.com/idootop/feiyu-player/releases/tag/installer)。
 
 jobs:
   build:
@@ -120,273 +120,273 @@ jobs:
           path: |
             packages/feiyu-desktop/dist/feiyu*
 
-  # build-for-windows:
-  #   name: Windows
-  #   needs: build
-  #   permissions:
-  #     contents: write
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       include:
-  #         - target: x86_64-pc-windows-msvc
-  #           build: windows
-  #           os: windows-latest
-  #           arch: x86_64
-  #         - target: aarch64-pc-windows-msvc
-  #           build: windows
-  #           os: windows-latest
-  #           arch: aarch64
-  #         - target: i686-pc-windows-msvc
-  #           build: windows
-  #           os: windows-latest
-  #           arch: i686
+  build-for-windows:
+    name: Windows
+    needs: build
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-pc-windows-msvc
+            build: windows
+            os: windows-latest
+            arch: x86_64
+          - target: aarch64-pc-windows-msvc
+            build: windows
+            os: windows-latest
+            arch: aarch64
+          - target: i686-pc-windows-msvc
+            build: windows
+            os: windows-latest
+            arch: i686
 
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: 下载构建产物
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: dist
-  #         path: packages/feiyu/dist
-  #     - name: 初始化 PNPM
-  #       uses: pnpm/action-setup@v3
-  #       with:
-  #         version: 8
-  #     - name: 初始化 Node 环境和缓存
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 20
-  #         cache: "pnpm"
-  #         cache-dependency-path: "**/pnpm-lock.yaml"
-  #     - name: 初始化 Rust
-  #       uses: dtolnay/rust-toolchain@stable
-  #       with:
-  #         toolchain: stable
-  #         targets: ${{ matrix.target }}
-  #     - name: 初始化 Rust 缓存
-  #       uses: swatinem/rust-cache@v2
-  #       with:
-  #         workspaces: "packages/feiyu-desktop/src-tauri/${{ matrix.target }} -> target"
-  #     - name: 构建飞鱼 APP
-  #       run: |
-  #         cd packages/feiyu-desktop
-  #         pnpm install
-  #         pnpm tauri build ${{ needs.build.outputs.build-version-windows }} -t ${{ matrix.target }} --bundles nsis,updater
-  #         cd ${{ github.workspace }}
-  #       env:
-  #         TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-  #         TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-  #     - name: 整理构建产物
-  #       shell: pwsh
-  #       run: |
-  #         cd packages/feiyu-desktop
-  #         $APP_NAME = "feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}"
-  #         node scripts/dist.js ${{ matrix.target }} $APP_NAME
-  #         cd ${{ github.workspace }}
-  #     - name: 上传构建产物
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: app_${{ matrix.build }}_${{ matrix.arch }}
-  #         path: |
-  #           packages/feiyu-desktop/dist/feiyu*
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: 下载构建产物
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: packages/feiyu/dist
+      - name: 初始化 PNPM
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: 初始化 Node 环境和缓存
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+          cache-dependency-path: "**/pnpm-lock.yaml"
+      - name: 初始化 Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          targets: ${{ matrix.target }}
+      - name: 初始化 Rust 缓存
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "packages/feiyu-desktop/src-tauri/${{ matrix.target }} -> target"
+      - name: 构建飞鱼 APP
+        run: |
+          cd packages/feiyu-desktop
+          pnpm install
+          pnpm tauri build ${{ needs.build.outputs.build-version-windows }} -t ${{ matrix.target }} --bundles nsis,updater
+          cd ${{ github.workspace }}
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+      - name: 整理构建产物
+        shell: pwsh
+        run: |
+          cd packages/feiyu-desktop
+          $APP_NAME = "feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}"
+          node scripts/dist.js ${{ matrix.target }} $APP_NAME
+          cd ${{ github.workspace }}
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: app_${{ matrix.build }}_${{ matrix.arch }}
+          path: |
+            packages/feiyu-desktop/dist/feiyu*
 
-  # build-for-linux:
-  #   name: Linux
-  #   needs: build
-  #   permissions:
-  #     contents: write
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       include:
-  #         - target: x86_64-unknown-linux-gnu
-  #           build: linux
-  #           os: ubuntu-latest
-  #           arch: x86_64
-  #         - target: aarch64-unknown-linux-gnu
-  #           build: linux
-  #           os: ubuntu-latest
-  #           arch: aarch64
-  #         # - target: armv7-unknown-linux-gnueabihf
-  #         #   build: linux
-  #         #   os: ubuntu-latest
-  #         #   arch: armv7
-  #         # - target: i686-unknown-linux-gnu
-  #         #   build: linux
-  #         #   os: ubuntu-latest
-  #         #   arch: i686
+  build-for-linux:
+    name: Linux
+    needs: build
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            build: linux
+            os: ubuntu-latest
+            arch: x86_64
+          - target: aarch64-unknown-linux-gnu
+            build: linux
+            os: ubuntu-latest
+            arch: aarch64
+          # - target: armv7-unknown-linux-gnueabihf
+          #   build: linux
+          #   os: ubuntu-latest
+          #   arch: armv7
+          # - target: i686-unknown-linux-gnu
+          #   build: linux
+          #   os: ubuntu-latest
+          #   arch: i686
 
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: 下载构建产物
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: dist
-  #         path: packages/feiyu/dist
-  #     - name: 初始化 PNPM
-  #       uses: pnpm/action-setup@v3
-  #       with:
-  #         version: 8
-  #     - name: 初始化 Node 环境和缓存
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 20
-  #         cache: "pnpm"
-  #         cache-dependency-path: "**/pnpm-lock.yaml"
-  #     - name: 初始化 Rust
-  #       uses: dtolnay/rust-toolchain@stable
-  #       with:
-  #         toolchain: stable
-  #         targets: ${{ matrix.target }}
-  #     - name: 初始化 Rust 缓存
-  #       uses: swatinem/rust-cache@v2
-  #       with:
-  #         workspaces: "packages/feiyu-desktop/src-tauri/${{ matrix.target }} -> target"
-  #     - name: 初始化 apt sources.list
-  #       if: matrix.arch != 'x86_64'
-  #       run: |
-  #         cat << EOF | sudo tee /etc/apt/sources.list
-  #         # x86 Support
-  #         deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
-  #         deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
-  #         deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-backports main restricted universe multiverse
-  #         deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-security main restricted universe multiverse
-  #         # ARM Support
-  #         deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy main restricted universe multiverse
-  #         deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted universe multiverse
-  #         deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse
-  #         deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted universe multiverse
-  #         EOF
-  #     - name: 初始化 Linux 构建环境
-  #       id: pkg
-  #       run: |
-  #         if [ "${{ matrix.target }}" = "x86_64-unknown-linux-gnu" ]; then
-  #             sudo apt-get update
-  #             sudo apt install -y libwebkit2gtk-4.1-dev libgtk-3-dev patchelf librsvg2-dev libappindicator3-dev libsoup-3.0-dev libjavascriptcoregtk-4.1-dev
-  #         elif [ "${{ matrix.target }}" = "i686-unknown-linux-gnu" ]; then
-  #             sudo dpkg --add-architecture i386
-  #             sudo apt update
-  #             sudo apt install -y gcc-multilib g++-multilib lib32stdc++6 libc6-dev-i386 libssl-dev:i386
-  #             sudo apt install -y libwebkit2gtk-4.1-dev:i386 libgtk-3-dev:i386 librsvg2-dev:i386 libsoup-3.0-dev:i386 libjavascriptcoregtk-4.1-dev:i386
-  #             echo "PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig/:$PKG_CONFIG_PATH" >> $GITHUB_OUTPUT
-  #             echo "PKG_CONFIG_SYSROOT_DIR=/usr/i386-linux-gnu/:$PKG_CONFIG_SYSROOT_DIR" >> $GITHUB_OUTPUT
-  #         elif [ "${{ matrix.target }}" = "aarch64-unknown-linux-gnu" ]; then
-  #             sudo dpkg --add-architecture arm64
-  #             sudo apt update
-  #             sudo apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libc6-dev-arm64-cross libssl-dev:arm64
-  #             sudo apt install -y libwebkit2gtk-4.1-dev:arm64 libgtk-3-dev:arm64 patchelf:arm64 librsvg2-dev:arm64 libayatana-appindicator3-dev:arm64 libsoup-3.0-dev:arm64 libjavascriptcoregtk-4.1-dev:arm64
-  #             echo "PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/:$PKG_CONFIG_PATH" >> $GITHUB_OUTPUT
-  #             echo "PKG_CONFIG_SYSROOT_DIR=/usr/aarch64-linux-gnu/:$PKG_CONFIG_SYSROOT_DIR" >> $GITHUB_OUTPUT
-  #         elif [ "${{ matrix.target }}" = "armv7-unknown-linux-gnueabihf" ]; then
-  #             sudo dpkg --add-architecture armhf
-  #             sudo apt update
-  #             sudo apt install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libc6-dev-armhf-cross libssl-dev:armhf
-  #             sudo apt install -y libwebkit2gtk-4.1-dev:armhf libgtk-3-dev:armhf patchelf:armhf librsvg2-dev:armhf libayatana-appindicator3-dev:armhf libsoup-3.0-dev:armhf libjavascriptcoregtk-4.1-dev:armhf
-  #             echo "PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig/:$PKG_CONFIG_PATH" >> $GITHUB_OUTPUT
-  #             echo "PKG_CONFIG_SYSROOT_DIR=/usr/arm-linux-gnueabihf/:$PKG_CONFIG_SYSROOT_DIR" >> $GITHUB_OUTPUT
-  #         fi
-  #     - name: 构建飞鱼 APP
-  #       id: app
-  #       run: |
-  #         cd packages/feiyu-desktop
-  #         pnpm install
-  #         case "${{ matrix.target }}" in
-  #           x86_64-unknown-linux-gnu|i686-unknown-linux-gnu)
-  #             pnpm tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }}
-  #             ;;
-  #           *)
-  #             pnpm tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }} -b deb,rpm
-  #             ;;
-  #         esac
-  #         cd ${{ github.workspace }}
-  #       env:
-  #         TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-  #         TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-  #         PKG_CONFIG_ALLOW_CROSS: 1
-  #         PKG_CONFIG_PATH: ${{ steps.pkg.outputs.PKG_CONFIG_PATH }}
-  #         PKG_CONFIG_SYSROOT_DIR: ${{ steps.pkg.outputs.PKG_CONFIG_SYSROOT_DIR }}
-  #         I686_UNKNOWN_LINUX_GNU_OPENSSL_LIB_DIR: /usr/lib/i386-linux-gnu/
-  #         I686_UNKNOWN_LINUX_GNU_OPENSSL_INCLUDE_DIR: /usr/include/openssl/
-  #         CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
-  #         CARGO_TARGET_ARMV7_UNKNOWN_LINUX_GNUEABIHF_LINKER: arm-linux-gnueabihf-gcc
-  #     - name: 整理构建产物
-  #       run: |
-  #         cd packages/feiyu-desktop
-  #         APP_NAME=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}
-  #         node scripts/dist.js ${{ matrix.target }} $APP_NAME
-  #         cd ${{ github.workspace }}
-  #     - name: 上传构建产物
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: app_${{ matrix.build }}_${{ matrix.arch }}
-  #         path: |
-  #           packages/feiyu-desktop/dist/feiyu*
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: 下载构建产物
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: packages/feiyu/dist
+      - name: 初始化 PNPM
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: 初始化 Node 环境和缓存
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+          cache-dependency-path: "**/pnpm-lock.yaml"
+      - name: 初始化 Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          targets: ${{ matrix.target }}
+      - name: 初始化 Rust 缓存
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "packages/feiyu-desktop/src-tauri/${{ matrix.target }} -> target"
+      - name: 初始化 apt sources.list
+        if: matrix.arch != 'x86_64'
+        run: |
+          cat << EOF | sudo tee /etc/apt/sources.list
+          # x86 Support
+          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
+          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
+          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-backports main restricted universe multiverse
+          deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu jammy-security main restricted universe multiverse
+          # ARM Support
+          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy main restricted universe multiverse
+          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted universe multiverse
+          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse
+          deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted universe multiverse
+          EOF
+      - name: 初始化 Linux 构建环境
+        id: pkg
+        run: |
+          if [ "${{ matrix.target }}" = "x86_64-unknown-linux-gnu" ]; then
+              sudo apt-get update
+              sudo apt install -y libwebkit2gtk-4.1-dev libgtk-3-dev patchelf librsvg2-dev libappindicator3-dev libsoup-3.0-dev libjavascriptcoregtk-4.1-dev
+          elif [ "${{ matrix.target }}" = "i686-unknown-linux-gnu" ]; then
+              sudo dpkg --add-architecture i386
+              sudo apt update
+              sudo apt install -y gcc-multilib g++-multilib lib32stdc++6 libc6-dev-i386 libssl-dev:i386
+              sudo apt install -y libwebkit2gtk-4.1-dev:i386 libgtk-3-dev:i386 librsvg2-dev:i386 libsoup-3.0-dev:i386 libjavascriptcoregtk-4.1-dev:i386
+              echo "PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig/:$PKG_CONFIG_PATH" >> $GITHUB_OUTPUT
+              echo "PKG_CONFIG_SYSROOT_DIR=/usr/i386-linux-gnu/:$PKG_CONFIG_SYSROOT_DIR" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.target }}" = "aarch64-unknown-linux-gnu" ]; then
+              sudo dpkg --add-architecture arm64
+              sudo apt update
+              sudo apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libc6-dev-arm64-cross libssl-dev:arm64
+              sudo apt install -y libwebkit2gtk-4.1-dev:arm64 libgtk-3-dev:arm64 patchelf:arm64 librsvg2-dev:arm64 libayatana-appindicator3-dev:arm64 libsoup-3.0-dev:arm64 libjavascriptcoregtk-4.1-dev:arm64
+              echo "PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/:$PKG_CONFIG_PATH" >> $GITHUB_OUTPUT
+              echo "PKG_CONFIG_SYSROOT_DIR=/usr/aarch64-linux-gnu/:$PKG_CONFIG_SYSROOT_DIR" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.target }}" = "armv7-unknown-linux-gnueabihf" ]; then
+              sudo dpkg --add-architecture armhf
+              sudo apt update
+              sudo apt install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libc6-dev-armhf-cross libssl-dev:armhf
+              sudo apt install -y libwebkit2gtk-4.1-dev:armhf libgtk-3-dev:armhf patchelf:armhf librsvg2-dev:armhf libayatana-appindicator3-dev:armhf libsoup-3.0-dev:armhf libjavascriptcoregtk-4.1-dev:armhf
+              echo "PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig/:$PKG_CONFIG_PATH" >> $GITHUB_OUTPUT
+              echo "PKG_CONFIG_SYSROOT_DIR=/usr/arm-linux-gnueabihf/:$PKG_CONFIG_SYSROOT_DIR" >> $GITHUB_OUTPUT
+          fi
+      - name: 构建飞鱼 APP
+        id: app
+        run: |
+          cd packages/feiyu-desktop
+          pnpm install
+          case "${{ matrix.target }}" in
+            x86_64-unknown-linux-gnu|i686-unknown-linux-gnu)
+              pnpm tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }}
+              ;;
+            *)
+              pnpm tauri build ${{ needs.build.outputs.build-version }} -t ${{ matrix.target }} -b deb,rpm
+              ;;
+          esac
+          cd ${{ github.workspace }}
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          PKG_CONFIG_ALLOW_CROSS: 1
+          PKG_CONFIG_PATH: ${{ steps.pkg.outputs.PKG_CONFIG_PATH }}
+          PKG_CONFIG_SYSROOT_DIR: ${{ steps.pkg.outputs.PKG_CONFIG_SYSROOT_DIR }}
+          I686_UNKNOWN_LINUX_GNU_OPENSSL_LIB_DIR: /usr/lib/i386-linux-gnu/
+          I686_UNKNOWN_LINUX_GNU_OPENSSL_INCLUDE_DIR: /usr/include/openssl/
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
+          CARGO_TARGET_ARMV7_UNKNOWN_LINUX_GNUEABIHF_LINKER: arm-linux-gnueabihf-gcc
+      - name: 整理构建产物
+        run: |
+          cd packages/feiyu-desktop
+          APP_NAME=feiyu_${{ needs.build.outputs.version }}_${{ matrix.build }}_${{ matrix.arch }}
+          node scripts/dist.js ${{ matrix.target }} $APP_NAME
+          cd ${{ github.workspace }}
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: app_${{ matrix.build }}_${{ matrix.arch }}
+          path: |
+            packages/feiyu-desktop/dist/feiyu*
 
-  # release:
-  #   name: Release
-  #   needs: [build, build-for-macos, build-for-windows, build-for-linux]
-  #   runs-on: ubuntu-latest
+  release:
+    name: Release
+    needs: [build, build-for-macos, build-for-windows, build-for-linux]
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: 下载构建产物
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         pattern: app_*
-  #         path: dist
-  #         merge-multiple: true
-  #     - name: 初始化 PNPM
-  #       uses: pnpm/action-setup@v3
-  #       with:
-  #         version: 8
-  #     - name: 初始化 Node 环境和缓存
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 20
-  #         cache: "pnpm"
-  #         cache-dependency-path: "**/pnpm-lock.yaml"
-  #     - name: 构建更新文件
-  #       run: |
-  #         cd packages/feiyu-desktop
-  #         npm install --no-save fs-extra
-  #         node scripts/updater.js ${{ github.workspace }} ${{ needs.build.outputs.version }} "${{ inputs.release_message }}"
-  #         cd ${{ github.workspace }}
-  #     - name: 发布飞鱼 v${{ needs.build.outputs.version }}
-  #       uses: ncipollo/release-action@v1
-  #       with:
-  #         allowUpdates: true
-  #         token: ${{ secrets.GITHUB_TOKEN }}
-  #         name: 飞鱼 v${{ needs.build.outputs.version }}
-  #         tag: v${{ needs.build.outputs.version }}
-  #         body: ${{ inputs.release_message }}
-  #         draft: false
-  #         prerelease: false
-  #         removeArtifacts: true
-  #         artifacts: installer/*
-  #     - name: 发布更新
-  #       uses: ncipollo/release-action@v1
-  #       with:
-  #         allowUpdates: true
-  #         token: ${{ secrets.GITHUB_TOKEN }}
-  #         name: Update
-  #         tag: updater
-  #         body: 版本更新
-  #         draft: false
-  #         prerelease: false
-  #         removeArtifacts: true
-  #         artifacts: updater/*
-  #     - name: 发布完整安装包
-  #       uses: ncipollo/release-action@v1
-  #       with:
-  #         allowUpdates: true
-  #         token: ${{ secrets.GITHUB_TOKEN }}
-  #         name: Installer
-  #         tag: installer
-  #         body: 完整安装包
-  #         draft: false
-  #         prerelease: false
-  #         removeArtifacts: true
-  #         artifacts: dist/*
+    steps:
+      - uses: actions/checkout@v4
+      - name: 下载构建产物
+        uses: actions/download-artifact@v4
+        with:
+          pattern: app_*
+          path: dist
+          merge-multiple: true
+      - name: 初始化 PNPM
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: 初始化 Node 环境和缓存
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+          cache-dependency-path: "**/pnpm-lock.yaml"
+      - name: 构建更新文件
+        run: |
+          cd packages/feiyu-desktop
+          npm install --no-save fs-extra
+          node scripts/updater.js ${{ github.workspace }} ${{ needs.build.outputs.version }} "${{ inputs.release_message }}"
+          cd ${{ github.workspace }}
+      - name: 发布更新
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Update
+          tag: updater
+          body: 版本更新
+          draft: false
+          prerelease: false
+          removeArtifacts: true
+          artifacts: updater/*
+      - name: 发布完整安装包
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Installer
+          tag: installer
+          body: 完整安装包
+          draft: false
+          prerelease: false
+          removeArtifacts: true
+          artifacts: dist/*
+      - name: 发布飞鱼 v${{ needs.build.outputs.version }}
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: 飞鱼 v${{ needs.build.outputs.version }}
+          tag: v${{ needs.build.outputs.version }}
+          body: ${{ inputs.release_message }}
+          draft: false
+          prerelease: false
+          removeArtifacts: true
+          artifacts: installer/*
