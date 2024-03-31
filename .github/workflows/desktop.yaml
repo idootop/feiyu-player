@@ -352,7 +352,7 @@ jobs:
         run: |
           cd packages/feiyu-desktop
           npm install --no-save fs-extra
-          node scripts/updater.js ${{ github.workspace }} ${{ needs.build.outputs.version }} ${{ inputs.release_message }}
+          node scripts/updater.js ${{ github.workspace }} ${{ needs.build.outputs.version }} "${{ inputs.release_message }}"
           cd ${{ github.workspace }}
       - name: 发布飞鱼 v${{ needs.build.outputs.version }}
         uses: ncipollo/release-action@v1
