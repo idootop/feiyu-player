@@ -36,17 +36,17 @@ class _FeiyuDesktop {
     bodyElement.appendChild(appBorderElement);
     [htmlElement, bodyElement].forEach((e) => {
       e.style.background = "transparent";
-      e.style.clipPath = "inset(0px round 12px)";
+      e.style.clipPath = "inset(1px round 12px)";
     });
     appBorderElement.style.position = "fixed";
-    appBorderElement.style.top = "0";
-    appBorderElement.style.left = "0";
-    appBorderElement.style.zIndex = "1000";
+    appBorderElement.style.top = "1px";
+    appBorderElement.style.left = "1px";
+    appBorderElement.style.zIndex = "10000";
     appBorderElement.style.pointerEvents = "none";
     appBorderElement.style.border = "1px solid rgba(0, 0, 0, 10%)";
     appBorderElement.style.borderRadius = "12px";
-    appBorderElement.style.width = "100vw";
-    appBorderElement.style.height = "100vh";
+    appBorderElement.style.width = "calc(100vw - 2 * 1px)";
+    appBorderElement.style.height = "calc(100vh - 2 * 1px)";
   }
 
   _initFullScreen() {
