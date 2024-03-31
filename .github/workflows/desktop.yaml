@@ -7,7 +7,7 @@ on:
         type: string
         required: true
         default: |
-          如果更新失败，请到官网下载最新版本：https://feiyu-player.xbox.work
+          其他版本安装包(如:Arm64)，[请到此处下载](https://github.com/idootop/feiyu-player/releases/tag/installer)。
 
 jobs:
   build:
@@ -364,7 +364,8 @@ jobs:
           body: ${{ inputs.release_message }}
           draft: false
           prerelease: false
-          artifacts: dist/*
+          removeArtifacts: true
+          artifacts: installer/*
       - name: 发布更新
         uses: ncipollo/release-action@v1
         with:
@@ -375,4 +376,17 @@ jobs:
           body: 版本更新
           draft: false
           prerelease: false
+          removeArtifacts: true
           artifacts: updater/*
+      - name: 发布完整安装包
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Installer
+          tag: installer
+          body: 完整安装包
+          draft: false
+          prerelease: false
+          removeArtifacts: true
+          artifacts: dist/*

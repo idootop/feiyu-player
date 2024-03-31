@@ -1,7 +1,14 @@
 #!/usr/bin/env node
 
 import path from "path";
-import { deleteFile, getFiles, moveFile, readString, writeJSON } from "./io.js";
+import {
+  copyFile,
+  deleteFile,
+  getFiles,
+  moveFile,
+  readString,
+  writeJSON,
+} from "./io.js";
 
 async function main() {
   const args = process.argv.slice(2);
@@ -9,13 +16,13 @@ async function main() {
   const targets = {
     "darwin-x86_64": "macos_x86_64.app.tar.gz",
     "darwin-aarch64": "macos_aarch64.app.tar.gz",
+    "darwin-universal": "macos_universal.app.tar.gz",
     "windows-x86_64": "windows_x86_64.nsis.zip",
     "windows-aarch64": "windows_aarch64.nsis.zip",
     "windows-i686": "windows_i686.nsis.zip",
     "linux-x86_64": "linux_x86_64.AppImage.tar.gz",
     "linux-i686": "linux_i686.AppImage.tar.gz",
   };
-
   const files = await getFiles(path.join(root, "dist"));
   const platforms = {};
   for (const target in targets) {
@@ -44,6 +51,20 @@ async function main() {
     platforms,
     pub_date: new Date().toISOString(),
   });
+  const installers = [
+    "macos_universal.dmg",
+    "windows_x86_64.exe",
+    "linux_x86_64.AppImage",
+  ];
+  for (const file of files) {
+    const match = installers.find((e) => file.endsWith(e));
+    if (match) {
+      await copyFile(
+        path.join(root, "dist", file),
+        path.join(root, "installer", updater)
+      );
+    }
+  }
 }
 
 main();
