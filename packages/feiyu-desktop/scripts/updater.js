@@ -64,6 +64,11 @@ async function main() {
         path.join(root, "installer", file)
       );
     }
+    // 移除版本号
+    await moveFile(
+      path.join(root, "dist", file),
+      path.join(root, "dist", file.replace("_" + version, ""))
+    );
   }
 }
 

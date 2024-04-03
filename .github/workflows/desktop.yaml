@@ -366,14 +366,14 @@ jobs:
           prerelease: false
           removeArtifacts: true
           artifacts: updater/*
-      - name: 发布完整安装包
+      - name: 发布最新安装包
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: Installer
-          tag: v0.0.0
-          body: 完整安装包
+          name: Latest
+          tag: latest
+          body: 最新安装包
           draft: false
           prerelease: false
           removeArtifacts: true
