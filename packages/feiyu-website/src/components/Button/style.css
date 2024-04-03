@@ -1,0 +1,28 @@
+.button {
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 24px;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 12px;
+}
+
+.button-primary {
+  color: white;
+  background: black;
+}
+.button-primary:hover {
+  background: rgb(51, 51, 51);
+}
+
+.button-secondary {
+  color: black;
+  background: rgb(249, 250, 251);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.button-secondary:hover {
+  background: white;
+}
