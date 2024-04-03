@@ -209,14 +209,14 @@ jobs:
             build: linux
             os: ubuntu-latest
             arch: aarch64
-          # - target: armv7-unknown-linux-gnueabihf
-          #   build: linux
-          #   os: ubuntu-latest
-          #   arch: armv7
-          # - target: i686-unknown-linux-gnu
-          #   build: linux
-          #   os: ubuntu-latest
-          #   arch: i686
+          - target: armv7-unknown-linux-gnueabihf
+            build: linux
+            os: ubuntu-latest
+            arch: armv7
+          - target: i686-unknown-linux-gnu
+            build: linux
+            os: ubuntu-latest
+            arch: i686
 
     runs-on: ${{ matrix.os }}
     steps:

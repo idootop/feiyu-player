@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
-  "productName": "Feiyu",
+  "productName": "飞鱼",
   "version": "1.0.0",
   "identifier": "xbox.work.feiyu",
   "build": {
