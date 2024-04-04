@@ -1,6 +1,6 @@
 export function Feature({ title, description, image }) {
   return (
-    <div style={{ margin: "8rem 0" }}>
+    <div style={{ marginTop: "8rem" }}>
       <p style={{ fontSize: "2rem", fontWeight: "bold" }}>{title}</p>
       <p
         style={{

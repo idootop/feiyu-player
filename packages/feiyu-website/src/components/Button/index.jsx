@@ -1,12 +1,15 @@
 import "./style.css";
 
-export function Button({ primary = true, url, download, style, children }) {
+export function Button({ secondary, url, download, style, children }) {
   return (
     <a
-      className={"button " + (primary ? "button-primary" : "button-secondary")}
+      className={
+        "button " + (secondary ? "button-secondary" : "button-primary")
+      }
       href={url}
       style={style}
       download={download}
+      target="_blank"
     >
       {children}
     </a>

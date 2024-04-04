@@ -1,6 +1,7 @@
 import "./App.css";
 import { Download } from "./components/Download";
 import { Feature } from "./components/Feature";
+import { Button } from "./components/Button";
 
 function Header() {
   return (
@@ -32,7 +33,8 @@ function Slogan() {
       <p style={{ fontSize: "3rem", fontWeight: "bold" }}>追光影，看世界</p>
       <p
         style={{
-          fontSize: "2rem",
+          margin: "0 0 2rem",
+          fontSize: "1.5rem",
           fontWeight: "normal",
           color: "rgba(0,0,0,50%)",
         }}
@@ -43,24 +45,32 @@ function Slogan() {
   );
 }
 
+function DownloadArea() {
+  return (
+    <div className="row" style={{ gap: "2rem", justifyContent: "center" }}>
+      <Download />
+      <Button
+        url="https://demo.feiyu-player.xbox.work/#/home/hot"
+        secondary
+        style={{
+          width: "128px",
+          height: "56px",
+        }}
+      >
+        网页版
+      </Button>
+    </div>
+  );
+}
+
 function Banner() {
   return (
     <>
-      <img
-        className="logo"
-        src="/logo.svg"
-        style={{
-          width: "10rem",
-          height: "10rem",
-        }}
-      />
-      <Slogan />
-      <div
-        style={{
-          margin: "4rem 0",
-          position: "relative",
-        }}
-      >
+      <div style={{ margin: "4rem 0" }}>
+        <Slogan />
+        <DownloadArea />
+      </div>
+      <div className="relative">
         <img
           src="/screenshots/home.webp"
           style={{
@@ -72,9 +82,9 @@ function Banner() {
             background: "#fff",
             filter: "blur(16px)",
             width: "calc(100vw - 2rem)",
-            height: "12rem",
+            height: "30%",
             position: "absolute",
-            bottom: "-2rem",
+            bottom: "-10%",
             left: "50%",
             transform: "translateX(-50%)",
           }}
@@ -88,7 +98,6 @@ function App() {
   return (
     <>
       <Header />
-      <Download />
       <Banner />
       <Feature
         title="海量资源，随心搜索"
