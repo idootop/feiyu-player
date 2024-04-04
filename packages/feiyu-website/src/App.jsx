@@ -2,10 +2,11 @@ import "./App.css";
 import { Download } from "./components/Download";
 import { Feature } from "./components/Feature";
 import { Button } from "./components/Button";
+import { IconGithub } from "./components/Icons/IconGithub";
 
 function Header() {
   return (
-    <div>
+    <div className="row" style={{ justifyContent: "space-between" }}>
       <a className="row" href="/">
         <img
           src="/logo.svg"
@@ -22,6 +23,13 @@ function Header() {
         >
           飞鱼
         </p>
+      </a>
+      <a
+        className="row"
+        href="https://github.com/idootop/feiyu-player"
+        target="_blank"
+      >
+        <IconGithub />
       </a>
     </div>
   );
