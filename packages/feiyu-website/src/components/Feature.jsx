@@ -1,4 +1,4 @@
-export function Feature({ title, description, image }) {
+export function Feature({ title, description, image, url }) {
   return (
     <div style={{ marginTop: "8rem" }}>
       <p style={{ fontSize: "2rem", fontWeight: "bold" }}>{title}</p>
@@ -11,13 +11,15 @@ export function Feature({ title, description, image }) {
       >
         {description}
       </p>
-      <img
-        src={image}
-        style={{
-          width: "100%",
-          marginTop: "2rem",
-        }}
-      />
+      <a href={url} target="_blank">
+        <img
+          src={image}
+          style={{
+            width: "100%",
+            marginTop: "2rem",
+          }}
+        />
+      </a>
     </div>
   );
 }

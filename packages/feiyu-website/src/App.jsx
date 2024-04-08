@@ -14,7 +14,7 @@ function App() {
         image="/screenshots/search.webp"
       />
       <Feature
-        title="🦀 自由订阅，随心分享"
+        title="🦀 一键订阅，自由分享"
         description="一键订阅视频源，从此找资源不求人"
         image="/screenshots/subscribe.webp"
       />
@@ -27,11 +27,13 @@ function App() {
         title="🦄 体积小巧，快如闪电"
         description="极至精简，安装包不足 10 MB"
         image="/screenshots/size.webp"
+        url='https://github.com/idootop/feiyu-player/releases/tag/latest'
       />
       <Feature
-        title="🐝 随时随地，想看就看"
+        title="🐟 随时随地，想看就看"
         description="网页、Windows、macOS、Linux 全平台支持"
         image="/screenshots/platform.webp"
+        url='https://github.com/idootop/feiyu-player/releases/tag/latest'
       />
       <Footer />
     </>
