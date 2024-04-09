@@ -1,6 +1,8 @@
+import "./style.css";
+
 export function Feature({ title, description, image, url }) {
   return (
-    <div style={{ marginTop: "8rem" }}>
+    <div className="feature">
       <p style={{ fontSize: "2rem", fontWeight: "bold" }}>{title}</p>
       <p
         style={{

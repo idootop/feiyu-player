@@ -1,4 +1,4 @@
-import { Download } from "../components/Download";
+import { Download } from "../components/Button/Download";
 import { Button } from "../components/Button";
 
 export function Intro() {
@@ -18,7 +18,7 @@ export function Intro() {
         <p
           style={{
             background: "#fff",
-            filter: "blur(16px)",
+            filter: "blur(1rem)",
             width: "calc(100vw - 2rem)",
             height: "30%",
             position: "absolute",
@@ -54,14 +54,7 @@ function DownloadArea() {
   return (
     <div className="row" style={{ gap: "2rem", justifyContent: "center" }}>
       <Download />
-      <Button
-        url="https://demo.feiyu-player.xbox.work/#/home/hot"
-        secondary
-        style={{
-          width: "128px",
-          height: "56px",
-        }}
-      >
+      <Button url="https://demo.feiyu-player.xbox.work/#/home/hot" secondary>
         网页版
       </Button>
     </div>

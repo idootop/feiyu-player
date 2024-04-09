@@ -7,13 +7,13 @@ export function Header() {
         <img
           src="/logo.svg"
           style={{
-            height: "28px",
-            marginRight: "10px",
+            height: "2rem",
+            marginRight: "1rem",
           }}
         />
         <p
           style={{
-            fontSize: "24px",
+            fontSize: "1.8rem",
             fontWeight: "bold",
           }}
         >
@@ -25,7 +25,7 @@ export function Header() {
         href="https://github.com/idootop/feiyu-player"
         target="_blank"
       >
-        <IconGithub />
+        <IconGithub size="2rem" />
       </a>
     </div>
   );

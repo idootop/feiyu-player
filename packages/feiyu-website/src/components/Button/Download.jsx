@@ -1,9 +1,9 @@
-import { kIsLinux, kIsMac, kIsWindows } from "../utils/os";
-import { Button } from "./Button";
-import { IconMac } from "./Icons/IconMac";
-import { IconLinux } from "./Icons/IconLinux";
-import { IconWindows } from "./Icons/IconWindows";
-import { IconGithub } from "./Icons/IconGithub";
+import { kIsLinux, kIsMac, kIsWindows } from "../../utils/os";
+import { Button } from ".";
+import { IconMac } from "../Icons/IconMac";
+import { IconLinux } from "../Icons/IconLinux";
+import { IconWindows } from "../Icons/IconWindows";
+import { IconGithub } from "../Icons/IconGithub";
 
 const kReleasePage = "https://github.com/idootop/feiyu-player/releases";
 const kDownloadPath = kReleasePage + "/download/latest/";

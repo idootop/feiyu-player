@@ -1,4 +1,4 @@
-export function getIconProps({ size = "32px" }) {
+export function getIconProps({ size = "1.5rem" }) {
   return {
     fill: "currentColor",
     width: "256",
