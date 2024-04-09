@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 
 export function useMousePosition() {
-  const elementRef = useRef(null);
+  const ref = useRef(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   useEffect(() => {
     const handleMouseMove = (event) => {
       setMousePosition({ x: event.clientX, y: event.clientY });
-      if (elementRef.current) {
-        const rect = elementRef.current.getBoundingClientRect();
+      if (ref.current) {
+        const rect = ref.current.getBoundingClientRect();
         setOffset({
           x: event.clientX - (rect.left + rect.width / 2),
           y: event.clientY - (rect.top + rect.height / 2),
@@ -21,5 +21,5 @@ export function useMousePosition() {
     };
   }, []);
 
-  return { ...mousePosition, offset, elementRef };
+  return { ...mousePosition, offset, ref };
 }

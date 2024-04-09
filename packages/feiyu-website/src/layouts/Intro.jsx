@@ -1,6 +1,7 @@
 import { Download } from "../components/Button/Download";
 import { Button } from "../components/Button";
-import { useMousePosition } from "../hooks/useMousePosition";
+import { useHover } from "../hooks/useHover";
+import { useShadow } from "../hooks/useShadow";
 
 export function Intro() {
   return (
@@ -34,27 +35,32 @@ export function Intro() {
 }
 
 function Slogan() {
-  const { offset, elementRef } = useMousePosition();
-
-  const shadowX = Math.round(offset.x * 0.1);
-  const shadowY = Math.round(offset.y * 0.1);
-  const shadowBlur = Math.round(Math.sqrt(offset.x ** 2 + offset.y ** 2) * 0.1);
-  const shadowColor = "rgba(0, 0, 0, 0.3)";
-  const shadow = `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowColor}`;
+  const { hoverRef, isHovered } = useHover();
+  const { shadow, shadowRef } = useShadow();
 
   return (
     <>
-      <p style={{ fontSize: "3rem", fontWeight: "bold" }}>
+      <p style={{ fontSize: "3rem", fontWeight: "bold", userSelect: "none" }}>
         追
         <span
-          ref={elementRef}
+          ref={shadowRef}
           style={{
             textShadow: shadow,
           }}
         >
           光影
         </span>
-        ，看世界
+        ，
+        <span
+          ref={hoverRef}
+          style={{
+            display: "inline-block",
+            width: "9rem",
+            textAlign: "center",
+          }}
+        >
+          {!isHovered ? "看世界" : "👀 🌍"}
+        </span>
       </p>
       <p
         style={{
