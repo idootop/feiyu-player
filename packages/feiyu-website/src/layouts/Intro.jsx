@@ -1,5 +1,6 @@
 import { Download } from "../components/Button/Download";
 import { Button } from "../components/Button";
+import { useMousePosition } from "../hooks/useMousePosition";
 
 export function Intro() {
   return (
@@ -33,9 +34,28 @@ export function Intro() {
 }
 
 function Slogan() {
+  const { offset, elementRef } = useMousePosition();
+
+  const shadowX = Math.round(offset.x * 0.1);
+  const shadowY = Math.round(offset.y * 0.1);
+  const shadowBlur = Math.round(Math.sqrt(offset.x ** 2 + offset.y ** 2) * 0.1);
+  const shadowColor = "rgba(0, 0, 0, 0.3)";
+  const shadow = `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowColor}`;
+
   return (
     <>
-      <p style={{ fontSize: "3rem", fontWeight: "bold" }}>追光影，看世界</p>
+      <p style={{ fontSize: "3rem", fontWeight: "bold" }}>
+        追
+        <span
+          ref={elementRef}
+          style={{
+            textShadow: shadow,
+          }}
+        >
+          光影
+        </span>
+        ，看世界
+      </p>
       <p
         style={{
           margin: "0.5rem 0 2rem 0",
