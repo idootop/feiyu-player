@@ -6,6 +6,7 @@ export function Feature({ title, description, image, url }) {
       <p style={{ fontSize: "2rem", fontWeight: "bold" }}>{title}</p>
       <p
         style={{
+          margin:'0.5rem 0 2rem 0',
           fontSize: "1.5rem",
           fontWeight: "normal",
           color: "rgba(0,0,0,50%)",
@@ -18,7 +19,6 @@ export function Feature({ title, description, image, url }) {
           src={image}
           style={{
             width: "100%",
-            marginTop: "2rem",
           }}
         />
       </a>

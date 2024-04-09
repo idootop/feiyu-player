@@ -8,7 +8,7 @@ export function Header() {
           src="/logo.svg"
           style={{
             height: "2rem",
-            marginRight: "1rem",
+            marginRight: "0.8rem",
           }}
         />
         <p

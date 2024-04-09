@@ -4,7 +4,7 @@ import { Button } from "../components/Button";
 export function Intro() {
   return (
     <>
-      <div style={{ margin: "4rem 0" }}>
+      <div style={{ margin: "6rem 0 4rem 0" }}>
         <Slogan />
         <DownloadArea />
       </div>
@@ -38,7 +38,7 @@ function Slogan() {
       <p style={{ fontSize: "3rem", fontWeight: "bold" }}>追光影，看世界</p>
       <p
         style={{
-          margin: "0 0 2rem",
+          margin: "0.5rem 0 2rem 0",
           fontSize: "1.5rem",
           fontWeight: "normal",
           color: "rgba(0,0,0,50%)",
