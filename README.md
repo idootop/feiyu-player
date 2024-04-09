@@ -228,7 +228,7 @@ pnpm install && pnpm dev
 
 # 🐟 关于飞鱼
 
-飞鱼是一款跨平台的在线视频播放器。它最初基于 [Flutter](https://flutter.dev/) 框架开发，支持 iOS 和 Android 移动设备。本次开源的飞鱼项目，是在[飞鱼 Flutter 版](https://github.com/idootop/feiyu_flutter)的基础上，进一步适配了网页端和桌面端，让人人都可以更自由的**追光影，观世界**。
+飞鱼是一款跨平台的在线视频播放器。它最初基于 [Flutter](https://flutter.dev/) 框架开发，支持 iOS 和 Android 移动设备。本次开源的飞鱼项目，是在[飞鱼 Flutter 版](https://github.com/idootop/feiyu_flutter)的基础上，进一步适配了网页端和桌面端，让人人都可以更自由的**追光影，看世界**。
 
 - 移动端: 支持 iOS 和 Android
 - 网页端: 支持所有现代桌面和移动浏览器
