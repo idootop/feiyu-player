@@ -18,8 +18,8 @@ export function Features() {
         image="/screenshots/subscribe.webp"
       />
       <Feature
-        title="🦋 颜值即正义"
-        description="极简高颜值，给你极致观影体验"
+        title="🦋 界面极简，超高颜值"
+        description="颜值即正义，给你极致观影体验"
         image="/screenshots/play.webp"
       />
       <Feature
