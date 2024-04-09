@@ -1,4 +1,5 @@
 import { Message } from '@arco-design/web-react';
+import { FeiyuDesktop } from 'feiyu-desktop';
 
 import { Expand, Row } from '@/components/Flex';
 import { SwitchDark } from '@/components/SwitchDark';
@@ -24,7 +25,7 @@ export const MyHeader = () => {
         zIndex: 10,
       }}
     >
-      <TitleBar />
+      {FeiyuDesktop.isDesktop && <TitleBar />}
       <div
         data-tauri-drag-region
         style={{
@@ -38,7 +39,7 @@ export const MyHeader = () => {
         }}
       >
         <Row
-          marginTop="14px"
+          marginTop={FeiyuDesktop.isDesktop ? '14px' : undefined}
           cursor="pointer"
           onClick={() => {
             if (hideSideMenu) {
