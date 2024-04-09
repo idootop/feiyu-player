@@ -4,7 +4,7 @@
 
 ![](screenshots/home-preview.jpg)
 
-# ✨ 项目亮点
+# ✨ 特性
 
 - **🐳 海量资源，随心搜索**: 支持多种视频源，聚合搜索，看你想看。
 - **🦀 一键订阅，自由分享**: 一键订阅视频源，从此找资源不求人。
@@ -12,7 +12,7 @@
 - **🦄 体积小巧，快如闪电**: 极至精简，安装包不足 10 MB。
 - **🐟 随时随地，想看就看**: 网页、Windows、macOS、Linux 全平台支持。
 
-# 🔥 应用预览
+# 🔥 预览
 
 ![](screenshots/mobile-preview.jpg)
 
@@ -217,6 +217,16 @@ cd packages/feiyu-desktop
 # 安装依赖，并启动本地项目
 pnpm install && pnpm dev
 ```
+
+# 🐟 关于飞鱼
+
+飞鱼是一款跨平台的在线视频播放器。它最初基于 [Flutter](https://flutter.dev/) 框架开发，支持 iOS 和 Android 移动设备。本次开源的飞鱼项目，是在[飞鱼 Flutter 版](https://github.com/idootop/feiyu_flutter)的基础上，进一步适配了网页端和桌面端，让人人都可以更自由的**追光影，观世界**。
+
+- 移动端: 支持 iOS 和 Android
+- 网页端: 支持所有现代桌面和移动浏览器
+- 桌面端: 支持 Windows、macOS 和 Linux 系统
+
+如果你对飞鱼有任何问题或建议，请提 [issue](https://github.com/idootop/feiyu-player/issues)。Enjoy!
 
 # 🚨 免责声明
 
