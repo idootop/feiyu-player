@@ -1,14 +1,19 @@
-export const kIsMac =
-  navigator.userAgentData?.platform === "macOS" ||
-  /^Mac/.test(navigator.platform ?? "") ||
-  /Mac/.test(navigator.userAgent);
+let { platform, userAgent, maxTouchPoints } = navigator;
+userAgent = userAgent.toLowerCase();
+platform = platform?.toLowerCase() || userAgent;
+maxTouchPoints = maxTouchPoints || 1;
 
-export const kIsWindows =
-  navigator.userAgentData?.platform === "Windows" ||
-  /^Win/.test(navigator.platform ?? "") ||
-  /Win/.test(navigator.userAgent);
+export const kIsIOS =
+  /ipad|iphone|ipod/i.test(platform) ||
+  (/mac/i.test(platform) && maxTouchPoints > 1);
+
+export const kIsAndroid =
+  /android/i.test(platform) || /android/i.test(userAgent);
+
+export const kIsMac =
+  !kIsIOS && (/mac/i.test(platform) || /mac/i.test(userAgent));
+
+export const kIsWindows = /win/i.test(platform) || /windows/i.test(userAgent);
 
 export const kIsLinux =
-  navigator.userAgentData?.platform === "Linux" ||
-  /^Linux/.test(navigator.platform ?? "") ||
-  /Linux/.test(navigator.userAgent);
+  !kIsAndroid && (/linux/i.test(platform) || /linux/i.test(userAgent));
