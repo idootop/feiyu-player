@@ -2,7 +2,7 @@
 
 一个漂亮得不像实力派的在线视频播放器 ✨
 
-![](screenshots/home-preview.jpg)
+![](screenshots/play.webp)
 
 # ✨ 特性
 
@@ -12,13 +12,21 @@
 - **🦄 体积小巧，快如闪电**: 极至精简，安装包不足 10 MB。
 - **🐟 随时随地，想看就看**: 网页、Windows、macOS、Linux 全平台支持。
 
-# 🔥 预览
-
-![](screenshots/mobile-preview.jpg)
-
-![](screenshots/play-preview.jpg)
-
 # ⚡️ 快速开始
+
+**官网**
+
+[https://feiyu-player.xbox.work](https://feiyu-player.xbox.work)
+
+**下载**
+
+| 操作系统 | 下载链接                                                                                                                |
+| -------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Windows  | [feiyu_windows_x86_64.exe](https://github.com/idootop/feiyu-player/releases/download/latest/feiyu_windows_x86_64.exe)   |
+| macOS    | [feiyu_macos_universal.dmg](https://github.com/idootop/feiyu-player/releases/download/latest/feiyu_macos_universal.dmg) |
+| Linux    | [feiyu_linux_x86_64.deb](https://github.com/idootop/feiyu-player/releases/download/latest/feiyu_linux_x86_64.deb)       |
+
+**Docker**
 
 飞鱼提供 Docker 镜像一键部署，用户无需手动编译即可快速体验。
 
