@@ -7,7 +7,7 @@
 [![Docker Image Version](https://img.shields.io/docker/v/idootop/feiyu?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/feiyu)
 
 ```shell
-docker run -d -p 4399:3000 idootop/feiyu:1.0.0
+docker run -d -p 4399:3000 idootop/feiyu:latest
 ```
 
 启动成功后，即可通过 [http://localhost:4399](http://localhost:4399) 访问飞鱼。
@@ -20,7 +20,7 @@ docker run -d -p 4399:3000 idootop/feiyu:1.0.0
 docker run -d \
     -p 4399:3000 \
     -v $(pwd)/feiyu.json:/home/static/feiyu.json \
-    idootop/feiyu:1.0.0
+    idootop/feiyu:latest
 ```
 
 ## 本地开发
