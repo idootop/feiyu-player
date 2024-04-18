@@ -1,9 +1,62 @@
+import { invoke } from "@tauri-apps/api/core";
+import { getCurrent } from "@tauri-apps/api/webviewWindow";
+import { updater } from "./updater";
+import { getPlatform } from "./platform";
+
 class _FeiyuDesktop {
-  isDesktop = false;
+  isDesktop = true;
   isMac = false;
   isWindows = false;
   isLinux = false;
-  init() {}
+
+  invoke = null;
+  window = null;
+  updater = updater;
+
+  _initialized = false;
+  async init() {
+    if (this._initialized) {
+      return;
+    }
+    this.invoke = invoke;
+    this.window = getCurrent();
+    const platform = await getPlatform();
+    this.isMac = platform.isMac;
+    this.isWindows = platform.isWindows;
+    this.isLinux = platform.isLinux;
+    this._initFullScreen();
+    this._initWindowsBorder();
+    this._initialized = true;
+  }
+
+  _initWindowsBorder() {
+    const htmlElement = document.documentElement;
+    const bodyElement = document.body;
+    const appBorderElement = document.createElement("div");
+    bodyElement.appendChild(appBorderElement);
+    [htmlElement, bodyElement].forEach((e) => {
+      e.style.background = "transparent";
+      e.style.clipPath = "inset(1px round 12px)";
+    });
+    appBorderElement.style.position = "fixed";
+    appBorderElement.style.top = "1px";
+    appBorderElement.style.left = "1px";
+    appBorderElement.style.zIndex = "10000";
+    appBorderElement.style.pointerEvents = "none";
+    appBorderElement.style.border = "1px solid rgba(0, 0, 0, 10%)";
+    appBorderElement.style.borderRadius = "12px";
+    appBorderElement.style.width = "calc(100vw - 2 * 1px)";
+    appBorderElement.style.height = "calc(100vh - 2 * 1px)";
+  }
+
+  _initFullScreen() {
+    if (this.isWindows) {
+      document.addEventListener("fullscreenchange", async () => {
+        const fullscreen = document.fullscreenElement != null;
+        await this.window?.setFullscreen(fullscreen);
+      });
+    }
+  }
 }
 
 export const FeiyuDesktop = new _FeiyuDesktop();
