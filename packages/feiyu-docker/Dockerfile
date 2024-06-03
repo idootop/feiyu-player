@@ -1,4 +1,4 @@
-FROM node:18.18.2-alpine as build
+FROM node:20.14.0-alpine as build
 
 RUN --mount=type=cache,target=/root/.npm \
     npm install -g pnpm@8.15.4
@@ -12,6 +12,5 @@ COPY ./feiyu-desktop/package.json ./feiyu-desktop/package.json
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
     cd feiyu && pnpm install && pnpm web && pnpm build
 
-FROM lipanski/docker-static-website:latest
-
-COPY --from=build /app/feiyu/dist .
+FROM httpd:alpine3.20
+COPY --from=build /app/feiyu/dist /usr/local/apache2/htdocs/
