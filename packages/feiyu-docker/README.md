@@ -28,10 +28,15 @@ docker run -d \
 ```bash
 # 克隆本项目
 git clone https://github.com/idootop/feiyu-player
+cd feiyu-player/packages/feiyu
 
-# 切换到项目所在路径
-cd feiyu-player/packages
+# 构建 feiyu 网页版
+pnpm build:web
+
+# 复制产物
+cd ../feiyu-docker
+rm -rf dist && cp -r ../feiyu/dist . 
 
 # 构建镜像
-docker build -t feiyu . -f $(pwd)/feiyu-docker/Dockerfile
+docker build -t feiyu .
 ```

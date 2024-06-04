@@ -8,6 +8,7 @@
     "desktop": "ts-node scripts/desktop",
     "dev": "vite --force",
     "build": "vite build --force && pnpm pwa",
+    "build:web": "pnpm i && pnpm web && pnpm build",
     "dev:desktop": "pnpm i && pnpm desktop && pnpm dev",
     "build:desktop": "pnpm i && pnpm desktop && pnpm build"
   },

@@ -1,17 +1,26 @@
-FROM node:18.18.2-alpine as build
+# 来源：https://github.com/lipanski/docker-static-website
+FROM alpine:3.20.0 AS builder
 
-RUN --mount=type=cache,target=/root/.npm \
-    npm install -g pnpm@8.15.4
+# 下载 busybox 源码
+ARG BUSYBOX_VERSION=1.36.1
+RUN wget https://busybox.net/downloads/busybox-${BUSYBOX_VERSION}.tar.bz2 \
+  && tar xf busybox-${BUSYBOX_VERSION}.tar.bz2 \
+  && mv /busybox-${BUSYBOX_VERSION} /busybox
 
-WORKDIR /app
+# 构建 busybox_HTTPD
+WORKDIR /busybox
+COPY busybox.conf .config
+RUN apk add gcc musl-dev make perl
+RUN make && ./make_single_applets.sh
 
-COPY ./feiyu ./feiyu
-COPY ./feiyu-desktop/src ./feiyu-desktop/src
-COPY ./feiyu-desktop/package.json ./feiyu-desktop/package.json
+FROM scratch AS release
 
-RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
-    cd feiyu && pnpm install && pnpm web && pnpm build
+EXPOSE 3000
+WORKDIR /var/www
 
-FROM lipanski/docker-static-website:latest
+# 拷贝飞鱼构建产物
+COPY dist .
 
-COPY --from=build /app/feiyu/dist .
+# 启动 busybox_HTTPD 服务
+COPY --from=builder /busybox/busybox_HTTPD httpd
+CMD ["./httpd", "-f", "-v", "-p", "3000"]

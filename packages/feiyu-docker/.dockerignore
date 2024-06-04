@@ -1,0 +1,7 @@
+# 排除全部文件
+**/*
+
+# 保留相关构建文件
+!dist
+!httpd.conf
+!busybox.conf
