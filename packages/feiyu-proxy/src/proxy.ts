@@ -1,5 +1,5 @@
-import { main } from "../src/index";
-import { generateAPIEvent } from "../src/utils/scf/events";
+import { main } from "./index";
+import { generateAPIEvent } from "./utils/scf/events";
 
 export default async function handler(request, response) {
   const req = generateAPIEvent({
