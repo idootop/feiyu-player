@@ -2,7 +2,7 @@
 
 一个漂亮得不像实力派的跨端视频播放器 ✨
 
-![](screenshots/play.webp)
+![](https://github.com/idootop/feiyu-player/raw/main/screenshots/play.webp)
 
 # ✨ 特性
 
@@ -151,12 +151,12 @@ docker run -d -p 4399:3000 -v $(pwd)/feiyu.json:/app/feiyu.json idootop/feiyu:la
 
 ## IPFS 配置（ipfs）
 
-飞鱼使用 IPFS 作为去中心化存储，用于分享影片和导出订阅配置等场景。
+[IPFS](https://ipfs.tech/) 是一种点对点分布式文件系统，旨在实现更开放、高效、安全的网络数据传输与共享。
 
 - **gateway**：用于访问 IPFS 网络中的数据，常用的公共网关包括 ipfs.io、dweb.link 等。
 - **token**：飞鱼默认使用 [NFT.storage](https://nft.storage/) 服务向 IPFS 网络中写入数据。[NFT.storage](https://nft.storage/) 提供免费的去中心化存储服务，需注册账号获取 token 后方可使用。
 
-[IPFS](https://ipfs.tech/) 是一种点对点分布式文件系统，旨在实现更开放、高效、安全的网络数据传输与共享。
+飞鱼使用 IPFS 作为去中心化存储，用于分享影片和导出订阅配置等场景。
 
 # 🐟 关于飞鱼
 
