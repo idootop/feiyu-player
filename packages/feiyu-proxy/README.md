@@ -18,10 +18,10 @@ git clone https://github.com/idootop/feiyu-player && cd feiyu-player
 cd packages/feiyu-proxy-vercel
 
 # 安装并更新 Vercel CLI 到最新版本
-pnpm install -g vercel@latest
+npm install -g vercel@latest
 
 # 安装依赖，部署项目
-pnpm install && pnpm build && pnpm deploy
+npm install && npm run build && npm run deploy
 ```
 
 执行最后一条命令后，Vercel CLI 会启动浏览器并引导你完成免费注册和部署过程。
@@ -37,6 +37,8 @@ pnpm install && pnpm build && pnpm deploy
 这样就可以通过该代理服务，正常搜索和访问各种第三方视频资源了。
 
 ## Docker 部署
+
+[![Docker Image Version](https://img.shields.io/docker/v/idootop/feiyu?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/feiyu-proxy)
 
 或者你也可以使用 Docker 镜像，在自己的服务器上部署飞鱼 Proxy。
 

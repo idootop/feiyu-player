@@ -7,4 +7,4 @@
 !package.json
 !tsconfig.json
 !tsup.config.ts
-!pnpm-lock.yaml
+!package-lock.json

@@ -1,13 +1,13 @@
 {
   "name": "feiyu-proxy",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": ">=16"
   },
   "scripts": {
     "build": "tsup",
-    "start": "pnpm build && vercel dev",
+    "start": "npm run build && vercel dev",
     "server": "node server.js",
     "deploy": "vercel deploy --prod"
   },

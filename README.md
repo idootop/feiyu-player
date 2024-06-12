@@ -143,6 +143,8 @@ docker run -d -p 4399:3000 -v $(pwd)/feiyu.json:/app/feiyu.json idootop/feiyu:la
 
 ## 请求代理 (proxy)
 
+[![Docker Image Version](https://img.shields.io/docker/v/idootop/feiyu?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/feiyu-proxy)
+
 有些视频源可能无法直接在网页端使用，这是由于浏览器的同源策略限制，无法直接访问第三方资源。
 
 为解决跨域问题，飞鱼提供了一个专用的请求代理服务，具体使用方法请查看飞鱼 Proxy [使用文档](https://github.com/idootop/feiyu-player/blob/main/packages/feiyu-proxy/README.md)。
