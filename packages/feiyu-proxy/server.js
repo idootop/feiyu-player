@@ -7,8 +7,8 @@ const server = http.createServer((req, res) => {
   if (pathname.startsWith("/api/proxy")) {
     apiProxy(req, res);
   } else {
-    res.writeHead(404, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ message: "Hello World!" }));
+    res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
+    res.end("Hello World!");
   }
 });
 
