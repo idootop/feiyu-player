@@ -41,7 +41,7 @@ pnpm install && pnpm build && pnpm deploy
 或者你也可以使用 Docker 镜像，在自己的服务器上部署飞鱼 Proxy。
 
 ```shell
-docker run -d -p 3000:80 idootop/feiyu-proxy:latest
+docker run -d -p 4399:3000 idootop/feiyu-proxy:latest
 ```
 
 待部署完成后，按照下面的示例，将 Proxy 地址正确填入订阅配置中。
@@ -61,5 +61,5 @@ docker run -d -p 3000:80 idootop/feiyu-proxy:latest
 docker build -t feiyu-proxy .
 
 # 运行
-docker run -d -p 3000:80 feiyu-proxy
+docker run -d -p 4399:3000 feiyu-proxy
 ```

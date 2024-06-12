@@ -17,10 +17,7 @@ docker run -d -p 4399:3000 idootop/feiyu:latest
 如需自定义默认配置(如视频源等)，可在本地创建 `feiyu.json` 配置文件，并按如下方式挂载启动:
 
 ```shell
-docker run -d \
-    -p 4399:3000 \
-    -v $(pwd)/feiyu.json:/home/static/feiyu.json \
-    idootop/feiyu:latest
+docker run -d -p 4399:3000 -v $(pwd)/feiyu.json:/app/feiyu.json idootop/feiyu:latest
 ```
 
 ## 本地开发
@@ -35,7 +32,7 @@ pnpm build:web
 
 # 复制产物
 cd ../feiyu-docker
-rm -rf dist && cp -r ../feiyu/dist . 
+rm -rf dist && cp -r ../feiyu/dist .
 
 # 构建镜像
 docker build -t feiyu .

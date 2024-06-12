@@ -8,5 +8,5 @@ git clone https://github.com/idootop/feiyu-player && cd feiyu-player
 cd packages/feiyu
 
 # 安装依赖，并启动本地项目
-pnpm install && pnpm dev
+pnpm install && pnpm build:web && pnpm dev
 ```
