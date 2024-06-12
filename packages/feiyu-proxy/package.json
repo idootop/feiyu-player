@@ -7,7 +7,8 @@
   },
   "scripts": {
     "build": "tsup",
-    "start": "pnpm build && vercel dev",
+    "dev": "pnpm build && vercel dev",
+    "start": "node server.js",
     "deploy": "vercel deploy --prod"
   },
   "dependencies": {
