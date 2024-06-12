@@ -38,9 +38,9 @@ npm install && npm run build && npm run deploy
 
 ## Docker 部署
 
-[![Docker Image Version](https://img.shields.io/docker/v/idootop/feiyu?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/feiyu-proxy)
-
 或者你也可以使用 Docker 镜像，在自己的服务器上部署飞鱼 Proxy。
+
+[![Docker Image Version](https://img.shields.io/docker/v/idootop/feiyu?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/feiyu-proxy)
 
 ```shell
 docker run -d -p 4399:3000 idootop/feiyu-proxy:latest
