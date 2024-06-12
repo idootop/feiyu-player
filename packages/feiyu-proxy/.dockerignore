@@ -1,0 +1,10 @@
+# 排除全部文件
+**/*
+
+# 只保留构建相关的文件
+!src
+!server.js
+!package.json
+!tsconfig.json
+!tsup.config.ts
+!pnpm-lock.yaml

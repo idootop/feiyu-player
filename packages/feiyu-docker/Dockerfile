@@ -16,7 +16,7 @@ RUN make && ./make_single_applets.sh
 FROM scratch AS release
 
 EXPOSE 3000
-WORKDIR /var/www
+WORKDIR /app
 
 # 拷贝飞鱼构建产物
 COPY dist .
