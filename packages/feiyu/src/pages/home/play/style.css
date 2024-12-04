@@ -57,3 +57,13 @@
 .no-next {
   display: none !important;
 }
+
+.xgplayer .xg-options-list li {
+  margin: 6px 0;
+}
+
+.xgplayer .xg-options-list li:hover,
+.xgplayer .xg-options-list li.selected {
+  color: #2d5cf6 !important;
+  font-weight: bold;
+}

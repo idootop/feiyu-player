@@ -10,6 +10,7 @@ import Mobile from 'xgplayer/es/plugins/mobile';
 import PC from 'xgplayer/es/plugins/pc';
 import PIPIcon from 'xgplayer/es/plugins/pip';
 import PlayIcon from 'xgplayer/es/plugins/play';
+import PlaybackRate from 'xgplayer/es/plugins/playbackRate';
 import Poster from 'xgplayer/es/plugins/poster';
 import Progress from 'xgplayer/es/plugins/progress';
 import MiniProgress from 'xgplayer/es/plugins/progress/miniProgress';
@@ -37,6 +38,7 @@ export class XgPreset {
   constructor(options, playerConfig) {
     const simulateMode =
       playerConfig && playerConfig.isMobileSimulateMode === 'mobile';
+
     const vodPlugins = [
       TimeSegments,
       Progress,
@@ -52,6 +54,7 @@ export class XgPreset {
       PlayNext,
       Volume,
       PIPIcon,
+      PlaybackRate,
     ];
 
     const layers = [
