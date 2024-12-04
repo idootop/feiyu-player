@@ -294,6 +294,7 @@ const PlayerPage = () => {
       )}
       <Expand
         className="normal-scrollbar"
+        width="100%"
         overflowX="hidden"
         overflowY="scroll"
         margin="10px 0 0 0"
@@ -315,6 +316,10 @@ const PlayerPage = () => {
                   onClick={() => startPlay(idx)}
                   style={{
                     margin: '5px',
+                    maxWidth: '100%',
+                    height: 'auto',
+                    minHeight: '32px',
+                    textWrap: 'wrap',
                   }}
                 >
                   {e.name}
