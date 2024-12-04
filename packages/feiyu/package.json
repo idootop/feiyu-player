@@ -24,7 +24,7 @@
     "wouter": "^2.12.1",
     "xgplayer": "^3.0.14",
     "xgplayer-hls": "^3.0.14",
-    "xsta": "^1.0.2"
+    "xsta": "^2.1.0"
   },
   "devDependencies": {
     "@types/node": "^18.19.24",
