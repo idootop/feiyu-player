@@ -22,7 +22,7 @@
 | macOS    | [feiyu_macos_universal.dmg](https://github.com/idootop/feiyu-player/releases/download/latest/feiyu_macos_universal.dmg) |
 | Linux    | [feiyu_linux_x86_64.deb](https://github.com/idootop/feiyu-player/releases/download/latest/feiyu_linux_x86_64.deb)       |
 
-> 首次安装后，你需要配置订阅才能正常使用。有关订阅配置的格式和参数说明，请参考下面的 [📖 管理订阅](https://github.com/idootop/feiyu-player?tab=readme-ov-file#-%E7%AE%A1%E7%90%86%E8%AE%A2%E9%98%85) 部分。
+> 首次安装后，你需要配置订阅才能正常使用。有关订阅的格式和参数说明，请参考下面的 [📖 管理订阅](https://github.com/idootop/feiyu-player?tab=readme-ov-file#-%E7%AE%A1%E7%90%86%E8%AE%A2%E9%98%85) 部分。
 
 ## 🐳 Docker
 
