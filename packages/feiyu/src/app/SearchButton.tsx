@@ -246,7 +246,7 @@ const SearchModal = () => {
   const $Feiyu = initial ? (
     <Column width="100%" height="300px">
       <SearchHistory searchMovie={searchMovie} />
-      <Expand alignItems="center">
+      <Expand alignItems="center" marginBottom="48px">
         <Empty
           icon={
             <Box fontSize="64px" color={colors.text} margin="20px">
@@ -271,7 +271,7 @@ const SearchModal = () => {
               >
                 飞鱼 v{APPConfig.version}
               </Box>
-              Made with ❤️ by &nbsp;
+              Made with ❤️ by
               <Link
                 href="https://github.com/idootop/feiyu-player"
                 target="_blank"
@@ -342,7 +342,7 @@ const SearchHistory = ({
       <Row
         className="normal-scrollbar"
         flex="1"
-        overflowX="scroll"
+        overflowX="auto"
         gap="8px"
         paddingBottom="12px"
       >
