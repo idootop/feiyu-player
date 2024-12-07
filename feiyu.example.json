@@ -3,10 +3,6 @@
   "name": "默认订阅",
   "feiyu": {
     "proxy": "https://example.vercel.app/api/proxy",
-    "ipfs": {
-      "gateway": "https://nftstorage.link/ipfs/{{cid}}",
-      "token": "eyJhb...xxx"
-    },
     "videoSources": [
       {
         "key": "视频源1",
@@ -18,6 +14,13 @@
       }
     ],
     "hotMovies": [
+      {
+        "id": "35588177",
+        "isNew": false,
+        "title": "漫长的季节",
+        "cover": "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2890906384.jpg",
+        "rate": "9.4"
+      },
       {
         "id": "26302614",
         "isNew": false,
@@ -31,6 +34,13 @@
         "title": "最后生还者 第一季",
         "cover": "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2884221114.jpg",
         "rate": "9.1"
+      },
+      {
+        "id": "36722428",
+        "isNew": false,
+        "title": "思想验证区域：The Community",
+        "cover": "https://img1.doubanio.com/view/photo/s_ratio_poster/public/p2903848858.jpg",
+        "rate": "9.5"
       }
     ]
   }
