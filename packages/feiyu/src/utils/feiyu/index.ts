@@ -128,28 +128,6 @@ class Feiyu {
         type: e.type ?? '', //分类
       }))
       .filter((e) => e.id && e.name);
-
-    if (!appConfig.movieCommentaries) {
-      // 去掉电影解说
-      videoList = videoList.filter(
-        (e) =>
-          !(
-            e.type.includes('解说') || // 电影解说
-            e.name.includes('电影解说') || // 钢铁侠[电影解说]
-            ((e.name.includes('，') || // 11年前的《钢铁侠》，它凭什么成为漫威最好的电影   漫威终局之战系列
-              e.name.includes('！') || // 钢铁侠妮妮新片《多力特的奇幻冒险》口碑票房扑街！真的有那么不堪吗！？
-              e.name.includes('？') || // 钢铁侠妮妮新片《多力特的奇幻冒险》口碑票房扑街！真的有那么不堪吗！？
-              e.name.includes('《') || // 11年前的《钢铁侠》，它凭什么成为漫威最好的电影   漫威终局之战系列
-              e.name.includes('[')) && // 钢铁侠[电影解说]
-              e.name.length > 10)
-          ),
-      );
-    }
-
-    if (!appConfig.adultContent) {
-      // 去掉伦理片
-      videoList = videoList.filter((e) => !e.type.includes('伦理'));
-    }
     return videoList;
   }
 
