@@ -15,12 +15,9 @@ import { Loading } from '@/components/Loading';
 import { SearchEmpty } from '@/components/SearchEmpty';
 import { Text } from '@/components/Text';
 import { useDarkMode } from '@/hooks/useDarkMode';
-import { useInit } from '@/hooks/useInit';
 import { Size, useMeasure } from '@/hooks/useMeasure';
-import { useRebuild, useRebuildRef } from '@/hooks/useRebuild';
+import { useRebuild } from '@/hooks/useRebuild';
 import { useScreen } from '@/hooks/useScreen';
-import { ipfs } from '@/services/ipfs';
-import { addSearchParams } from '@/services/routes/location';
 import { usePage } from '@/services/routes/page';
 import { router } from '@/services/routes/router';
 import { colors } from '@/styles/colors';
@@ -36,58 +33,10 @@ import { Player } from './player';
 
 export const isPlayPage = () => router.current === '/home/play';
 
-const usePlayIPFSData = (props: { cid?: string; data?: any }) => {
-  // eslint-disable-next-line prefer-const
-  let { cid, data } = props;
-  const dataRef = useRef({
-    ...props,
-    loading: true,
-    noData: true,
-    inited: false,
-    preData: undefined as any,
-  });
-  const rebuildRef = useRebuildRef();
-  if (dataRef.current.cid) {
-    dataRef.current.inited = true;
-  }
-  if (dataRef.current.cid && !dataRef.current.data) {
-    dataRef.current.loading = true;
-    dataRef.current.noData = true;
-  }
-  if (dataRef.current.data) {
-    dataRef.current.loading = false;
-    dataRef.current.noData = false;
-  }
-
-  useInit(async () => {
-    if (!isPlayPage()) return;
-    if (cid && !data) {
-      // 有 cid 但是没有数据，重新从 cid 获取数据
-      data = await ipfs.readJson(cid);
-      dataRef.current.data = data;
-      dataRef.current.loading = false;
-      // 刷新界面
-      rebuildRef.current.rebuild();
-    } else if (!cid && !data) {
-      // fallback 到首页
-      setTimeout(() => {
-        router.replace('/home/hot');
-      });
-    }
-  }, [props]);
-  return dataRef.current;
-};
-
 const PlayerPage = () => {
-  /**
-   * query: cid[电影详情数据ipfs cid], ep[当前播放集数]
-   * data: movie[电影详情数据]
-   */
-  const { query, isActive } = usePage('/home/play');
-  const { cid, ep: _ep } = query;
-  const ep = parseInt(_ep ?? '1', 10);
+  const { isActive } = usePage('/home/play');
   const [pageData] = useXConsumer(kPlayPageId);
-  const { pageId, movie: currentData } = pageData ?? {};
+  const { pageId, movie } = pageData ?? {};
 
   const { isDarkMode } = useDarkMode();
   const { jumpToPage } = useHomePages();
@@ -96,26 +45,25 @@ const PlayerPage = () => {
   const isMobile = width < 750;
   const descWidth = clamp(320 - (960 - width), 180, 320);
 
-  const {
-    loading: _loading,
-    noData: _noData,
-    data: ipfsData,
-  } = usePlayIPFSData({ cid, data: currentData });
-  const movie: FeiyuMovie | undefined = currentData ?? ipfsData;
+  const loading = false;
+  const title = movie?.name;
   const playList = movie?.videos.map((e) => e.url) ?? [];
-  const loading = movie ? false : _loading;
-  const noData = movie ? movie.videos.length < 1 : _noData;
-  const title = movie?.name ?? (loading ? '加载中' : '加载失败');
+  const noData = playList.length < 1;
+
+  useEffect(() => {
+    if (isActive && !movie) {
+      // 回到首页
+      jumpToPage('hot');
+    }
+  }, []);
 
   // 分享影片
   const share = () => {
-    if (movie?.name) {
-      clipboard.write(
-        `${window.location.origin}/#/home/search?movie=${encodeURIComponent(
-          movie.name,
-        )}`,
-      );
-    }
+    clipboard.write(
+      `${window.location.origin}/#/home/search?movie=${encodeURIComponent(
+        movie.name,
+      )}`,
+    );
   };
 
   // 返回上一页
@@ -140,12 +88,11 @@ const PlayerPage = () => {
   }
 
   // 初始化剧集数
-  const [currentIdx, setCurrentIdx] = useState(ep - 1);
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const currentVideo = movie?.videos[currentIdx];
   const startPlay = (idx: number) => {
     if (idx !== currentIdx) {
       setCurrentIdx(idx);
-      // 更新请求参数(当前播放的剧集)
-      addSearchParams({ ep: idx + 1 });
     }
   };
   useEffect(() => {
@@ -154,13 +101,6 @@ const PlayerPage = () => {
     // 选集恢复原始排序
     setReverseEPs(false);
   }, [pageId]);
-  useEffect(() => {
-    // 从query里的 ep 更新当前的播放集数
-    if (currentIdx !== ep - 1) {
-      setCurrentIdx(ep - 1);
-    }
-  }, [ep]);
-  const currentVideo = movie?.videos?.[currentIdx];
 
   // 更新网页标题
   const titleRef = useRef(document.title);

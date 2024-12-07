@@ -349,6 +349,7 @@ const SearchHistory = ({
         {history.map((e) => {
           return (
             <Button
+              key={e}
               onClick={() => searchMovie(e)}
               style={{
                 height: 'auto',
