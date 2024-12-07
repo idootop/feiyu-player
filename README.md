@@ -1,6 +1,6 @@
 # 🐟 飞鱼
 
-一个漂亮得不像实力派的跨端视频播放器 ✨
+一个漂亮得不像实力派的跨平台视频播放器 ✨
 
 ![](https://github.com/idootop/feiyu-player/raw/main/screenshots/play.webp)
 
@@ -14,8 +14,6 @@
 
 ## ⚡️ 快速开始
 
-**下载**
-
 推荐下载安装包后使用，或者直接访问[官网](https://feiyu-player.xbox.work)，在线体验网页版演示。
 
 | 操作系统 | 下载链接                                                                                                                |
@@ -24,17 +22,13 @@
 | macOS    | [feiyu_macos_universal.dmg](https://github.com/idootop/feiyu-player/releases/download/latest/feiyu_macos_universal.dmg) |
 | Linux    | [feiyu_linux_x86_64.deb](https://github.com/idootop/feiyu-player/releases/download/latest/feiyu_linux_x86_64.deb)       |
 
-**订阅设置**
-
-首次安装后，你需要配置订阅才能正常使用。
-
-有关订阅配置的格式和参数说明，请参考下面的 [📖 管理订阅](https://github.com/idootop/feiyu-player?tab=readme-ov-file#-%E7%AE%A1%E7%90%86%E8%AE%A2%E9%98%85) 部分。
+> 首次安装后，你需要配置订阅才能正常使用。有关订阅配置的格式和参数说明，请参考下面的 [📖 管理订阅](https://github.com/idootop/feiyu-player?tab=readme-ov-file#-%E7%AE%A1%E7%90%86%E8%AE%A2%E9%98%85) 部分。
 
 ## 🐳 Docker
 
 [![Docker Image Version](https://img.shields.io/docker/v/idootop/feiyu?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/feiyu)
 
-如果你想要将飞鱼部署到自己的网站，或者在本地 NAS 上运行，可以使用 Docker 镜像一键部署，无需手动安装依赖，编译源码。
+如果你想要将飞鱼部署到自己的网站，或者在本地 NAS 上运行，可以使用 Docker 镜像一键部署。
 
 ```shell
 docker run -d -p 4399:3000 idootop/feiyu:latest
@@ -153,7 +147,7 @@ docker run -d -p 4399:3000 -v $(pwd)/feiyu.json:/app/feiyu.json idootop/feiyu:la
 
 如果你对飞鱼有任何问题或建议，请提 [issue](https://github.com/idootop/feiyu-player/issues)。
 
-**Enjoy!**
+**Enjoy! ;)**
 
 ## 🚨 免责声明
 
