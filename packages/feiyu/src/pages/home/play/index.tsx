@@ -1,4 +1,4 @@
-import { Button, Link, Message, Modal } from '@arco-design/web-react';
+import { Button } from '@arco-design/web-react';
 import {
   IconLeft,
   IconShareExternal,
@@ -25,9 +25,10 @@ import { usePage } from '@/services/routes/page';
 import { router } from '@/services/routes/router';
 import { colors } from '@/styles/colors';
 import { clamp } from '@/utils/base';
+import { clipboard } from '@/utils/clipborad';
 import { isEqual } from '@/utils/diff';
 import { FeiyuMovie } from '@/utils/feiyu';
-import { isEmpty, isNotEmpty } from '@/utils/is';
+import { isNotEmpty } from '@/utils/is';
 
 import { kCurrentSearchMovies, kPlayPageId, MovieItem } from '../search';
 import { useHomePages } from '../useHomePages';
@@ -106,48 +107,15 @@ const PlayerPage = () => {
   const noData = movie ? movie.videos.length < 1 : _noData;
   const title = movie?.name ?? (loading ? '加载中' : '加载失败');
 
-  const [sharing, setSharing] = useState(false);
-  const [shareURL, setShareURL] = useState<string>('');
-
-  const $ShareModal = (
-    <Modal
-      title="分享链接"
-      visible={isNotEmpty(shareURL)}
-      onCancel={() => setShareURL('')}
-      footer={null}
-      style={{
-        width: 'auto',
-        maxWidth: '400px',
-        margin: '20px',
-      }}
-    >
-      <Link
-        style={{ padding: '20px', color: '#3d7ff6', wordBreak: 'break-all' }}
-        href={shareURL}
-        target="_blank"
-      >
-        {shareURL}
-      </Link>
-    </Modal>
-  );
-
   // 分享影片
-  const share = async () => {
-    if (sharing) {
-      Message.info('生成分享链接中，请稍等');
-      return;
+  const share = () => {
+    if (movie?.name) {
+      clipboard.write(
+        `${window.location.origin}/#/home/search?movie=${encodeURIComponent(
+          movie.name,
+        )}`,
+      );
     }
-    setSharing(true);
-    const _cid = isEmpty(cid) ? await ipfs.writeJson(movie) : cid;
-    if (_cid) {
-      const shareUrl = new URL(window.location.href.replace('#/', ''));
-      shareUrl.searchParams.set('cid', _cid);
-      const url = shareUrl.href.replace('/home', '/#/home');
-      setShareURL(url);
-    } else {
-      Message.info('分享失败');
-    }
-    setSharing(false);
   };
 
   // 返回上一页
@@ -220,7 +188,6 @@ const PlayerPage = () => {
       icon={<IconShareExternal />}
       style={{ visibility: movie ? 'visible' : 'hidden' }}
       onClick={share}
-      loading={sharing}
     >
       分享
     </Button>
@@ -364,7 +331,6 @@ const PlayerPage = () => {
     <PageBuilder
       background={isMobile ? colors.bg : isDarkMode ? colors.bg3 : colors.gray}
     >
-      {$ShareModal}
       {isMobile ? (
         <Box />
       ) : (
