@@ -1,9 +1,9 @@
 import { XSta } from 'xsta';
 
 import { http } from '@/services/http';
-import { ipfs, ipfsURL } from '@/services/ipfs';
 import { storage } from '@/services/storage/storage';
 import { jsonDecode, timestamp } from '@/utils/base';
+import { clipboard } from '@/utils/clipborad';
 import { deepClone } from '@/utils/clone';
 import { isArray, isNotEmpty, isObject, isValidUrl } from '@/utils/is';
 
@@ -14,7 +14,7 @@ import { Subscribe } from './types';
 
 export interface SubscribesStore {
   current: string; // 当前选中的订阅名称
-  subscribes: Record<string, Subscribe>; //订阅列表 map
+  subscribes: Record<string, Subscribe>; //订阅列表
   adultContent: boolean; // 展示伦理片
   movieCommentaries: boolean; // 展示电影解说
 }
@@ -158,12 +158,9 @@ export class APPConfig {
   /**
    * 导出单个订阅
    */
-  async exportSubscribe(name: string) {
+  async exportSubscribe(subscribe: Subscribe) {
     await this.init();
-    const subscribe = this.getSubscribes()[name];
-    if (!subscribe) return false;
-    const cid = await ipfs.writeJson(subscribe, true);
-    return cid ? ipfsURL(cid) : undefined;
+    return clipboard.writeJSON(subscribe);
   }
 
   /**
@@ -171,8 +168,7 @@ export class APPConfig {
    */
   async exportSubscribes() {
     await this.init();
-    const cid = await ipfs.writeJson(this.getSubscribes(), true);
-    return cid ? ipfsURL(cid) : undefined;
+    return clipboard.writeJSON(this.getSubscribes());
   }
 
   /**

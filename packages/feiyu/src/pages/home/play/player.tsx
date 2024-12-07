@@ -62,6 +62,27 @@ export const Player = forwardRef(
             plugins: [HlsPlugin],
             presets: [XgPreset],
             playNext: { urlList: playList },
+            playbackRate: {
+              list: [
+                {
+                  text: 'x2',
+                  rate: 2,
+                },
+                {
+                  text: 'x1.5',
+                  rate: 1.5,
+                },
+                {
+                  text: 'x1',
+                  iconText: '倍速',
+                  rate: 1,
+                },
+                {
+                  text: 'x0.5',
+                  rate: 0.5,
+                },
+              ],
+            },
           });
           player.current.on(Events.PLAYNEXT, () => {
             const { current, playList, onPlayNext } =

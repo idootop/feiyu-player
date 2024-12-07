@@ -42,11 +42,9 @@ import {
   AddSubscribeModal,
   CopyModal,
   DeleteSubscribeModal,
-  ExportSubscribeModal,
   ImportSubscribeModal,
   showAddSubscribeModal,
   showDeleteSubscribeModal,
-  showExportSubscribeModal,
   showImportSubscribeModal,
   showSubscribeDetailModal,
   SubscribeDetailModal,
@@ -72,7 +70,7 @@ const SubscribeHeader = (props: { isMobile: boolean }) => {
         更新订阅
       </Menu.Item>
       <Menu.Item
-        key="批量导入"
+        key="导入订阅"
         onClick={() => {
           showImportSubscribeModal();
         }}
@@ -80,12 +78,12 @@ const SubscribeHeader = (props: { isMobile: boolean }) => {
         <IconImport
           style={{ marginRight: '4px', transform: 'rotate(-90deg)' }}
         />
-        批量导入
+        导入订阅
       </Menu.Item>
       <Menu.Item
         key="批量导出"
         onClick={() => {
-          showExportSubscribeModal();
+          appConfig.exportSubscribes();
         }}
       >
         <IconExport
@@ -264,7 +262,7 @@ const TableRow = (props: {
       <Menu.Item
         key="导出"
         onClick={() => {
-          showExportSubscribeModal();
+          appConfig.exportSubscribe(subscribe);
         }}
       >
         <IconExport
@@ -456,7 +454,6 @@ const SettingsBody = (props: { isMobile: boolean }) => {
       <ClearCache isMobile={isMobile} />
       <AddSubscribeModal />
       <ImportSubscribeModal />
-      <ExportSubscribeModal />
       <SubscribeDetailModal />
       <DeleteSubscribeModal />
       <CopyModal />
