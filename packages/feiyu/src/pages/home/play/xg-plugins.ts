@@ -1,6 +1,7 @@
 import { Events, Plugin, Util } from 'xgplayer';
 import XgPlayNext from 'xgplayer/es/plugins/playNext';
 import XgReplay from 'xgplayer/es/plugins/replay';
+import HlsJsPlugin from 'xgplayer-hls.js';
 
 export class Loading extends Plugin {
   static get pluginName() {
@@ -128,4 +129,31 @@ export class PlayNext extends XgPlayNext {
     e.stopPropagation();
     player.emit(Events.PLAYNEXT);
   };
+}
+
+export class HlsPlugin extends HlsJsPlugin {
+  static get pluginName() {
+    return 'HlsJsPlugin';
+  }
+
+  static get defaultConfig() {
+    return {
+      hlsOpts: {
+        maxBufferLength: 300,
+        liveSyncDurationCount: 10,
+        fragLoadingTimeOut: 1000,
+        manifestLoadingTimeOut: 1000,
+        levelLoadingTimeOut: 1000,
+        fragLoadingMaxRetry: 30,
+        manifestLoadingMaxRetry: 30,
+        levelLoadingMaxRetry: 30,
+        fragLoadingMaxRetryTimeout: 1000,
+        manifestLoadingMaxRetryTimeout: 1000,
+        levelLoadingMaxRetryTimeout: 1000,
+        fragLoadingRetryDelay: 500,
+        manifestLoadingRetryDelay: 500,
+        levelLoadingRetryDelay: 500,
+      },
+    };
+  }
 }

@@ -1,18 +1,4 @@
 /**
- * IPFS 配置（用于生成分享链接，导入导出配置文件）
- */
-interface IPFSConfig {
-  /**
-   * https://nft.storage/ API key
-   */
-  token?: string;
-  /**
-   * IPFS gateway
-   */
-  gateway?: string;
-}
-
-/**
  * 资源站
  */
 interface SearchProvider {
@@ -76,8 +62,4 @@ export type FeiyuConfig = {
    * 网络请求代理地址
    */
   proxy?: string;
-  /**
-   * IPFS 配置（用于生成分享链接，导入导出配置文件）
-   */
-  ipfs?: IPFSConfig;
 };

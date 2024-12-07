@@ -1,13 +1,6 @@
 import './style.css';
 
-import {
-  Button,
-  Dropdown,
-  Menu,
-  Message,
-  Radio,
-  Switch,
-} from '@arco-design/web-react';
+import { Button, Dropdown, Menu, Message, Radio } from '@arco-design/web-react';
 import {
   IconCode,
   IconDelete,
@@ -42,11 +35,9 @@ import {
   AddSubscribeModal,
   CopyModal,
   DeleteSubscribeModal,
-  ExportSubscribeModal,
   ImportSubscribeModal,
   showAddSubscribeModal,
   showDeleteSubscribeModal,
-  showExportSubscribeModal,
   showImportSubscribeModal,
   showSubscribeDetailModal,
   SubscribeDetailModal,
@@ -72,7 +63,7 @@ const SubscribeHeader = (props: { isMobile: boolean }) => {
         更新订阅
       </Menu.Item>
       <Menu.Item
-        key="批量导入"
+        key="导入订阅"
         onClick={() => {
           showImportSubscribeModal();
         }}
@@ -80,12 +71,12 @@ const SubscribeHeader = (props: { isMobile: boolean }) => {
         <IconImport
           style={{ marginRight: '4px', transform: 'rotate(-90deg)' }}
         />
-        批量导入
+        导入订阅
       </Menu.Item>
       <Menu.Item
         key="批量导出"
         onClick={() => {
-          showExportSubscribeModal();
+          appConfig.exportSubscribes();
         }}
       >
         <IconExport
@@ -264,7 +255,7 @@ const TableRow = (props: {
       <Menu.Item
         key="导出"
         onClick={() => {
-          showExportSubscribeModal();
+          appConfig.exportSubscribe(subscribe);
         }}
       >
         <IconExport
@@ -367,58 +358,6 @@ const TableRow = (props: {
   );
 };
 
-const ContentFilter = (props: { isMobile: boolean }) => {
-  const { isMobile: _ } = props;
-  const [data] = useXConsumer<SubscribesStore>(kSubscribesKey);
-  const { adultContent, movieCommentaries } = data ?? {};
-  return (
-    <Column width="100%" className="subscribe-title" alignItems="start">
-      <Text fontSize="16px" fontWeight="bold">
-        搜索结果屏蔽以下内容
-      </Text>
-      <Row>
-        <Row
-          margin="20px 0"
-          padding="12px"
-          border={`1px solid ${colors.border}`}
-          borderRadius="4px"
-          marginRight="20px"
-        >
-          <Text fontSize="14px" fontWeight="bold" marginRight="20px">
-            电影解说
-          </Text>
-          <Switch
-            checked={!movieCommentaries}
-            onChange={(value) => {
-              if (!movieCommentaries === !value) {
-                appConfig.toggleAllowMovieCommentaries();
-              }
-            }}
-          />
-        </Row>
-        <Row
-          margin="20px 0"
-          padding="12px"
-          border={`1px solid ${colors.border}`}
-          borderRadius="4px"
-        >
-          <Text fontSize="14px" fontWeight="bold" marginRight="20px">
-            伦理片
-          </Text>
-          <Switch
-            checked={!adultContent}
-            onChange={(value) => {
-              if (!adultContent === !value) {
-                appConfig.toggleAllowAdultContent();
-              }
-            }}
-          />
-        </Row>
-      </Row>
-    </Column>
-  );
-};
-
 const ClearCache = (props: { isMobile: boolean }) => {
   const { isMobile: _ } = props;
   return (
@@ -429,7 +368,7 @@ const ClearCache = (props: { isMobile: boolean }) => {
 
       <Row>
         <Text fontSize="13px" fontWeight="400" padding="8px 0 16px 0">
-          如果搜索结果异常或程序运行不正常，你可以尝试清除缓存以解决问题。该操作不会影响你的个人设置和数据。
+          如果搜索异常，你可以尝试清除缓存来解决。该操作不会影响你的个人设置和订阅数据。
         </Text>
       </Row>
       <Button
@@ -452,11 +391,9 @@ const SettingsBody = (props: { isMobile: boolean }) => {
     <Column width="100%">
       <SubscribeHeader isMobile={isMobile} />
       <SubscribeTable isMobile={isMobile} />
-      <ContentFilter isMobile={isMobile} />
       <ClearCache isMobile={isMobile} />
       <AddSubscribeModal />
       <ImportSubscribeModal />
-      <ExportSubscribeModal />
       <SubscribeDetailModal />
       <DeleteSubscribeModal />
       <CopyModal />

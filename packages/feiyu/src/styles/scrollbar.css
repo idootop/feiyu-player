@@ -25,6 +25,7 @@
 
 .normal-scrollbar::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 .normal-scrollbar::-webkit-scrollbar-thumb {

@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { getCurrent } from "@tauri-apps/api/webviewWindow";
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { updater } from "./updater";
 import { getPlatform } from "./platform";
 
@@ -19,7 +19,7 @@ class _FeiyuDesktop {
       return;
     }
     this.invoke = invoke;
-    this.window = getCurrent();
+    this.window = getCurrentWebviewWindow();
     const platform = await getPlatform();
     this.isMac = platform.isMac;
     this.isWindows = platform.isWindows;

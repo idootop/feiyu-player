@@ -1,9 +1,8 @@
-import './style.css';
 import 'xgplayer/dist/index.min.css';
+import './style.css';
 
 import { forwardRef, useEffect, useRef } from 'react';
 import XgPlayer, { Events } from 'xgplayer/es/player';
-import HlsPlugin from 'xgplayer-hls';
 import { XSta } from 'xsta';
 
 import { Box } from '@/components/Box';
@@ -59,9 +58,29 @@ export const Player = forwardRef(
             videoInit: true,
             fluid: true,
             lang: 'zh-cn',
-            plugins: [HlsPlugin],
             presets: [XgPreset],
             playNext: { urlList: playList },
+            playbackRate: {
+              list: [
+                {
+                  text: 'x2',
+                  rate: 2,
+                },
+                {
+                  text: 'x1.5',
+                  rate: 1.5,
+                },
+                {
+                  text: 'x1',
+                  iconText: '倍速',
+                  rate: 1,
+                },
+                {
+                  text: 'x0.5',
+                  rate: 0.5,
+                },
+              ],
+            },
           });
           player.current.on(Events.PLAYNEXT, () => {
             const { current, playList, onPlayNext } =

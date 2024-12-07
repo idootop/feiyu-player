@@ -1,4 +1,4 @@
-import { Button, Link, Message, Modal } from '@arco-design/web-react';
+import { Button } from '@arco-design/web-react';
 import {
   IconLeft,
   IconShareExternal,
@@ -15,19 +15,17 @@ import { Loading } from '@/components/Loading';
 import { SearchEmpty } from '@/components/SearchEmpty';
 import { Text } from '@/components/Text';
 import { useDarkMode } from '@/hooks/useDarkMode';
-import { useInit } from '@/hooks/useInit';
 import { Size, useMeasure } from '@/hooks/useMeasure';
-import { useRebuild, useRebuildRef } from '@/hooks/useRebuild';
+import { useRebuild } from '@/hooks/useRebuild';
 import { useScreen } from '@/hooks/useScreen';
-import { ipfs } from '@/services/ipfs';
-import { addSearchParams } from '@/services/routes/location';
 import { usePage } from '@/services/routes/page';
 import { router } from '@/services/routes/router';
 import { colors } from '@/styles/colors';
 import { clamp } from '@/utils/base';
+import { clipboard } from '@/utils/clipborad';
 import { isEqual } from '@/utils/diff';
 import { FeiyuMovie } from '@/utils/feiyu';
-import { isEmpty, isNotEmpty } from '@/utils/is';
+import { isNotEmpty } from '@/utils/is';
 
 import { kCurrentSearchMovies, kPlayPageId, MovieItem } from '../search';
 import { useHomePages } from '../useHomePages';
@@ -35,58 +33,10 @@ import { Player } from './player';
 
 export const isPlayPage = () => router.current === '/home/play';
 
-const usePlayIPFSData = (props: { cid?: string; data?: any }) => {
-  // eslint-disable-next-line prefer-const
-  let { cid, data } = props;
-  const dataRef = useRef({
-    ...props,
-    loading: true,
-    noData: true,
-    inited: false,
-    preData: undefined as any,
-  });
-  const rebuildRef = useRebuildRef();
-  if (dataRef.current.cid) {
-    dataRef.current.inited = true;
-  }
-  if (dataRef.current.cid && !dataRef.current.data) {
-    dataRef.current.loading = true;
-    dataRef.current.noData = true;
-  }
-  if (dataRef.current.data) {
-    dataRef.current.loading = false;
-    dataRef.current.noData = false;
-  }
-
-  useInit(async () => {
-    if (!isPlayPage()) return;
-    if (cid && !data) {
-      // 有 cid 但是没有数据，重新从 cid 获取数据
-      data = await ipfs.readJson(cid);
-      dataRef.current.data = data;
-      dataRef.current.loading = false;
-      // 刷新界面
-      rebuildRef.current.rebuild();
-    } else if (!cid && !data) {
-      // fallback 到首页
-      setTimeout(() => {
-        router.replace('/home/hot');
-      });
-    }
-  }, [props]);
-  return dataRef.current;
-};
-
 const PlayerPage = () => {
-  /**
-   * query: cid[电影详情数据ipfs cid], ep[当前播放集数]
-   * data: movie[电影详情数据]
-   */
-  const { query, isActive } = usePage('/home/play');
-  const { cid, ep: _ep } = query;
-  const ep = parseInt(_ep ?? '1', 10);
+  const { isActive } = usePage('/home/play');
   const [pageData] = useXConsumer(kPlayPageId);
-  const { pageId, movie: currentData } = pageData ?? {};
+  const { pageId, movie } = pageData ?? {};
 
   const { isDarkMode } = useDarkMode();
   const { jumpToPage } = useHomePages();
@@ -95,59 +45,25 @@ const PlayerPage = () => {
   const isMobile = width < 750;
   const descWidth = clamp(320 - (960 - width), 180, 320);
 
-  const {
-    loading: _loading,
-    noData: _noData,
-    data: ipfsData,
-  } = usePlayIPFSData({ cid, data: currentData });
-  const movie: FeiyuMovie | undefined = currentData ?? ipfsData;
+  const loading = false;
+  const title = movie?.name;
   const playList = movie?.videos.map((e) => e.url) ?? [];
-  const loading = movie ? false : _loading;
-  const noData = movie ? movie.videos.length < 1 : _noData;
-  const title = movie?.name ?? (loading ? '加载中' : '加载失败');
+  const noData = playList.length < 1;
 
-  const [sharing, setSharing] = useState(false);
-  const [shareURL, setShareURL] = useState<string>('');
-
-  const $ShareModal = (
-    <Modal
-      title="分享链接"
-      visible={isNotEmpty(shareURL)}
-      onCancel={() => setShareURL('')}
-      footer={null}
-      style={{
-        width: 'auto',
-        maxWidth: '400px',
-        margin: '20px',
-      }}
-    >
-      <Link
-        style={{ padding: '20px', color: '#3d7ff6', wordBreak: 'break-all' }}
-        href={shareURL}
-        target="_blank"
-      >
-        {shareURL}
-      </Link>
-    </Modal>
-  );
+  useEffect(() => {
+    if (isActive && !movie) {
+      // 回到首页
+      jumpToPage('hot');
+    }
+  }, []);
 
   // 分享影片
-  const share = async () => {
-    if (sharing) {
-      Message.info('生成分享链接中，请稍等');
-      return;
-    }
-    setSharing(true);
-    const _cid = isEmpty(cid) ? await ipfs.writeJson(movie) : cid;
-    if (_cid) {
-      const shareUrl = new URL(window.location.href.replace('#/', ''));
-      shareUrl.searchParams.set('cid', _cid);
-      const url = shareUrl.href.replace('/home', '/#/home');
-      setShareURL(url);
-    } else {
-      Message.info('分享失败');
-    }
-    setSharing(false);
+  const share = () => {
+    clipboard.write(
+      `${window.location.origin}/#/home/search?movie=${encodeURIComponent(
+        movie.name,
+      )}`,
+    );
   };
 
   // 返回上一页
@@ -172,12 +88,11 @@ const PlayerPage = () => {
   }
 
   // 初始化剧集数
-  const [currentIdx, setCurrentIdx] = useState(ep - 1);
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const currentVideo = movie?.videos[currentIdx];
   const startPlay = (idx: number) => {
     if (idx !== currentIdx) {
       setCurrentIdx(idx);
-      // 更新请求参数(当前播放的剧集)
-      addSearchParams({ ep: idx + 1 });
     }
   };
   useEffect(() => {
@@ -186,13 +101,6 @@ const PlayerPage = () => {
     // 选集恢复原始排序
     setReverseEPs(false);
   }, [pageId]);
-  useEffect(() => {
-    // 从query里的 ep 更新当前的播放集数
-    if (currentIdx !== ep - 1) {
-      setCurrentIdx(ep - 1);
-    }
-  }, [ep]);
-  const currentVideo = movie?.videos?.[currentIdx];
 
   // 更新网页标题
   const titleRef = useRef(document.title);
@@ -220,7 +128,6 @@ const PlayerPage = () => {
       icon={<IconShareExternal />}
       style={{ visibility: movie ? 'visible' : 'hidden' }}
       onClick={share}
-      loading={sharing}
     >
       分享
     </Button>
@@ -294,6 +201,7 @@ const PlayerPage = () => {
       )}
       <Expand
         className="normal-scrollbar"
+        width="100%"
         overflowX="hidden"
         overflowY="scroll"
         margin="10px 0 0 0"
@@ -315,6 +223,10 @@ const PlayerPage = () => {
                   onClick={() => startPlay(idx)}
                   style={{
                     margin: '5px',
+                    maxWidth: '100%',
+                    height: 'auto',
+                    minHeight: '32px',
+                    textWrap: 'wrap',
                   }}
                 >
                   {e.name}
@@ -359,7 +271,6 @@ const PlayerPage = () => {
     <PageBuilder
       background={isMobile ? colors.bg : isDarkMode ? colors.bg3 : colors.gray}
     >
-      {$ShareModal}
       {isMobile ? (
         <Box />
       ) : (

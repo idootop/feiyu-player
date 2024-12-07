@@ -1,9 +1,8 @@
 import { XSta } from 'xsta';
 
 import { http } from '@/services/http';
-import { ipfs, ipfsURL } from '@/services/ipfs';
-import { storage } from '@/services/storage/storage';
 import { jsonDecode, timestamp } from '@/utils/base';
+import { clipboard } from '@/utils/clipborad';
 import { deepClone } from '@/utils/clone';
 import { isArray, isNotEmpty, isObject, isValidUrl } from '@/utils/is';
 
@@ -14,9 +13,7 @@ import { Subscribe } from './types';
 
 export interface SubscribesStore {
   current: string; // 当前选中的订阅名称
-  subscribes: Record<string, Subscribe>; //订阅列表 map
-  adultContent: boolean; // 展示伦理片
-  movieCommentaries: boolean; // 展示电影解说
+  subscribes: Record<string, Subscribe>; //订阅列表
 }
 
 export const kSubscribesKey = 'kSubscribesKey';
@@ -38,29 +35,6 @@ export class APPConfig {
   updateStore(data: Partial<SubscribesStore>) {
     const old = XSta.get<SubscribesStore>(kSubscribesKey) ?? {};
     XSta.set(kSubscribesKey, { ...old, ...data });
-  }
-
-  get adultContent() {
-    return storage.get('adultContent');
-  }
-  get movieCommentaries() {
-    return storage.get('movieCommentaries');
-  }
-
-  toggleAllowAdultContent() {
-    const flag = !this.adultContent;
-    storage.set('adultContent', flag);
-    this.updateStore({
-      adultContent: flag,
-    });
-  }
-
-  toggleAllowMovieCommentaries() {
-    const flag = !this.movieCommentaries;
-    storage.set('movieCommentaries', flag);
-    this.updateStore({
-      movieCommentaries: flag,
-    });
   }
 
   getSubscribes() {
@@ -145,12 +119,7 @@ export class APPConfig {
       return { ...pre, [s.name]: s };
     }, {});
     // 初始化依赖
-    this.updateStore({
-      current,
-      subscribes,
-      adultContent: this.adultContent,
-      movieCommentaries: this.movieCommentaries,
-    });
+    this.updateStore({ current, subscribes });
     // 异步刷新所有订阅
     this.refreshAll();
   }
@@ -158,12 +127,9 @@ export class APPConfig {
   /**
    * 导出单个订阅
    */
-  async exportSubscribe(name: string) {
+  async exportSubscribe(subscribe: Subscribe) {
     await this.init();
-    const subscribe = this.getSubscribes()[name];
-    if (!subscribe) return false;
-    const cid = await ipfs.writeJson(subscribe, true);
-    return cid ? ipfsURL(cid) : undefined;
+    return clipboard.writeJSON(subscribe);
   }
 
   /**
@@ -171,8 +137,7 @@ export class APPConfig {
    */
   async exportSubscribes() {
     await this.init();
-    const cid = await ipfs.writeJson(this.getSubscribes(), true);
-    return cid ? ipfsURL(cid) : undefined;
+    return clipboard.writeJSON(this.getSubscribes());
   }
 
   /**

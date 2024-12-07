@@ -9,7 +9,7 @@ import {
   Modal,
   Rate,
 } from '@arco-design/web-react';
-import { IconSearch } from '@arco-design/web-react/icon';
+import { IconDelete, IconSearch } from '@arco-design/web-react/icon';
 import { useCallback, useEffect } from 'react';
 import { useXState } from 'xsta';
 
@@ -24,6 +24,7 @@ import { randomMovie } from '@/data/movies';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useRefCallback } from '@/hooks/useRefCallback';
 import { useScreen } from '@/hooks/useScreen';
+import { useSearchHistory } from '@/hooks/useSearchHistory';
 import { colors } from '@/styles/colors';
 import { DoubanSearchDetail } from '@/utils/douban';
 import { useSearchKeywords } from '@/utils/douban/useSearchKeywords';
@@ -105,8 +106,11 @@ const SearchModal = () => {
     reset();
   };
 
+  const { addHistory } = useSearchHistory();
+
   const searchMovie = (name: string) => {
     closeModal();
+    addHistory(name);
     jumpToPage('search', {
       query: {
         movie: name,
@@ -240,42 +244,44 @@ const SearchModal = () => {
   );
 
   const $Feiyu = initial ? (
-    <Column width="100%" height="300px" justifyContent="center">
-      <Empty
-        icon={
-          <Box fontSize="64px" color={colors.text} margin="20px">
-            <img
-              src="/logo.gif"
-              style={{
-                objectFit: 'cover',
-                width: '64px',
-                height: '64px',
-                borderRadius: '10px',
-              }}
-            />
-          </Box>
-        }
-        description={
-          <>
-            <Box
-              fontSize="16px"
-              fontWeight="bold"
-              color={colors.text2}
-              margin="20px"
-            >
-              飞鱼 v{APPConfig.version}
+    <Column width="100%" height="300px">
+      <SearchHistory searchMovie={searchMovie} />
+      <Expand alignItems="center" marginBottom="48px">
+        <Empty
+          icon={
+            <Box fontSize="64px" color={colors.text} margin="20px">
+              <img
+                src="/logo.gif"
+                style={{
+                  objectFit: 'cover',
+                  width: '64px',
+                  height: '64px',
+                  borderRadius: '10px',
+                }}
+              />
             </Box>
-            Made with ❤️ by
-            <Link
-              href="https://github.com/idootop/feiyu-player"
-              target="_blank"
-            >
-              {' '}
-              Del.Wang{' '}
-            </Link>
-          </>
-        }
-      />
+          }
+          description={
+            <>
+              <Box
+                fontSize="16px"
+                fontWeight="bold"
+                color={colors.text2}
+                margin="20px"
+              >
+                飞鱼 v{APPConfig.version}
+              </Box>
+              Made with ❤️ by
+              <Link
+                href="https://github.com/idootop/feiyu-player"
+                target="_blank"
+              >
+                Del Wang
+              </Link>
+            </>
+          }
+        />
+      </Expand>
     </Column>
   ) : (
     <Box />
@@ -313,6 +319,65 @@ const SearchModal = () => {
       </Column>
     </Modal>
   );
+};
+
+const SearchHistory = ({
+  searchMovie,
+}: {
+  searchMovie: (keyword: string) => void;
+}) => {
+  const { history, clearHistory } = useSearchHistory();
+
+  return history.length ? (
+    <Row width="100%" gap="8px" padding="8px 12px">
+      <span
+        style={{
+          fontSize: '14px',
+          fontWeight: 'bold',
+          marginBottom: '12px',
+        }}
+      >
+        搜索历史
+      </span>
+      <Row
+        className="normal-scrollbar"
+        flex="1"
+        overflowX="auto"
+        gap="8px"
+        paddingBottom="12px"
+      >
+        {history.map((e) => {
+          return (
+            <Button
+              key={e}
+              onClick={() => searchMovie(e)}
+              style={{
+                height: 'auto',
+                borderRadius: '32px',
+                fontSize: '12px',
+                lineHeight: '16px',
+                padding: '4px 8px',
+              }}
+            >
+              {e}
+            </Button>
+          );
+        })}
+      </Row>
+      <Button
+        type="text"
+        onClick={clearHistory}
+        style={{
+          color: colors.text2,
+          padding: '0',
+          width: '32px',
+          marginBottom: '12px',
+        }}
+      >
+        <IconDelete />
+      </Button>
+    </Row>
+  ) : null;
 };
 
 const ModalBodyHeight = (props: {

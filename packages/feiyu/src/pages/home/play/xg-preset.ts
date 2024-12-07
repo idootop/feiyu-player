@@ -10,6 +10,7 @@ import Mobile from 'xgplayer/es/plugins/mobile';
 import PC from 'xgplayer/es/plugins/pc';
 import PIPIcon from 'xgplayer/es/plugins/pip';
 import PlayIcon from 'xgplayer/es/plugins/play';
+import PlaybackRate from 'xgplayer/es/plugins/playbackRate';
 import Poster from 'xgplayer/es/plugins/poster';
 import Progress from 'xgplayer/es/plugins/progress';
 import MiniProgress from 'xgplayer/es/plugins/progress/miniProgress';
@@ -22,7 +23,7 @@ import Volume from 'xgplayer/es/plugins/volume';
 import WaitingTimeoutJump from 'xgplayer/es/plugins/waitingTimeoutJump';
 import sniffer from 'xgplayer/es/utils/sniffer';
 
-import { Loading, PlayNext, Replay } from './xg-plugins';
+import { HlsPlugin, Loading, PlayNext, Replay } from './xg-plugins';
 
 // @ts-ignore
 ZH.TEXT.FULLSCREEN_TIPS = '全屏';
@@ -37,6 +38,7 @@ export class XgPreset {
   constructor(options, playerConfig) {
     const simulateMode =
       playerConfig && playerConfig.isMobileSimulateMode === 'mobile';
+
     const vodPlugins = [
       TimeSegments,
       Progress,
@@ -52,6 +54,7 @@ export class XgPreset {
       PlayNext,
       Volume,
       PIPIcon,
+      PlaybackRate,
     ];
 
     const layers = [
@@ -65,7 +68,13 @@ export class XgPreset {
       Thumbnail,
     ];
 
-    this.plugins = [...contolsIcons, ...layers, GapJump, WaitingTimeoutJump];
+    this.plugins = [
+      HlsPlugin,
+      ...contolsIcons,
+      ...layers,
+      GapJump,
+      WaitingTimeoutJump,
+    ];
     const mode = simulateMode ? 'mobile' : sniffer.device;
     switch (mode) {
       case 'pc':

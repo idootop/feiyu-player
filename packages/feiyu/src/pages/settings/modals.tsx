@@ -5,7 +5,7 @@ import { useXConsumer, useXProvider, XSta } from 'xsta';
 
 import { Box } from '@/components/Box';
 import { Dialog } from '@/components/Dialog';
-import { Expand, Row } from '@/components/Flex';
+import { Column, Expand, Row } from '@/components/Flex';
 import { Text } from '@/components/Text';
 import {
   appConfig,
@@ -24,11 +24,10 @@ const kSettingModals = 'kSettingModals';
 interface SettingModals {
   showAdd: boolean;
   showImport: boolean;
-  showExport: boolean;
   showDelete: boolean;
   showDetail: boolean;
   subscribe?: Subscribe;
-  url?: string;
+  text?: string;
 }
 
 export const setSettingModals = (option: Partial<SettingModals>) => {
@@ -41,11 +40,10 @@ export const setSettingModals = (option: Partial<SettingModals>) => {
 const _initSettingModalStates = {
   showAdd: false,
   showImport: false,
-  showExport: false,
   showDetail: false,
   showDelete: false,
   subscribe: undefined,
-  url: undefined,
+  text: undefined,
 };
 export const useInitSettingModals = () => {
   useXProvider<SettingModals>(kSettingModals, _initSettingModalStates);
@@ -146,66 +144,27 @@ export const ImportSubscribeModal = () => {
       }}
     >
       <Row width="100%" paddingBottom="16px">
-        <Text
-          style={{
-            fontSize: '14px',
-            fontWeight: '400',
-            color: colors.text2,
-            paddingRight: '10px',
+        <Input
+          placeholder="请输入订阅链接或配置参数..."
+          value={link}
+          onChange={(s) => {
+            setLink(s);
           }}
-        >
-          订阅链接
-        </Text>
-        <Expand>
-          <Input
-            placeholder="请输入..."
-            value={link}
-            onChange={(s) => {
-              setLink(s);
-            }}
-          />
-        </Expand>
+        />
       </Row>
     </Dialog>
   );
-};
-
-export const showExportSubscribeModal = (flag = true) => {
-  setSettingModals({ ..._initSettingModalStates, showExport: flag });
-};
-export const ExportSubscribeModal = () => {
-  const [data] = useXConsumer<SettingModals>(kSettingModals);
-  const { showExport } = data ?? {};
-  const [waiting, setWaiting] = useState(false);
-  useEffect(() => {
-    setTimeout(async () => {
-      if (showExport) {
-        if (waiting) {
-          Message.info('正在导出');
-        }
-        setWaiting(true);
-        Message.info('导出中');
-        const result = await appConfig.exportSubscribes();
-        Message.clear();
-        if (result) {
-          Message.success('导出成功');
-          showCopyModal(result);
-        } else {
-          Message.error('导出失败，请检查 IPFS 配置是否正确');
-          showExportSubscribeModal(false);
-        }
-        setWaiting(false);
-      }
-    });
-  }, [showExport]);
-  return <Box />;
 };
 
 export const showSubscribeDetailModal = (
   subscribe?: Subscribe,
   flag = true,
 ) => {
-  setSettingModals({ ..._initSettingModalStates, showDetail: flag, subscribe });
+  setSettingModals({
+    ..._initSettingModalStates,
+    showDetail: flag,
+    subscribe,
+  });
 };
 export const SubscribeDetailModal = () => {
   const [data] = useXConsumer<SettingModals>(kSettingModals);
@@ -244,18 +203,8 @@ export const SubscribeDetailModal = () => {
       okWaiting={waiting}
       cancelWaiting={deleteWaiting}
       leadWaiting={leadWaiting}
-      onLead={async () => {
-        setLeadWaiting(true);
-        Message.info('导出中');
-        const result = await appConfig.exportSubscribe(subscribe.name);
-        Message.clear();
-        if (result) {
-          Message.success('导出成功');
-          showCopyModal(result);
-        } else {
-          Message.error('导出失败，请检查 IPFS 配置是否正确');
-        }
-        setLeadWaiting(false);
+      onLead={() => {
+        appConfig.exportSubscribe(subscribe);
       }}
       onOk={async () => {
         setWaiting(true);
@@ -325,19 +274,9 @@ export const SubscribeDetailModal = () => {
         <Box />
       ) : (
         <Row width="100%" paddingBottom="16px">
-          <Text
-            style={{
-              fontSize: '14px',
-              fontWeight: '400',
-              color: colors.text2,
-              paddingRight: '10px',
-            }}
-          >
-            订阅链接
-          </Text>
           <Expand>
             <Input
-              placeholder="请输入..."
+              placeholder="请输入订阅链接或配置参数..."
               value={isEdit ? subscribe?.server : _current?.server}
               onChange={() => {
                 Message.info('当前订阅不可编辑');
@@ -396,7 +335,11 @@ export const showDeleteSubscribeModal = (
   subscribe?: Subscribe,
   flag = true,
 ) => {
-  setSettingModals({ showDelete: flag, subscribe });
+  setSettingModals({
+    ..._initSettingModalStates,
+    showDelete: flag,
+    subscribe,
+  });
 };
 export const DeleteSubscribeModal = () => {
   const [data] = useXConsumer<SettingModals>(kSettingModals);
@@ -433,33 +376,30 @@ export const DeleteSubscribeModal = () => {
   );
 };
 
-export const showCopyModal = (url: string) => {
-  setSettingModals({ url });
+export const showCopyModal = (text: string) => {
+  setSettingModals({ ..._initSettingModalStates, text });
 };
 export const CopyModal = () => {
   const [data] = useXConsumer<SettingModals>(kSettingModals);
-  const { url } = data ?? {};
+  const { text } = data ?? {};
   return (
     <Modal
-      title="分享链接"
-      visible={isNotEmpty(url)}
+      title="分享"
+      visible={isNotEmpty(text)}
       onCancel={() => {
         showCopyModal('');
       }}
       footer={null}
       style={{
-        width: 'auto',
-        maxWidth: '400px',
+        width: '400px',
         margin: '20px',
+        maxWidth: 'calc(100% - 2 * 20px)',
       }}
     >
-      <Link
-        style={{ padding: '20px', color: '#3d7ff6', wordBreak: 'break-all' }}
-        href={url}
-        target="_blank"
-      >
-        {url}
-      </Link>
+      <Column padding="0 20px 20px 20px" alignItems="start">
+        <p>请手动复制下面的文本分享给他人</p>
+        <TextArea value={text} autoSize={{ minRows: 6, maxRows: 6 }} />
+      </Column>
     </Modal>
   );
 };

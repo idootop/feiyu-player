@@ -4,7 +4,7 @@
 
 ![](https://github.com/idootop/feiyu-player/raw/main/screenshots/play.webp)
 
-# ✨ 特性
+## ✨ 特性
 
 - **🐳 海量资源，随心搜索**: 支持多种视频源，聚合搜索，看你想看。
 - **🦀 一键订阅，自由分享**: 一键订阅视频源，从此找资源不求人。
@@ -12,13 +12,11 @@
 - **🦄 体积小巧，快如闪电**: 极至精简，安装包不足 10 MB。
 - **🐟 随时随地，想看就看**: 网页、Windows、macOS、Linux 全平台支持。
 
-# ⚡️ 快速开始
-
-**官网**
-
-[https://feiyu-player.xbox.work](https://feiyu-player.xbox.work)
+## ⚡️ 快速开始
 
 **下载**
+
+推荐下载安装包后使用，或者直接访问[官网](https://feiyu-player.xbox.work)，在线体验网页版演示。
 
 | 操作系统 | 下载链接                                                                                                                |
 | -------- | ----------------------------------------------------------------------------------------------------------------------- |
@@ -26,11 +24,17 @@
 | macOS    | [feiyu_macos_universal.dmg](https://github.com/idootop/feiyu-player/releases/download/latest/feiyu_macos_universal.dmg) |
 | Linux    | [feiyu_linux_x86_64.deb](https://github.com/idootop/feiyu-player/releases/download/latest/feiyu_linux_x86_64.deb)       |
 
-**Docker**
+**订阅设置**
 
-飞鱼提供 Docker 镜像一键部署，用户无需手动编译即可快速体验。
+首次安装后，你需要配置订阅才能正常使用。
+
+有关订阅配置的格式和参数说明，请参考下面的 [📖 管理订阅](https://github.com/idootop/feiyu-player?tab=readme-ov-file#-%E7%AE%A1%E7%90%86%E8%AE%A2%E9%98%85) 部分。
+
+## 🐳 Docker
 
 [![Docker Image Version](https://img.shields.io/docker/v/idootop/feiyu?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/feiyu)
+
+如果你想要将飞鱼部署到自己的网站，或者在本地 NAS 上运行，可以使用 Docker 镜像一键部署，无需手动安装依赖，编译源码。
 
 ```shell
 docker run -d -p 4399:3000 idootop/feiyu:latest
@@ -38,29 +42,23 @@ docker run -d -p 4399:3000 idootop/feiyu:latest
 
 启动成功后，即可通过 [http://localhost:4399](http://localhost:4399) 访问飞鱼。
 
-**自定义配置**
-
-有关配置文件的编写格式和参数说明，请参考下面的 [📖 管理订阅](https://github.com/idootop/feiyu-player?tab=readme-ov-file#-%E7%AE%A1%E7%90%86%E8%AE%A2%E9%98%85) 部分。
-
-如需自定义默认配置(如视频源等)，可在本地创建 `feiyu.json` 配置文件，并按如下方式挂载启动:
+如需自定义网站内置的默认配置，可以参考 [feiyu.example.json](https://github.com/idootop/feiyu-player/blob/main/feiyu.example.json) 模板，在本地创建 `feiyu.json` 配置文件，并按如下方式挂载启动:
 
 ```shell
 docker run -d -p 4399:3000 -v $(pwd)/feiyu.json:/app/feiyu.json idootop/feiyu:latest
 ```
 
-注意：在 Windows 终端下需要将配置文件路径 `$(pwd)` 替换为绝对路径。
-
-# 📖 管理订阅
+## 📖 管理订阅
 
 为了更灵活的管理视频源等配置，飞鱼支持通过订阅来分享和导入配置文件。
 
 你可以参考 [feiyu.example.json](https://github.com/idootop/feiyu-player/blob/main/feiyu.example.json) 文件，然后根据下面的参数说明配置自己的订阅。
 
-## 视频源 (videoSources)
+### 视频源 (videoSources)
 
 视频源相当于飞鱼播放器的"光盘"，没有配置视频源，飞鱼将无法搜索和播放任何内容。
 
-作为一款通用播放器，**飞鱼本身不内置任何影视资源，也不提供或推荐任何特定的视频源**，用户需要自行添加符合规范的视频源。
+作为一款通用播放器，**飞鱼自身没有提供任何影视资源**，用户需要自行添加符合规范的视频源。
 
 飞鱼支持集成 [苹果 CMS](https://magicblack.github.io/)、[飞飞 CMS](https://www.feifeicms.org/) 等格式规范的视频源。如果你不了解这些格式，可以自行搜索了解更多详情。
 
@@ -80,11 +78,11 @@ docker run -d -p 4399:3000 -v $(pwd)/feiyu.json:/app/feiyu.json idootop/feiyu:la
 }
 ```
 
-## 热门影视 (hotMovies)
+### 热门影视 (hotMovies)
 
 你可以通过静态/动态配置两种方式，自定义首页显示的热门影视列表。
 
-### 静态配置
+#### 静态配置
 
 ```json
 {
@@ -108,7 +106,7 @@ docker run -d -p 4399:3000 -v $(pwd)/feiyu.json:/app/feiyu.json idootop/feiyu:la
 }
 ```
 
-### 动态配置
+#### 动态配置
 
 你也可以配置一个返回热门影视数据的远程 JSON 接口地址，如:
 
@@ -141,24 +139,15 @@ docker run -d -p 4399:3000 -v $(pwd)/feiyu.json:/app/feiyu.json idootop/feiyu:la
 ]
 ```
 
-## 请求代理 (proxy)
+### 请求代理 (proxy)
 
-有些视频源可能无法直接在网页端使用，这是由于浏览器的同源策略限制，无法直接访问第三方资源。
+有些视频源可能无法直接在网页端使用，这是由于浏览器的同源策略限制。
 
 为解决跨域问题，飞鱼提供了一个专用的请求代理服务，具体使用方法请查看飞鱼 Proxy [使用文档](https://github.com/idootop/feiyu-player/blob/main/packages/feiyu-proxy/README.md)。
 
 > 注意: 此代理服务并非常规的 http_proxy，而是使用飞鱼私有的代理协议，不兼容其他代理服务。
 
-## IPFS 配置（ipfs）
-
-[IPFS](https://ipfs.tech/) 是一种点对点分布式文件系统，旨在实现更开放、高效、安全的网络数据传输与共享。
-
-- **gateway**：用于访问 IPFS 网络中的数据，常用的公共网关包括 ipfs.io、dweb.link 等。
-- **token**：飞鱼默认使用 [NFT.storage](https://nft.storage/) 服务向 IPFS 网络中写入数据。[NFT.storage](https://nft.storage/) 提供免费的去中心化存储服务，需注册账号获取 token 后方可使用。
-
-飞鱼使用 IPFS 作为去中心化存储，用于分享影片和导出订阅配置等场景。
-
-# 🐟 关于飞鱼
+## 🐟 关于飞鱼
 
 飞鱼是一款跨平台的在线视频播放器。它最初基于 [Flutter](https://flutter.dev/) 框架开发，支持 iOS 和 Android 移动设备。本次开源的飞鱼项目，是在飞鱼 [Flutter 版](https://github.com/idootop/feiyu_flutter) 的基础上，进一步适配了网页端和桌面端，让人人都可以随时随地自由观影。
 
@@ -166,7 +155,7 @@ docker run -d -p 4399:3000 -v $(pwd)/feiyu.json:/app/feiyu.json idootop/feiyu:la
 
 **Enjoy!**
 
-# 🚨 免责声明
+## 🚨 免责声明
 
 1. 本项目(飞鱼)是一个开源的视频播放器软件，仅供个人合法地点播、学习和研究使用，严禁将其用于任何商业、违法或不当用途，否则由此产生的一切后果由用户自行承担。
 2. 本软件仅作为一个通用播放器使用，不针对任何特定内容提供源，用户应自行判断所播放内容的合法性并承担相应责任，开发者对用户播放的任何内容不承担任何责任。
