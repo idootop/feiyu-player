@@ -23,7 +23,7 @@ import Volume from 'xgplayer/es/plugins/volume';
 import WaitingTimeoutJump from 'xgplayer/es/plugins/waitingTimeoutJump';
 import sniffer from 'xgplayer/es/utils/sniffer';
 
-import { Loading, PlayNext, Replay } from './xg-plugins';
+import { HlsPlugin, Loading, PlayNext, Replay } from './xg-plugins';
 
 // @ts-ignore
 ZH.TEXT.FULLSCREEN_TIPS = '全屏';
@@ -68,7 +68,13 @@ export class XgPreset {
       Thumbnail,
     ];
 
-    this.plugins = [...contolsIcons, ...layers, GapJump, WaitingTimeoutJump];
+    this.plugins = [
+      HlsPlugin,
+      ...contolsIcons,
+      ...layers,
+      GapJump,
+      WaitingTimeoutJump,
+    ];
     const mode = simulateMode ? 'mobile' : sniffer.device;
     switch (mode) {
       case 'pc':

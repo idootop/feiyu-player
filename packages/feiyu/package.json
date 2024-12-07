@@ -23,7 +23,7 @@
     "react-lazy-load": "^4.0.1",
     "wouter": "^2.12.1",
     "xgplayer": "^3.0.20",
-    "xgplayer-hls": "^3.0.20",
+    "xgplayer-hls.js": "^3.0.20",
     "xsta": "^2.1.0"
   },
   "devDependencies": {

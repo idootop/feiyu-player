@@ -31,7 +31,7 @@ dependencies:
   xgplayer:
     specifier: ^3.0.20
     version: 3.0.20(core-js@3.39.0)
-  xgplayer-hls:
+  xgplayer-hls.js:
     specifier: ^3.0.20
     version: 3.0.20(core-js@3.39.0)(xgplayer@3.0.20)
   xsta:
@@ -2435,12 +2435,6 @@ packages:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
     dev: true
 
-  /concat-typed-array@1.0.2:
-    resolution: {integrity: sha512-aC878bxeWSlrY6h60cCDwBUXpKwovZrB7+C4+VHNO1CIXW2gBLxbQ757jWtOXUscLGgYI8R84N6uy9fTJPe+0g==}
-    engines: {node: '>=0.10.0'}
-    deprecated: 'WARNING: This package has been renamed to typed-array-concat.'
-    dev: false
-
   /connect-history-api-fallback@1.6.0:
     resolution: {integrity: sha512-e54B99q/OUoH64zYYRf3HBP5z24G38h5D3qXu23JGRoigpX5Ss4r9ZnDk3g0Z8uQC2x2lPaJ+UlWBc1ZWBWdLg==}
     engines: {node: '>=0.8'}
@@ -2493,10 +2487,6 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
-
-  /crypto-es@1.2.7:
-    resolution: {integrity: sha512-UUqiVJ2gUuZFmbFsKmud3uuLcNP2+Opt+5ysmljycFCyhA0+T16XJmo1ev/t5kMChMqWh7IEvURNCqsg+SjZGQ==}
-    dev: false
 
   /crypto-random-string@2.0.0:
     resolution: {integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==}
@@ -2616,6 +2606,11 @@ packages:
   /deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
     dev: true
+
+  /deepmerge@2.0.1:
+    resolution: {integrity: sha512-VIPwiMJqJ13ZQfaCsIFnp5Me9tnjURiaIFxfz7EH0Ci0dTSQpZtSLrqOicXqEd/z2r+z+Klk9GzmnRsgpgbOsQ==}
+    engines: {node: '>=0.10.0'}
+    dev: false
 
   /deepmerge@4.3.1:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
@@ -3491,6 +3486,10 @@ packages:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
     dev: true
+
+  /hls.js@1.5.17:
+    resolution: {integrity: sha512-wA66nnYFvQa1o4DO/BFgLNRKnBTVXpNeldGRBJ2Y0SvFtdwvFKCbqa9zhHoZLoxHhZ+jYsj3aIBkWQQCPNOhMw==}
+    dev: false
 
   /hosted-git-info@2.8.9:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==}
@@ -5898,26 +5897,17 @@ packages:
       signal-exit: 3.0.7
     dev: true
 
-  /xgplayer-hls@3.0.20(core-js@3.39.0)(xgplayer@3.0.20):
-    resolution: {integrity: sha512-ForAjajjSFb4sFWhjIKPChFsZMnGbrsifUp8W2h8x11HDc3ErDHX4r6xZjeqvZRPppv2OVPX7YAcyVjVYnCbIg==}
+  /xgplayer-hls.js@3.0.20(core-js@3.39.0)(xgplayer@3.0.20):
+    resolution: {integrity: sha512-vS9pQ56AhjAaWc61I4W252um01elMWOkgzflsvw8U1oEUeVKCmtjvHXkwrmPEa89mBx53iB8VXUocSW7Sq2kQg==}
     peerDependencies:
       core-js: '>=3.12.1'
-      xgplayer: 3.0.20
+      xgplayer: '>=3.0.13'
     dependencies:
       core-js: 3.39.0
-      eventemitter3: 4.0.7
+      deepmerge: 2.0.1
+      event-emitter: 0.3.5
+      hls.js: 1.5.17
       xgplayer: 3.0.20(core-js@3.39.0)
-      xgplayer-streaming-shared: 3.0.20(core-js@3.39.0)
-      xgplayer-transmuxer: 3.0.20(core-js@3.39.0)
-    dev: false
-
-  /xgplayer-streaming-shared@3.0.20(core-js@3.39.0):
-    resolution: {integrity: sha512-Z7f/ozrEDUtT5g2y7y1wssuzIPpL8YXkq6f5UX6SI0qN+aC2/r5SlKpgCVaQMi3nynWiCjwoag6vJ+uf5HVEYA==}
-    peerDependencies:
-      core-js: '>=3.12.1'
-    dependencies:
-      core-js: 3.39.0
-      eventemitter3: 4.0.7
     dev: false
 
   /xgplayer-subtitles@3.0.20(core-js@3.39.0):
@@ -5927,17 +5917,6 @@ packages:
     dependencies:
       core-js: 3.39.0
       eventemitter3: 4.0.7
-    dev: false
-
-  /xgplayer-transmuxer@3.0.20(core-js@3.39.0):
-    resolution: {integrity: sha512-WH1XV4ZBnZ5jTdMgz4R63K2ekw61leYzYzey3rjC0WSTMMufvwFQnJ0I1Jx5w7puSZqKwHpNl1a6CUDFlba+5A==}
-    peerDependencies:
-      core-js: '>=3.12.1'
-    dependencies:
-      '@babel/runtime': 7.26.0
-      concat-typed-array: 1.0.2
-      core-js: 3.39.0
-      crypto-es: 1.2.7
     dev: false
 
   /xgplayer@3.0.20(core-js@3.39.0):
