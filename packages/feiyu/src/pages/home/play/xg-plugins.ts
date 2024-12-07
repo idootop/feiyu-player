@@ -139,7 +139,7 @@ export class HlsPlugin extends HlsJsPlugin {
   static get defaultConfig() {
     return {
       hlsOpts: {
-        maxBufferLength: 300,
+        maxBufferLength: 600,
         liveSyncDurationCount: 10,
         fragLoadingTimeOut: 1000,
         manifestLoadingTimeOut: 1000,
@@ -155,5 +155,25 @@ export class HlsPlugin extends HlsJsPlugin {
         levelLoadingRetryDelay: 500,
       },
     };
+  }
+
+  private _autoPlayed = false;
+  register(url: string) {
+    super.register(url);
+    this._autoPlayed = false;
+    const {
+      player,
+      hls,
+      playerConfig: { autoplay },
+    } = this;
+
+    hls.on('hlsFragBuffered', () => {
+      if (!this._autoPlayed && autoplay) {
+        this._autoPlayed = true;
+        setTimeout(() => {
+          player.play();
+        }, 100);
+      }
+    });
   }
 }
